@@ -1,19 +1,61 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React, {Suspense} from 'react';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {createRoot} from "react-dom/client";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {ErrorPage, MainLayout , CallsLayout} from "./routes/routesConfig/lazyComponents";
+import {Spin} from "antd";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const App = () => {
+    const routes = [
+        {
+            path: '/',
+            element: <MainLayout />,
+            errorElement: <ErrorPage />,
+            children: [
+                {
+                    path: '/calls',
+                    element: <CallsLayout />,
+                }
+            ]
+        }
+    ]
+
+    const router = createBrowserRouter(routes);
+
+    return <RouterProvider router={router} />;
+};
+
+const container = document.getElementById('root');
+
+if (!container) {
+    throw new Error('Root element not found');
+}
+
+const root = createRoot(container);
+
+const contentStyle = {
+    padding: 50,
+    background: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 4,
+};
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <Suspense
+        fallback={
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                }}
+            >
+                <Spin tip="Загрузка..." size="large">
+                    <div style={contentStyle}></div>
+                </Spin>
+            </div>
+        }
+    >
+        <App />
+    </Suspense>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

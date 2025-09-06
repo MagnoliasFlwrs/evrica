@@ -1,0 +1,109 @@
+.Sidebar {
+  border-radius: 30px;
+  background: #F3F3F3;
+  display: flex;
+  padding: 20px 10px;
+  flex-direction: column;
+  height: 100%;
+  &.active {
+    width: 213px;
+    .SidebarLink {
+      padding: 0 14px 0 0;
+    }
+    .SidebarLogoContainer {
+      padding: 0 14px 0 9px;
+    }
+  }
+  .SidebarLogoTitleContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  .SidebarLogoContainer {
+    padding: 0 9px;
+  }
+  .SidebarLogo {
+    display: flex;
+    margin-bottom: 20px;
+    .SidebarLogoTitle {
+      display: flex;
+      align-items: flex-start;
+      span {
+        &:first-child {
+          color: #000;
+          font-family: Mulish;
+          font-size: 22px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 17px; /* 77.273% */
+        }
+        &:nth-child(2) {
+          color: #000;
+          font-family: Mulish;
+          font-size: 7px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 8px; /* 114.286% */
+        }
+      }
+    }
+    .SidebarLogoTitleDescription {
+      color: #000;
+      font-family: Mulish;
+      font-size: 7px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: -0.21px;
+    }
+  }
+  .SidebarButton {
+    padding: 0 14px;
+    cursor: pointer;
+  }
+  .SidebarLink {
+    padding: 0;
+    border-radius: 30px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .SidebarIconWrapper {
+      padding: 14px;
+      height: 44px;
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50px;
+    }
+    &:hover {
+      border-radius: 30px;
+      background: #000;
+      svg path{
+        stroke: #fff;
+      }
+      span {
+        color: white;
+      }
+    }
+    &.active {
+      border-radius: 30px;
+      background: #000;
+      svg path{
+        stroke: white;
+      }
+    }
+    span {
+      color: #000;
+      font-family: Mulish;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+  }
+}
+.SidebarSupportRow {
+  margin-top: auto;
+}
