@@ -9,7 +9,7 @@ const Logo = () => {
             <defs>
                 <linearGradient id="paint0_linear_193_9003" x1="-3" y1="-2" x2="33" y2="30.5"
                                 gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#0090F7"/>
+                    <stop stopColor="#0090F7"/>
                     <stop offset="0.336538" stopColor="#B164FC"/>
                     <stop offset="0.6875" stopColor="#F2416B"/>
                     <stop offset="1" stopColor="#F55600"/>

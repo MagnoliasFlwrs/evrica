@@ -1,0 +1,40 @@
+.FilteredCallsBlock {
+  flex: 1;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    overflow: hidden;
+    color: #1D1D1F;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .SelectedCalls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    a {
+      border-radius: 30px;
+      background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      display: flex;
+      height: 42px;
+      padding: 12px 14px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: #FFF;
+      font-family: Mulish;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+
+}

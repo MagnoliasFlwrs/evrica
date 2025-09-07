@@ -4,6 +4,7 @@ import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ErrorPage, MainLayout , CallsLayout} from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
+import CallsFilteredLayout from "./routes/CallsFilteredLayout";
 
 const App = () => {
     const routes = [
@@ -15,6 +16,10 @@ const App = () => {
                 {
                     path: '/calls',
                     element: <CallsLayout />,
+                },
+                {
+                    path: '/calls/filtered',
+                    element: <CallsFilteredLayout/>
                 }
             ]
         }

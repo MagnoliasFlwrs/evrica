@@ -7,8 +7,15 @@
   height: 100%;
   &.active {
     width: 213px;
+    flex-shrink: 0;
     .SidebarLink {
       padding: 0 14px 0 0;
+      &.active {
+        span {
+          color: #FFFFFF;
+        }
+      }
+
     }
     .SidebarLogoContainer {
       padding: 0 14px 0 9px;
@@ -54,6 +61,7 @@
       font-weight: 500;
       line-height: normal;
       letter-spacing: -0.21px;
+      white-space: nowrap;
     }
   }
   .SidebarButton {

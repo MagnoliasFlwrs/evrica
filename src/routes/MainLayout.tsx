@@ -5,7 +5,7 @@ import {Outlet} from "react-router-dom";
 
 const MainLayout = () => {
     return (
-        <Flex style={{padding: '20px', height:"100vh"}} gap="30px" >
+        <Flex style={{padding: '20px', height:"100vh" , width:"100vw"}}  >
             <Sidebar/>
             <Outlet/>
         </Flex>

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import PageTitle from "../components/ui/PageTitle/PageTitle";
 import CategoriesFilter from "../components/CallsLayout/CategoriesFilter/CategoriesFilter";
+import FilteredCallsBlock from "../components/CallsLayout/FilteredCallsBlock/FilteredCallsBlock";
 
 const CallsLayout = () => {
+    const [isSelected, setIsSelected] = useState(0);
+    console.log(isSelected)
     return (
         <PageContainer>
             <PageTitle text='Звонки'/>
-            <CategoriesFilter/>
+            <CategoriesFilter setIsSelected={setIsSelected}/>
+            <FilteredCallsBlock isSelected={isSelected}/>
         </PageContainer>
     );
 };

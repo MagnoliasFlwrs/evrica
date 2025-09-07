@@ -1,0 +1,135 @@
+.CallsOptionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  .CallsOptionsListsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    p {
+      color: #000;
+      font-family: Mulish;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+  }
+  .CallsOptionsCheckListsItem{
+    display: flex;
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    .CallsOptionsCheckListsItemRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      .CallsOptionsCheckListsItemRowType {
+        color: #000;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .CallsOptionsCheckListsItemRowCompleting {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .CallsOptionsCheckListsItemRowPercentMark {
+        border-radius: 4px;
+        display: flex;
+        padding: 2px 5px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        span{
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+
+        }
+      }
+      .CallsOptionsCheckListsItemRowCheckListMark {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        border-radius: 2px;
+        border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+        background: #EFEFED;
+        span {
+          color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+          text-align: center;
+          font-family: Mulish;
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+        }
+      }
+    }
+  }
+  .CallsOptionsMarkerItem {
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    display: flex;
+    padding: 14px;
+    gap: 20px;
+    flex: 1 0 0;
+    align-items: center;
+    justify-content: space-between;
+    .CallsOptionsMark {
+      display: flex;
+      padding: 4px 8px;
+      align-items: center;
+      gap: 4px;
+      border-radius: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      text-transform: uppercase;
+    }
+    .CallsOptionsMarkCount {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      border-radius: 2px;
+      border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      background: #EFEFED;
+      color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      text-align: center;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+}

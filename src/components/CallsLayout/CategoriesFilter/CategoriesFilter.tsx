@@ -3,12 +3,16 @@ import {Flex, TreeDataNode} from "antd";
 import CategoriesTree from "./CategoriesTree";
 import CategoriesDatePicker from "./CategoriesDatePicker";
 import styles from "./CategoriesFilter.module.scss";
+import {CategoriesFilterProps} from "../types";
 
-const CategoriesFilter = () => {
+const CategoriesFilter = ({setIsSelected}:CategoriesFilterProps) => {
+    const onDateRangeSelect = () => {
+        console.log("onDateRangeSelect");
+    }
 
     return (
         <Flex className={styles.CategoriesFilterContainer}>
-            <CategoriesTree/>
+            <CategoriesTree setIsSelected={setIsSelected}/>
             <CategoriesDatePicker/>
         </Flex>
     );

@@ -3,7 +3,7 @@ import React from 'react';
 const Analytic = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-            <g clip-path="url(#clip0_193_9024)">
+            <g clipPath="url(#clip0_193_9024)">
                 <path
                     d="M14 8.64936C14.368 8.64936 14.67 8.35003 14.6333 7.98403C14.4796 6.45347 13.8014 5.02316 12.7135 3.93558C11.6257 2.84799 10.1953 2.17005 8.66467 2.01669C8.298 1.98003 7.99933 2.28203 7.99933 2.65003V7.98336C7.99933 8.16017 8.06957 8.32974 8.19459 8.45477C8.31962 8.57979 8.48919 8.65003 8.666 8.65003L14 8.64936Z"
                     stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

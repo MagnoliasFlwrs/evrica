@@ -3,7 +3,7 @@ import React from 'react';
 const Calls = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-            <g clip-path="url(#clip0_427_3467)">
+            <g clipPath="url(#clip0_427_3467)">
                 <path d="M8 13.3162V15.3162" stroke="black" strokeWidth="1.5" strokeLinecap="round"
                       strokeLinejoin="round"/>
                 <path

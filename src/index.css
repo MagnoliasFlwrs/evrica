@@ -37,7 +37,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  transition: .5s ease;
+  transition: .1s ease;
 }
 a {
   text-decoration: none;
@@ -59,11 +59,31 @@ body {
   font-weight: 400;
   line-height: normal;
   position: relative;
-  transition: 0.5s ease;
+  transition: 0.1s ease;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: #F7F7F7;
   width: 100vw;
   overflow-x: hidden;
+}
+
+.ant-tree-switcher {
+  transition: none !important;
+}
+
+.ant-tree-switcher-icon {
+  transition: none !important;
+  transform: none !important;
+}
+
+.ant-tree-switcher_open .ant-tree-switcher-icon,
+.ant-tree-switcher_close .ant-tree-switcher-icon {
+  transform: none !important;
+}
+.ant-tree-treenode {
+  width: 100%;
+}
+.custom-datepicker-container {
+  position: relative;
 }

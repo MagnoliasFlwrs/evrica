@@ -1,20 +1,27 @@
 import React, { ReactNode } from 'react';
 import { Flex } from "antd";
+import { useSidebar } from "../Sidebar/useSidebar";
+import styles from './PageContainer.module.scss'
+import classNames from 'classnames'; // рекомендуется использовать classnames
 
 interface PageContainerProps {
     children: ReactNode;
-    className?: string;
 }
 
-const PageContainer: React.FC<PageContainerProps> = ({
-                                                         children,
-                                                         className
-                                                     }) => {
+const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
+    const { sidebarOpen } = useSidebar();
+
+    const containerClasses = classNames(
+        styles.PageContainer,
+        {
+            [styles.short]: sidebarOpen
+        }
+    );
+
     return (
         <Flex
-            style={{ padding: '40px 20px', flex:1 }}
             vertical
-            className={className}
+            className={containerClasses}
         >
             {children}
         </Flex>

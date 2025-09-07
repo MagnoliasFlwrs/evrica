@@ -1,0 +1,22 @@
+.CustomSwiper {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .customSwiperButton {
+    display: flex;
+    height: 44px;
+    padding: 10px 14px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 40px;
+    background: #EFEFED;
+    cursor: pointer;
+    &.disabled {
+      display: none;
+    }
+  }
+}

@@ -11,9 +11,10 @@ import Analytic from "../../../icons/Analytic";
 import Support from "../../../icons/Support";
 import Profile from "../../../icons/Profile";
 import cn from 'classnames';
+import {useSidebar} from "./useSidebar";
 
 const Sidebar = () => {
-    const [openMenu, setOpenMenu] = useState(false);
+    const { sidebarOpen, toggleSidebar } = useSidebar();
     const location = useLocation();
 
 
@@ -25,13 +26,13 @@ const Sidebar = () => {
     };
 
     return (
-        <Flex className={cn(styles.Sidebar, { [styles.active]: openMenu })}>
+        <Flex className={cn(styles.Sidebar, { [styles.active]: sidebarOpen })}>
             <Link className={styles.SidebarLogo} to='/'>
                 <Flex className={styles.SidebarLogoContainer}>
                     <Logo/>
                 </Flex>
                 {
-                    openMenu &&
+                    sidebarOpen &&
                     <Flex className={styles.SidebarLogoTitleContainer} vertical>
                         <Flex className={styles.SidebarLogoTitle}>
                             <span>ЭВРИКА</span>
@@ -43,7 +44,7 @@ const Sidebar = () => {
             </Link>
 
             <Flex vertical gap={20}>
-                <Flex className={styles.SidebarButton} onClick={() => setOpenMenu(!openMenu)}>
+                <Flex className={styles.SidebarButton} onClick={() => toggleSidebar()}>
                     <SidebarButton/>
                 </Flex>
 
@@ -56,7 +57,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Home/>
                     </Flex>
-                    {openMenu && <span>Главная</span>}
+                    {sidebarOpen && <span>Главная</span>}
                 </Link>
 
                 <Link
@@ -68,7 +69,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Analytic/>
                     </Flex>
-                    {openMenu && <span>Аналитика</span>}
+                    {sidebarOpen && <span>Аналитика</span>}
                 </Link>
 
                 <Link
@@ -80,7 +81,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Calls/>
                     </Flex>
-                    {openMenu && <span>Звонки</span>}
+                    {sidebarOpen && <span>Звонки</span>}
                 </Link>
 
                 <Link
@@ -92,7 +93,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Settings/>
                     </Flex>
-                    {openMenu && <span>Настройка</span>}
+                    {sidebarOpen && <span>Настройка</span>}
                 </Link>
             </Flex>
 
@@ -106,7 +107,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Support/>
                     </Flex>
-                    {openMenu && <span>Поддержка</span>}
+                    {sidebarOpen && <span>Поддержка</span>}
                 </Link>
 
                 <Link
@@ -118,7 +119,7 @@ const Sidebar = () => {
                     <Flex className={styles.SidebarIconWrapper}>
                         <Profile/>
                     </Flex>
-                    {openMenu && <span>Профиль</span>}
+                    {sidebarOpen && <span>Профиль</span>}
                 </Link>
             </Flex>
         </Flex>

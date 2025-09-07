@@ -3,7 +3,7 @@ import React from 'react';
 const Profile = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <g clip-path="url(#clip0_193_9046)">
+            <g clipPath="url(#clip0_193_9046)">
                 <path
                     d="M12 13.3334C12 12.2725 11.5786 11.2551 10.8284 10.5049C10.0783 9.7548 9.06087 9.33337 8 9.33337C6.93913 9.33337 5.92172 9.7548 5.17157 10.5049C4.42143 11.2551 4 12.2725 4 13.3334"
                     stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

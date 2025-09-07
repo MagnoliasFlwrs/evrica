@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Input, Tree, TreeDataNode, TreeProps } from "antd";
 import styles from './CategoriesFilter.module.scss'
-import { SearchOutlined } from "@ant-design/icons";
+import {DownOutlined,  SearchOutlined} from "@ant-design/icons";
+import {CategoriesFilterProps} from "../types";
 
-const CategoriesTree = () => {
+const CategoriesTree = ({setIsSelected}:CategoriesFilterProps) => {
     const [searchValue, setSearchValue] = useState('');
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -234,11 +235,14 @@ const CategoriesTree = () => {
 
     const selectedCount = checkedKeys.length;
 
+    useEffect(() => {
+        setIsSelected(selectedCount);
+    }, [selectedCount]);
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
     };
 
-    // Данные дерева с подсветкой
     const treeDataWithHighlights = highlightMatches(treeData, searchValue);
 
     return (
@@ -271,6 +275,7 @@ const CategoriesTree = () => {
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
                     className={styles.CategoriesTreeWidget}
+                    switcherIcon={<DownOutlined />}
                 />
             </Flex>
 

@@ -1,18 +1,30 @@
-import React, { useState } from 'react';
-import { Flex, Button } from "antd";
-import { Calendar } from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-import styles from "./CategoriesFilter.module.scss"
-import './reactCalendarCustom.css'
+import React, {useState} from 'react';
+import {Flex} from "antd";
+import styles from "./CustomDatePicker.module.scss";
+import {CustomDatePickerProps} from "./types";
+import {Calendar} from "react-calendar";
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
+import 'react-calendar/dist/Calendar.css';
+import '../../CallsLayout/CategoriesFilter/reactCalendarCustom.css'
+import BlueButton from "../BlueButton/BlueButton";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const CategoriesDatePicker = () => {
-    const [value, onChange] = useState<Value>(new Date());
+
+const CustomDatePicker = ({
+                              openCustomDatePicker,
+                              setOpenCustomDatePicker,
+                              selectedDate,
+                              onDateChange
+                          }: CustomDatePickerProps) => {
+    const [value, onChange] = useState<Value>(selectedDate || new Date());
     const [activePeriod, setActivePeriod] = useState<string>('all');
 
+    const handleApply = () => {
+        onDateChange?.(value);
+        setOpenCustomDatePicker(false);
+    };
 
     const handlePeriodClick = (period: string) => {
         setActivePeriod(period);
@@ -38,8 +50,7 @@ const CategoriesDatePicker = () => {
                 onChange([thirtyDaysAgo, today]);
                 break;
             case 'all':
-                // Установите начальную дату по вашему усмотрению
-                const startDate = new Date(2020, 0, 1); // 1 января 2020
+                const startDate = new Date(2020, 0, 1);
                 onChange([startDate, today]);
                 break;
             default:
@@ -48,22 +59,7 @@ const CategoriesDatePicker = () => {
     };
 
     return (
-        <Flex className={styles.CategoriesDatePickerContainer}>
-            <Flex className={styles.CalendarInner}>
-                <Calendar
-                    onChange={onChange}
-                    value={value}
-                    showNeighboringMonth={true}
-                    prevLabel={<LeftOutlined/>}
-                    nextLabel={<RightOutlined/>}
-                    allowPartialRange={true}
-                    selectRange={true}
-                    className={styles.CustomCalendar}
-                    next2Label={null}
-                    prev2Label={null}
-                />
-            </Flex>
-
+        <Flex className={styles.CustomDatePicker}>
             <Flex vertical className={styles.CalendarInnerControllers}>
                 <Flex
                     className={`${styles.CalendarInnerController} ${activePeriod === 'today' ? styles.active : ''}`}
@@ -96,8 +92,31 @@ const CategoriesDatePicker = () => {
                     За все время
                 </Flex>
             </Flex>
+
+            <Flex className={styles.CustomDatePickerCalendarInner}>
+                <Flex className={styles.CalendarInner}>
+                    <Calendar
+                        onChange={onChange}
+                        value={value}
+                        showNeighboringMonth={true}
+                        prevLabel={<LeftOutlined/>}
+                        nextLabel={<RightOutlined/>}
+                        allowPartialRange={true}
+                        selectRange={true}
+                        className={styles.CustomCalendar}
+                        next2Label={null}
+                        prev2Label={null}
+                    />
+                </Flex>
+
+                <Flex className={styles.ButtonInner}>
+                    <BlueButton
+                        text='Применить'
+                        onClick={handleApply}
+                    />
+                </Flex>
+            </Flex>
         </Flex>
     );
 };
-
-export default CategoriesDatePicker;
+export default CustomDatePicker;

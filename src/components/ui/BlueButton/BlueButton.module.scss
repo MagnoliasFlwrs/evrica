@@ -1,0 +1,19 @@
+.blueButton {
+  color: #FFF;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  height: 42px;
+  padding: 12px 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 30px;
+  background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
