@@ -4,6 +4,8 @@ import PageTitle from "../components/ui/PageTitle/PageTitle";
 import CallsFilteredLayoutControl from "../components/CallsFilteredLayout/CallsFilteredLayoutControl";
 import {Value} from "../components/ui/CustomDatePicker/types";
 import CallsOptionsContainer from "../components/CallsFilteredLayout/CallsOptions/CallsOptionsContainer";
+import CallsTable from "../components/CallsFilteredLayout/CallsTable/CallsTable";
+import CallsFilter from "../components/CallsFilteredLayout/CallsFilter/CallsFilter";
 
 const CallsFilteredLayout = () => {
     const [openCustomDatePicker, setOpenCustomDatePicker] = useState(false);
@@ -23,6 +25,8 @@ const CallsFilteredLayout = () => {
                 onDateChange={handleDateChange}
             />
             <CallsOptionsContainer/>
+            <CallsFilter/>
+            <CallsTable/>
         </PageContainer>
     );
 };

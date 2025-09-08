@@ -6,6 +6,7 @@
   top: calc(100% + 2px);
   left:0;
   display: flex;
+  z-index: 10;
   .CalendarInnerControllers {
     display: flex;
     padding: 24px;
