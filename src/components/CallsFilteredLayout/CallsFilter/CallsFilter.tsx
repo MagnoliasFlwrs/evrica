@@ -18,7 +18,7 @@ const CallsFilter = () => {
     };
 
     return (
-        <Flex>
+        <Flex gap={20}>
             <CustomSelect
                 options={callTypeOptions}
                 multiple={false}
@@ -36,6 +36,7 @@ const CallsFilter = () => {
                 multiple={true}
                 placeholder="Типы звонков"
                 value={callTypes}
+
                 onChange={(value) => {
                     if (Array.isArray(value)) {
                         setCallTypes(value);

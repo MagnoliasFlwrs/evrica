@@ -76,15 +76,10 @@ const CallsTable = () => {
         }
     ];
 
-
-
-
     return (
-        <Flex>
-            <Table columns={columns}
-                   dataSource={data}
-            />
-        </Flex>
+        <Table columns={columns}
+               dataSource={data}
+        />
 )
     ;
 };
