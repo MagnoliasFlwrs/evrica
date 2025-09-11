@@ -66,3 +66,128 @@
     margin-left: auto;
   }
 }
+.CallsFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px 0;
+  .CallsFilterTitleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .CallsFilterTitle {
+      color: #000;
+      font-family: Mulish;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+    .CallsFilterInput {
+      border-radius: 40px;
+      border: 1px solid rgba(0, 0, 0, 0.10);
+      display: flex;
+      width: 314px;
+      height: 32px;
+      padding: 10px 14px;
+      align-items: center;
+      gap: 10px;
+      color: rgba(0, 0, 0, 0.50);
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+  }
+  .CallsFilterPanel {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+}
+.CallsTable {
+  border-radius: 16px;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+  background: #FFF;
+  overflow: hidden;
+
+  .tableText {
+    color: var(--Black, #1D1D1F);
+    text-overflow: ellipsis;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .tableTextDate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    color: var(--Black, #1D1D1F);
+    text-overflow: ellipsis;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    span {
+      color: #868686;
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+}
+
+.CustomPagination :global(.ant-pagination-item-active) {
+  background-color: #007AFF !important;
+  border-color: #007AFF !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CustomPagination :global(.ant-pagination-item-active a) {
+  color: #FFF !important;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400 !important;
+
+}
+
+.CustomPagination :global(.ant-pagination-item:hover) {
+  border-color: #007AFF !important;
+  background-color: #007AFF !important;
+  color: #FFF;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400 !important;
+}
+
+.CustomPagination :global(.ant-pagination-item:hover a) {
+  color: #FFF;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400 !important;
+}
+.CustomFooter {
+  border-radius: 0 0 16px 16px;
+}

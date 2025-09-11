@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './CustomSelect.module.scss';
 import CloseIcon from "./icons/CloseIcon";
-import {Flex, Input} from "antd";
+import {Flex, Input, Tag} from "antd";
 import DownArrow from "./icons/DownArrow";
 import Check from "./icons/Check";
 import SearchIcon from "./icons/SearchIcon";
@@ -255,7 +255,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                             className={`${styles.option} ${isOptionSelected(option.value) ? styles.selected : ''}`}
                             onClick={() => handleSelect(option.value)}
                         >
-                            {option.label}
+                            {
+                                tag ?
+                                    <Tag className={`${styles.tag} ${styles[option.value]}`}>
+                                        {option.label}
+                                    </Tag>
+                                    :
+                                    <span>{option.label}</span>
+                            }
+
                             <span className={styles.checkbox}>
                                 {isOptionSelected(option.value) ? <Check/> : ''}
                             </span>

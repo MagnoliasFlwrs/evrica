@@ -63,7 +63,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #F7F7F7;
+  background: #fff;
   width: 100vw;
   overflow-x: hidden;
 }

@@ -225,3 +225,76 @@
 :where(.css-dev-only-do-not-override-xepvsj).ant-input-affix-wrapper::before {
   content: none!important;
 }
+
+.promise {
+  border-radius: 4px;
+  background: #EDFBCC;
+  overflow: hidden;
+  color: #486A12;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+}
+
+.dontwant {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #CCFBF0;
+  overflow: hidden;
+  color: #126D69;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+
+}
+
+.expencive {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: #00598F;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: #ECF8FE;
+}
+
+.donthelp {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #F9E7FE;
+  overflow: hidden;
+  color: #8D1697;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+}

@@ -3,7 +3,9 @@ import { ConfigProvider } from 'antd';
 
 function App() {
   return (
-      <ConfigProvider locale={ruRU}>
+      <ConfigProvider
+          locale={ruRU}
+      >
         <div className="App"></div>
       </ConfigProvider>
   );

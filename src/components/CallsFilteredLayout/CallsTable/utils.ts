@@ -1,7 +1,32 @@
 import {TableRecord} from "./CallsTable";
 
-export const formatDate = (timestamp: string): string => {
+export const formatDate = (
+    timestamp: string,
+    format: 'full' | 'date-only' | 'time-only' = 'full'
+): string => {
     const date = new Date(Number(timestamp) * 1000);
+
+    if (format === 'date-only') {
+        const options: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Europe/Moscow'
+        };
+        const formatted = date.toLocaleString('ru-RU', options);
+        return formatted.replace(', г.', '').replace(' г.', '');
+    }
+
+    if (format === 'time-only') {
+        const options: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Europe/Moscow'
+        };
+        const time = date.toLocaleString('ru-RU', options);
+        return `${time} (GMT+3)`;
+    }
 
     const options: Intl.DateTimeFormatOptions = {
         day: 'numeric',
@@ -12,9 +37,9 @@ export const formatDate = (timestamp: string): string => {
         second: '2-digit',
         timeZone: 'Europe/Moscow'
     };
-
     const formattedDate = date.toLocaleString('ru-RU', options);
-    return `${formattedDate} (GMT+3)`;
+    const cleanedDate = formattedDate.replace(', г.', '').replace(' г.', '');
+    return `${cleanedDate} (GMT+3)`;
 };
 
 
