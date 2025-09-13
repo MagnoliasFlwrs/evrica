@@ -123,7 +123,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             ? (Array.isArray(selectedValues) ? selectedValues : [])
             : (selectedValues ? [selectedValues as string] : []);
 
-        // Если выбрано пустое значение (Любой) в single select
         if (!multiple && selectedValues === '') {
             return <span className={styles.placeholder}>{placeholder}</span>;
         }

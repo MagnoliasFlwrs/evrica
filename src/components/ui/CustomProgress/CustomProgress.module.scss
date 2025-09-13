@@ -1,0 +1,32 @@
+.CustomProgressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  .CustomProgressContainerTitle {
+    color: #000;
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    max-width: 80px;
+    text-align: center;
+  }
+  .progressWrapper {
+    position: relative;
+    .percentText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+}

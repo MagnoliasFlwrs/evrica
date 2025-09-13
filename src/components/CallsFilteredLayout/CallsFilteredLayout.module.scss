@@ -120,7 +120,7 @@
   border-radius: 16px;
   border: 1px solid var(--border, rgba(0, 0, 0, 0.10));
   background: #FFF;
-  overflow: hidden;
+  //overflow-x: hidden;
 
   .tableText {
     color: var(--Black, #1D1D1F);
@@ -190,4 +190,179 @@
 }
 .CustomFooter {
   border-radius: 0 0 16px 16px;
+}
+
+.CustomPaginationSelect {
+  position: relative;
+  padding: 8px;
+
+  .CustomPaginationSelectLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    cursor: pointer;
+    color: #3E4E55;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+    .CustomPaginationSelectOptions {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      z-index: 1000;
+      border-radius: 20px;
+      background: #FFF;
+      box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+      display: flex;
+      padding: 8px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      .CustomPaginationSelectOption {
+        color: #3E4E55;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        padding: 4px;
+        cursor: pointer;
+        &:hover {
+          color: #007AFF;
+        }
+      }
+    }
+}
+.checklistItem {
+  overflow: hidden;
+  color: var(--Black, #1D1D1F);
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.manyItemsContainer {
+  position: relative;
+  cursor: pointer;
+  .manyItemsContainerModal {
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+    display: flex;
+    width: 210px;
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    position: absolute;
+    right: 110%;
+    bottom: 100%;
+    z-index: 1000;
+  }
+}
+.checklistItemLength , .markerItemLength {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  aspect-ratio: 1/1;
+  border-radius: 2px;
+  border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+  background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+  color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+  text-align: center;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+}
+.promise {
+  border-radius: 4px;
+  background: #EDFBCC;
+  overflow: hidden;
+  color: #486A12;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+}
+
+.dontwant {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #CCFBF0;
+  overflow: hidden;
+  color: #126D69;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  width: fit-content;
+
+}
+
+.expencive {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: #00598F;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: #ECF8FE;
+  width: fit-content;
+}
+
+.donthelp {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #F9E7FE;
+  overflow: hidden;
+  color: #8D1697;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+:where(.css-dev-only-do-not-override-45y2o1).ant-table-wrapper .ant-table {
+  border-radius: 16px !important;
 }

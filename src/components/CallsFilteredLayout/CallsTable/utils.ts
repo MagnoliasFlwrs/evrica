@@ -50,7 +50,13 @@ export const data: TableRecord[] = Array.from({ length: 100 }, (_, index) => {
     const phones = ['375290000000', '375290000001', '375290000002', '375290000003', '375290000004'];
     const userNames = ['евлампий', 'алексей', 'мария', 'анна', 'дмитрий', 'екатерина', 'сергей', 'ольга'];
     const checklistOptions = ['hr', 'sales', 'support', 'technical', 'quality'];
-    const markerOptions = ['не хочу', 'не буду', 'перезвонить', 'важно', 'срочно', 'обработано', 'проблема'];
+
+    const markerOptions = [
+        { value: 'promise', label: 'Обещали перезвонить' },
+        { value: 'dontwant', label: 'не хочу' },
+        { value: 'expencive', label: 'Возражение "Дорого"' },
+        { value: 'donthelp', label: 'не помогли' },
+    ];
 
     const randomCallType = callTypes[Math.floor(Math.random() * callTypes.length)];
     const randomDuration = durations[Math.floor(Math.random() * durations.length)];
@@ -59,17 +65,14 @@ export const data: TableRecord[] = Array.from({ length: 100 }, (_, index) => {
 
     const randomTimestamp = (Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 2592000)).toString();
 
-
     const randomChecklists = Array.from(
         { length: Math.floor(Math.random() * 4) + 1 },
         () => checklistOptions[Math.floor(Math.random() * checklistOptions.length)]
     ).filter((value, index, self) => self.indexOf(value) === index);
 
-
-    const randomMarkers = Array.from(
-        { length: Math.floor(Math.random() * 4) + 1 },
-        () => markerOptions[Math.floor(Math.random() * markerOptions.length)]
-    ).filter((value, index, self) => self.indexOf(value) === index);
+    const markersCount = Math.floor(Math.random() * 4) + 1; // От 1 до 4
+    const shuffledMarkers = [...markerOptions].sort(() => Math.random() - 0.5);
+    const randomMarkers = shuffledMarkers.slice(0, markersCount);
 
     return {
         key: (index + 1).toString(),
@@ -80,6 +83,6 @@ export const data: TableRecord[] = Array.from({ length: 100 }, (_, index) => {
         phone: randomPhone,
         userName: randomUserName,
         checklists: randomChecklists,
-        markers: randomMarkers
+        markers: randomMarkers // Теперь это массив объектов {value, label}
     };
 });

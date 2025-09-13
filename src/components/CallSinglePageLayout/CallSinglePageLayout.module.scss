@@ -1,0 +1,165 @@
+.CallSinglePageLayoutHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.CallSinglePageWidgets {
+  display: flex;
+  gap: 10px;
+  .CallSinglePageWidgetsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    &:first-child {
+      width: 685px;
+    }
+    &:last-child {
+      flex: 1;
+    }
+  }
+}
+.GeneralCallInfoWidget {
+  display: flex;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+  border-radius: 30px;
+  background: #FFF;
+  width: 100%;
+}
+.GeneralCallInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  .GeneralCallInfoColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+  }
+}
+.GeneralCallInfoWidgetHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--Bue, #007AFF);
+    font-family: Mulish;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+  }
+}
+.CallWidgetTitle {
+  color: #000;
+  font-family: Mulish;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.GeneralCallInfoColumnItem {
+  display: flex;
+  flex-direction: column;
+  p {
+    color: rgba(0, 0, 0, 0.50);
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  span {
+    color: #000;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .IconRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    button {
+      border-radius: 2px;
+      border: 1px solid #007AFF;
+      background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+      display: flex;
+      width: 20px;
+      height: 20px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.CustomerInfo {
+  display: flex;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+  border-radius: 30px;
+  background: #FFF;
+  width: 100%;
+
+  button {
+    border-radius: 2px;
+    border: 1px solid #007AFF;
+    background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+    display: flex;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.StagesOfConversationWidget {
+  border-radius: 30px;
+  background: #FFF;
+  display: flex;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+}
+.StagesOfConversation {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.CustomProgress :where(.css-dev-only-do-not-override-xepvsj).ant-progress.ant-progress-circle .ant-progress-text{
+  color: #000;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

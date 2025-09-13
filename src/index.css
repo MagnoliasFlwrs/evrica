@@ -49,6 +49,7 @@ ul , li {
 }
 html {
   scroll-behavior: smooth;
+  font-family: "Mulish", sans-serif;
 }
 body {
   font-family: "Mulish", sans-serif;
@@ -63,7 +64,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #fff;
   width: 100vw;
   overflow-x: hidden;
 }
@@ -86,4 +86,7 @@ body {
 }
 .custom-datepicker-container {
   position: relative;
+}
+:where(.css-dev-only-do-not-override-45y2o1).ant-table-wrapper .ant-table {
+  border-radius: 16px !important;
 }

@@ -1,11 +1,19 @@
 import React from 'react';
-import {Flex} from "antd";
+import { Flex } from "antd";
 import Sidebar from "../components/ui/Sidebar/Sidebar";
-import {Outlet} from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import styles from '../styles/MainLayout.module.scss';
 
 const MainLayout = () => {
+    const location = useLocation();
+
+    const isCallDetailPage = location.pathname.includes('/call/');
+
     return (
-        <Flex style={{padding: '20px', minHeight:"100vh" , width:"100vw"}}  >
+        <Flex
+            style={{ padding: '20px', minHeight: "100vh", width: "100vw" }}
+            className={isCallDetailPage ? styles.grayBg : ''}
+        >
             <Sidebar/>
             <Outlet/>
         </Flex>

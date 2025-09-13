@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { ConfigProvider, Flex, Pagination, Select, Table, Typography } from "antd";
+import React, {useState, useMemo, useEffect} from 'react';
+import {ConfigProvider, Flex, Pagination, Table, Tag, Typography} from "antd";
 import { data, formatDate } from "./utils";
 import styles from '../CallsFilteredLayout.module.scss';
-import CustomSelect from "../../ui/CustomSelect/CustomSelect";
+import CustomPaginationSelect from "../../ui/CustomPaginationSelect/CustomPaginationSelect";
+import {useNavigate} from "react-router-dom";
 
 const { Text } = Typography;
-const { Option } = Select;
 
 export interface TableRecord {
     key: string;
@@ -16,18 +16,43 @@ export interface TableRecord {
     phone: string;
     userName: string;
     checklists: string[];
-    markers: string[];
+    markers: Array<{ value: string; label: string }>;
 }
 
 const CallsTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
+    const [visibleChecklistIndex, setVisibleChecklistIndex] = useState<number | null>(null);
+    const [visibleMarkerslistIndex, setVisibleMarkerslistIndex] = useState<number | null>(null);
+
+    const navigate = useNavigate();
+
     const paginatedData = useMemo(() => {
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         return data.slice(startIndex, endIndex);
     }, [currentPage, pageSize, data]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            setVisibleChecklistIndex(null);
+
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            setVisibleMarkerslistIndex(null);
+
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
 
     const columns = [
         {
@@ -52,7 +77,7 @@ const CallsTable = () => {
             title: 'Дата звонка',
             dataIndex: 'date',
             key: 'date',
-            width: 150,
+            width: 170,
             render: (text: string, record: TableRecord) => (
                 <p className={styles.tableTextDate}>
                     {formatDate(record.date, 'date-only')}
@@ -90,20 +115,65 @@ const CallsTable = () => {
             title: 'Чек-листы',
             dataIndex: 'checklists',
             key: 'checklists',
-            render: (checklists: string[]) => (
-                <span>
-                    {checklists.length === 1 ? checklists[0] : `${checklists.length}`}
-                </span>
+            render: (checklists: string[], record: any, index: number) => (
+                checklists.length === 1 ? (
+                    <span className={styles.checklistItem}>{checklists[0]}</span>
+                ) : (
+                    <Flex
+                        className={styles.manyItemsContainer}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setVisibleChecklistIndex(visibleChecklistIndex === index ? null : index);
+                            setVisibleMarkerslistIndex(null);
+                        }}
+                        style={{ cursor: 'pointer', position: 'relative' }}
+                    >
+                        <span className={styles.checklistItemLength}>{`${checklists.length}`}</span>
+                        {visibleChecklistIndex === index && (
+                            <Flex className={styles.manyItemsContainerModal}>
+                                {checklists.map((item, i) => (
+                                    <span className={styles.checklistItem} key={i}>{item}</span>
+                                ))}
+                            </Flex>
+                        )}
+                    </Flex>
+                )
             )
         },
         {
             title: 'Маркеры',
             dataIndex: 'markers',
             key: 'markers',
-            render: (markers: string[]) => (
-                <span>
-                    {markers.length === 1 ? markers[0] : `${markers.length}`}
-                </span>
+            render: (markers: Array<{ value: string; label: string }>, record: TableRecord, index: number) => (
+                markers.length === 1 ? (
+                    <Tag className={`${styles.tag} ${styles[markers[0].value]}`}>
+                        {markers[0].label}
+                    </Tag>
+                ) : (
+                    <Flex
+                        className={styles.manyItemsContainer}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setVisibleMarkerslistIndex(visibleMarkerslistIndex === index ? null : index);
+                            setVisibleChecklistIndex(null);
+                        }}
+                        style={{ cursor: 'pointer', position: 'relative' }}
+                    >
+                        <span className={styles.markerItemLength}>{`${markers.length}`}</span>
+                        {visibleMarkerslistIndex === index && (
+                            <Flex className={styles.manyItemsContainerModal}>
+                                {markers.map((marker, i) => (
+                                    <Tag
+                                        className={`${styles.tag} ${styles[marker.value]}`}
+                                        key={marker.value}
+                                    >
+                                        {marker.label}
+                                    </Tag>
+                                ))}
+                            </Flex>
+                        )}
+                    </Flex>
+                )
             )
         }
     ];
@@ -117,14 +187,12 @@ const CallsTable = () => {
             <Flex align="center" gap='32px'>
                 <Flex align="center" >
                     <Text strong>Показать:</Text>
-                    <Select
-                        defaultValue={pageSize}
+                    <CustomPaginationSelect
+                        value={pageSize.toString()}
                         onChange={(value) => {
                             setPageSize(Number(value));
                             setCurrentPage(1);
                         }}
-                        style={{ width: 80 }}
-                        size="small"
                         options={[
                             { value: '10', label: '10' },
                             { value: '20', label: '20' },
@@ -174,6 +242,14 @@ const CallsTable = () => {
                 className={styles.CallsTable}
                 pagination={false}
                 footer={customFooter}
+                onRow={(record: TableRecord) => ({
+                    onClick: () => {
+                        navigate(`/call/:id?${record.id}`);
+                    },
+                    style: {
+                        cursor: 'pointer',
+                    },
+                })}
             />
         </ConfigProvider>
     );

@@ -5,6 +5,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ErrorPage, MainLayout , CallsLayout} from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
+import CallSinglePageLayout from "./routes/CallSinglePageLayout";
 
 const App = () => {
     const routes = [
@@ -20,6 +21,10 @@ const App = () => {
                 {
                     path: '/calls/filtered',
                     element: <CallsFilteredLayout/>
+                },
+                {
+                    path: '/call/:id?',
+                    element: <CallSinglePageLayout/>
                 }
             ]
         }
