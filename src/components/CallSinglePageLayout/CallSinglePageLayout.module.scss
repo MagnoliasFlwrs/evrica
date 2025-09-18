@@ -732,6 +732,235 @@
           line-height: normal;
         }
       }
+      .RecomendationWidgetHeadRecommendation {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .RecommendationRow {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+          p {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            width: 70px;
+            flex-shrink: 0;
+          }
+          span {
+            color: #000;
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+      }
     }
+    .CommentsWidget {
+      display: flex;
+      padding: 20px 20px 20px 30px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      align-self: stretch;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.10);
+      background: #FFF;
+      .CommentsWidgetHead {
+        display: flex;
+        p {
+          color: #000;
+          font-family: Mulish;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+      }
+      .CommentsWidgetList {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .CommentsWidgetListItem {
+          display: flex;
+          gap: 10px;
+          p {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            width: 89px;
+            flex-shrink: 0;
+          }
+          span {
+            overflow: hidden;
+            color: #000;
+            text-overflow: ellipsis;
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            flex: 1 0 0;
+          }
+        }
+      }
+      .CommentsWidgetControls {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .CommentsWidgetShowMore {
+          display: flex;
+          gap: 5px;
+          align-items: center;
+          p {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+          span {
+            color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+            text-align: center;
+            font-family: Mulish;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            border-radius: 2px;
+            border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+            background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+            display: flex;
+            width: 20px;
+            height: 20px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+          }
+        }
+        button {
+          display: flex;
+          width: 20px;
+          height: 20px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          aspect-ratio: 1/1;
+          border-radius: 30px;
+          background: #007AFF;
+          cursor: pointer;
+          border: none;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+.AudioPlayerBlock {
+  display: flex;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+  justify-content: space-between;
+  border-radius: 30px;
+  background: #FFF;
+  margin: 20px 0;
+  .AudioPlayerBlockHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    p {
+      color: #000;
+      font-family: Mulish;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+    .AudioPlayerBlockHeadBtns {
+      display: flex;
+      gap: 10px;
+    }
+  }
+  .AudioPlayer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .AudioPlayerRow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      .AudioPlayerRowControls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        width: 121px;
+        flex-shrink: 0;
+
+        .PlayBtn {
+          display: flex;
+          width: 32px;
+          height: 32px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          border-radius: 100px;
+          border: 1px solid #000;
+          background: #FFF;
+          flex-shrink: 0;
+          outline: none;
+          cursor: pointer;
+        }
+      }
+      .AudioPlayerRowCustomer {
+        color: #000;
+        text-align: right;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        width: 121px;
+        flex-shrink: 0;
+      }
+      .AudioPlayerEmpty {
+        width: 140px;
+        flex-shrink: 0;
+      }
+      .AudioPlayerDuration {
+        color: #000;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        width: 140px;
+        flex-shrink: 0;
+      }
+      .AudioPlayerWave {
+        flex: 1;
+      }
+
+    }
+
   }
 }

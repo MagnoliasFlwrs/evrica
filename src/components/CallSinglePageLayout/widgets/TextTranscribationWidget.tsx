@@ -7,6 +7,7 @@ import HideSpeechStagesIcon from "../../icons/hideSpeechStagesIcon";
 import SearchIcon from "../../ui/CustomSelect/icons/SearchIcon";
 import TranscribationCustomerItem from "../TranscribationItems/TranscribationCustomerItem";
 import TranscribationOperatorItem from "../TranscribationItems/TranscribationOperatorItem";
+import BlueCircledIcon from "../../ui/BlueCircledIcon/BlueCircledIcon";
 
 interface TranscribationItem {
     type: 'operator' | 'customer';
@@ -56,9 +57,7 @@ const TextTranscribationWidget: React.FC<TextTranscribationWidgetProps> = () => 
                     <button className={styles.copyBtn}>
                         <CopyIcon />
                     </button>
-                    <button className={styles.DownloadBtn}>
-                        <DownloadIcon />
-                    </button>
+                    <BlueCircledIcon icon={<DownloadIcon />}/>
                 </Flex>
             </Flex>
             <Flex className={styles.SearchRow}>

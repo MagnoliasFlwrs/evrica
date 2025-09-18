@@ -1,0 +1,320 @@
+.baseSelect {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 78px;
+}
+
+.selectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 100%;
+  height: 32px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 40px;
+  background: #EFEFED;
+  &.outlined {
+    border-radius: 100px;
+    border: 1px solid #000;
+    background: #FFF;
+    display: flex;
+    padding: 0 9px 0 12px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+}
+
+.selectedValueContainer {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.placeholder {
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.selectedContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  flex: 1;
+}
+.selectedOptions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  .selectedTag {
+    border-radius: 2px;
+    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+    display: flex;
+    height: 20px;
+    padding: 0 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    text-align: center;
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .selectedCount {
+    border-radius: 2px;
+    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+    display: flex;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    text-align: center;
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .removeButton {
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    &:hover {
+      svg path {
+        fill: #007AFF;
+      }
+    }
+  }
+
+}
+
+
+
+.arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.selectOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+  display: flex;
+  width: max-content;
+  padding: 12px 20px 20px 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  z-index: 10;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s ease;
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  &:hover {
+    color: #007AFF;
+  }
+}
+.optionAll {
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+  display: flex;
+  padding: 10px 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s ease;
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  &:hover {
+    color: #007AFF;
+  }
+}
+
+.checkbox {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  background-color: white;
+  font-size: 12px;
+}
+.optionsHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: -10px;
+  span {
+    color: #000;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.searchInput {
+  display: flex;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border: none;
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+  outline: none;
+  border-radius: 0;
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.50);
+    font-family: Mulish;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  &:hover, &:focus, &:active, &:focus-visible , &:focus-within {
+    outline: none;
+    border: none!important;
+    box-shadow: none;
+    border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10))!important;
+  }
+}
+:where(.css-dev-only-do-not-override-xepvsj).ant-input-affix-wrapper::before {
+  content: none!important;
+}
+
+.promise {
+  border-radius: 4px;
+  background: #EDFBCC;
+  overflow: hidden;
+  color: #486A12;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+}
+
+.dontwant {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #CCFBF0;
+  overflow: hidden;
+  color: #126D69;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+
+}
+
+.expencive {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: #00598F;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: #ECF8FE;
+}
+
+.donthelp {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #F9E7FE;
+  overflow: hidden;
+  color: #8D1697;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+}
