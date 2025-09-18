@@ -7,6 +7,8 @@ import styles from '../components/CallSinglePageLayout/CallSinglePageLayout.modu
 import BlueButton from "../components/ui/BlueButton/BlueButton";
 import DownloadIcon from "../components/icons/DownloadIcon";
 import CallSinglePageWidgets from "../components/CallSinglePageLayout/CallSinglePageWidgets";
+import CallDetails from "../components/CallSinglePageLayout/CallDetails";
+import CallTranscribationWidgets from "../components/CallSinglePageLayout/CallTranscribationWidgets";
 
 const CallSinglePageLayout = () => {
     return (
@@ -28,6 +30,8 @@ const CallSinglePageLayout = () => {
                 <BlueButton text='Скачать отчет' icon={<DownloadIcon/>}/>
             </Flex>
             <CallSinglePageWidgets/>
+            <CallDetails/>
+            <CallTranscribationWidgets/>
 
         </PageContainer>
     );

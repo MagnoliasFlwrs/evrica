@@ -4,6 +4,7 @@ import styles from './CallSinglePageLayout.module.scss'
 import GeneralCallInfoWidget from "./widgets/GeneralCallInfoWidget";
 import CustomerInfoWidget from "./widgets/CustomerInfoWidget";
 import StagesOfConversationWidget from "./widgets/StagesOfConversationWidget";
+import SummaryOfCallInformationWidget from "./widgets/SummaryOfCallInformationWidget";
 
 const CallSinglePageWidgets = () => {
     return (
@@ -14,7 +15,7 @@ const CallSinglePageWidgets = () => {
                 <StagesOfConversationWidget/>
             </Flex>
             <Flex className={styles.CallSinglePageWidgetsColumn}>
-
+                <SummaryOfCallInformationWidget/>
             </Flex>
         </Flex>
     );

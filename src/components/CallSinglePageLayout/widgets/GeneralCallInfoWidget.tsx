@@ -1,8 +1,40 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex} from "antd";
+import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 
 const GeneralCallInfoWidget = () => {
+    const [attentionModal, setAttentionModal] = React.useState(false);
+    const [categoryModal, setCategoryModal] = React.useState(false);
+    const attentionModalRef = useRef<HTMLDivElement>(null);
+    const categoryModalRef = useRef<HTMLDivElement>(null);
+
+    const handleToggleAttentionModal = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setAttentionModal(!attentionModal);
+        setCategoryModal(false);
+    }
+    const handleToggleCategoryModal = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCategoryModal(!categoryModal);
+        setAttentionModal(false);
+    }
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (attentionModalRef.current && !attentionModalRef.current.contains(e.target as Node)) {
+                setAttentionModal(false);
+            }
+            if (categoryModalRef.current && !categoryModalRef.current.contains(e.target as Node)) {
+                setCategoryModal(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+
     return (
         <Flex className={styles.GeneralCallInfoWidget}>
             <Flex className={styles.GeneralCallInfoWidgetHead}>
@@ -53,9 +85,9 @@ const GeneralCallInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Требует внимания</p>
-                        <Flex className={styles.IconRow}>
+                        <Flex className={styles.IconRow} ref={attentionModalRef}>
                             <span>Да</span>
-                            <button>
+                            <button onClick={handleToggleAttentionModal}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                                      fill="none">
                                     <path d="M8.66669 3.33333H12.6667V7.33333" stroke="#007AFF" strokeWidth="0.67"
@@ -64,6 +96,14 @@ const GeneralCallInfoWidget = () => {
                                           strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </button>
+                            {
+                                attentionModal &&
+                                <CustomTextModal
+                                    text='Стандартный запрос на подбор автомобиля'
+                                    top={true}
+                                    left={true}
+                                />
+                            }
                         </Flex>
 
                     </Flex>
@@ -73,9 +113,9 @@ const GeneralCallInfoWidget = () => {
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Категория</p>
-                        <Flex className={styles.IconRow}>
+                        <Flex className={styles.IconRow} ref={categoryModalRef}>
                             <span>Салон</span>
-                            <button>
+                            <button onClick={handleToggleCategoryModal}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                                      fill="none">
                                     <path
@@ -84,6 +124,14 @@ const GeneralCallInfoWidget = () => {
                                         strokeLinejoin="round"/>
                                 </svg>
                             </button>
+                            {
+                                categoryModal &&
+                                <CustomTextModal
+                                    text='Категория / Подкатегория / Подподкатеогория'
+                                    bottom={true}
+                                    left={true}
+                                />
+                            }
                         </Flex>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>

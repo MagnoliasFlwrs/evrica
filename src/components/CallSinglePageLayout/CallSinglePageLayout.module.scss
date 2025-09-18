@@ -7,6 +7,7 @@
 .CallSinglePageWidgets {
   display: flex;
   gap: 10px;
+  margin-top: 10px;
   .CallSinglePageWidgetsColumn {
     display: flex;
     flex-direction: column;
@@ -96,6 +97,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    position: relative;
     button {
       border-radius: 2px;
       border: 1px solid #007AFF;
@@ -162,4 +164,574 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+.SummaryOfCallInformationWidgetContainer {
+  display: flex;
+  padding: 20px 20px 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #FFF;
+  height: 584px;
+  .InformationListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .InformationListContainerRow{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .InformationListContainerRowTitle {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        width: 170px;
+        flex-shrink: 0;
+      }
+      .InformationListContainerRowDescrtiption {
+        color: #000;
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .InformationListContainerModalWrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        button {
+          display: flex;
+          width: 20px;
+          height: 20px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          border-radius: 2px;
+          border: 1px solid var(--green, #00C310);
+          background: var(--light-green, rgba(0, 195, 16, 0.20));
+          outline: none;
+          cursor: pointer;
+        }
+        .customerSatisfactionList {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          li {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+            p {
+              width: 200px;
+              color: #000;
+              font-family: Mulish;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: normal;
+            }
+            span {
+              color: var(--green, #00C310);
+              font-family: Mulish;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: normal;
+            }
+          }
+        }
+      }
+    }
+    .InformationList {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 412px;
+      overflow: auto;
+      p {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        width: 170px;
+        flex-shrink: 0;
+      }
+      span {
+        color: #000;
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+  }
+  .Tasks {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    .TasksContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    p {
+      color: rgba(0, 0, 0, 0.50);
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+    button {
+      cursor: pointer;
+      border-radius: 2px;
+      border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
+      display: flex;
+      width: 20px;
+      height: 20px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      outline: none;
+      color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      text-align: center;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+  .TasksContainerList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    li {
+      p {
+        color: #000;
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+  }
+}
+
+.CallDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .CallDetailsContainerTile {
+    color: #000;
+    font-family: Mulish;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .CallDetailsContainerSubTile {
+    color: #000;
+    font-family: Mulish;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  .CallsOptionsCheckListsItem{
+    display: flex;
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    .CallsOptionsCheckListsItemRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      .CallsOptionsCheckListsItemRowType {
+        color: #000;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .CallsOptionsCheckListsItemRowCompleting {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .CallsOptionsCheckListsItemRowPercentMark {
+        border-radius: 4px;
+        display: flex;
+        padding: 2px 5px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        span{
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+
+        }
+      }
+      .CallsOptionsCheckListsItemRowCheckListMark {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        border-radius: 2px;
+        border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+        background: #EFEFED;
+        span {
+          color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+          text-align: center;
+          font-family: Mulish;
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+        }
+      }
+    }
+  }
+  .CallsOptionsMarkerItem {
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 20px;
+    flex: 1 0 0;
+    align-items: center;
+    justify-content: space-between;
+    .CallsOptionsMarkerItemContainer {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .CallsOptionsMark {
+      display: flex;
+      padding: 4px 8px;
+      align-items: center;
+      gap: 4px;
+      border-radius: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      text-transform: uppercase;
+    }
+    .CallsOptionsMarkCount {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      border-radius: 2px;
+      border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      background: #EFEFED;
+      color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+      text-align: center;
+      font-family: Mulish;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+}
+.showTriggered {
+  display: flex;
+  height: 32px;
+  padding: 10px 7px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 40px;
+  background: #EFEFED;
+  width: 100%;
+  outline: none;
+  border: none;
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  .triggeredIcon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 30px;
+    background: #007AFF;
+  }
+  .noTriggeredIcon {
+    border-radius: 30px;
+    background: #8C8C8C;
+    display: flex;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+}
+.CallTranscribationWidgets {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  margin-top: 20px;
+  .TextTranscribationWidget {
+    display: flex;
+    width: 889px;
+    padding: 20px 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 30px;
+    background: #FFF;
+    .TextTranscribationWidgetHead {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        color: #000;
+        font-family: Mulish;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .TextTranscribationWidgetHeadButtons {
+        display: flex;
+        gap: 20px;
+        .copyBtn{
+          display: flex;
+          width: 32px;
+          height: 32px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          border-radius: 30px;
+          background: #EFEFED;
+          flex-shrink: 0;
+          outline: none;
+          border: none;
+          cursor: pointer;
+        }
+        .DownloadBtn {
+          border-radius: 30px;
+          background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+          display: flex;
+          width: 32px;
+          height: 32px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          flex-shrink: 0;
+          outline: none;
+          border: none;
+          cursor: pointer;
+        }
+      }
+    }
+    .SearchRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+      button {
+        display: flex;
+        height: 32px;
+        padding: 10px 14px 9px 14px;
+        align-items: center;
+        gap: 10px;
+        border-radius: 40px;
+        border: 1px solid rgba(0, 0, 0, 0.10);
+        color: #000;
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        background: transparent;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .SearchRowInput {
+        display: flex;
+        height: 32px;
+        padding: 10px 14px;
+        align-items: center;
+        gap: 10px;
+        border-radius: 40px;
+        border: 1px solid rgba(0, 0, 0, 0.10);
+        width: 259px;
+        outline: none;
+        &:focus {
+          outline: none;
+
+        }
+      }
+    }
+    .transcribation {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      height: 320px;
+      overflow-y: auto;
+      .TranscribationOperatorItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 4px;
+        .dateRow {
+          display: flex;
+          gap: 4px;
+          align-items: flex-end;
+          span {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+        .textRow {
+          display: flex;
+          padding: 10px 20px;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 10px;
+          border-radius: 31px;
+          border: 1px solid rgba(0, 0, 0, 0.10);
+          color: #000;
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 120%; /* 16.8px */
+          max-width: 552px;
+          width: 100%;
+        }
+
+      }
+      .TranscribationCustomerItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        width: 100%;
+        .dateRow {
+          display: flex;
+          gap: 4px;
+          align-items: flex-end;
+          span {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+        .textRow {
+          display: flex;
+          padding: 10px 20px;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 10px;
+          border-radius: 31px;
+          border: 1px solid rgba(0, 0, 0, 0.10);
+          color: #000;
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 120%; /* 16.8px */
+          max-width: 552px;
+          width: 100%;
+        }
+      }
+    }
+  }
+  .widgetsBlock {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    .RecomendationWidget {
+      display: flex;
+      padding: 20px 20px 20px 30px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      align-self: stretch;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.10);
+      background: #FFF;
+      .RecomendationWidgetHead {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        p {
+          color: #000;
+          font-family: Mulish;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+      }
+    }
+  }
 }
