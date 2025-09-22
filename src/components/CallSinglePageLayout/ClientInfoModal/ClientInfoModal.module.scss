@@ -1,0 +1,105 @@
+.ClientInfoModalContainer {
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(12px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .ClientInfoModal{
+    display: flex;
+    padding: 12px 20px 20px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+    .ClientInfoModalHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      p {
+        color: #000;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+      button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        outline: none;
+      }
+    }
+    .ClientInfoModalInfoCards {
+      display: flex;
+      gap: 40px;
+      .ClientInfoModalInfoCard {
+        display: flex;
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+        height: fit-content;
+        li {
+          display: flex;
+          align-items: flex-end;
+          gap: 10px;
+          p {
+            color: rgba(0, 0, 0, 0.50);
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            width: 170px;
+            flex-shrink: 0;
+          }
+          span {
+            color: #000;
+            font-family: Mulish;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            position: relative;
+          }
+        }
+
+      }
+    }
+    a {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--Bue, #007AFF);
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      text-decoration-line: underline;
+      text-decoration-style: solid;
+      text-decoration-skip-ink: auto;
+      text-decoration-thickness: auto;
+      text-underline-offset: auto;
+      text-underline-position: from-font;
+    }
+  }
+}

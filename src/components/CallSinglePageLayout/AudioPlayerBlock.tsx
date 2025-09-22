@@ -9,7 +9,7 @@ import AudioPlayer from "./AudioPlayer/AudioPlayer";
 
 const AudioPlayerBlock = () => {
     const [isHideSpeechStages, setHideSpeechStages] = useState(false);
-    const [showChannels, setShowChannels] = useState(false);
+    const [showChannels, setShowChannels] = useState(true);
 
 
     return (

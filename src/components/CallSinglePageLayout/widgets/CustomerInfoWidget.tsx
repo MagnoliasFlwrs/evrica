@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Flex} from "antd";
 import styles from '../CallSinglePageLayout.module.scss'
+import ClientInfoModal from "../ClientInfoModal/ClientInfoModal";
 
 const CustomerInfoWidget = () => {
+    const [openClientInfomodal , setOpenClientInfoModal] = useState(false);
     return (
         <Flex className={styles.CustomerInfo}>
             <Flex className={styles.GeneralCallInfoWidgetHead}>
                 <p className={styles.CallWidgetTitle}>Общая информация</p>
-                <a href="#">
-                    Карточка клиента
+                <a href="#" onClick={()=> setOpenClientInfoModal(true)}>
+                    Подробнее
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                              fill="none">
@@ -53,6 +55,11 @@ const CustomerInfoWidget = () => {
                     </Flex>
                 </Flex>
             </Flex>
+
+            {
+                openClientInfomodal &&
+                <ClientInfoModal setOpenClientInfoModal={setOpenClientInfoModal}/>
+            }
         </Flex>
     );
 };

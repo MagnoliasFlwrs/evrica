@@ -1,10 +1,22 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex} from "antd";
-import {PlusOutlined} from "@ant-design/icons";
+
 import PlusIcon from "../icons/PlusIcon";
+import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
+import BlueCircledIcon from "../../ui/BlueCircledIcon/BlueCircledIcon";
+import SendBtn from "../../icons/SendBtn";
 
 const CommentsWidget = () => {
+    const [openModal, setOpenModal] = useState(false);
+    const [addCommentInput, setAddCommentInput] = useState(false);
+    const handleAddCommentClick = () => {
+        setAddCommentInput(true);
+    }
+    useEffect(() => {
+        addCommentInput && setOpenModal(false) ;
+    }, [addCommentInput])
+
     return (
         <Flex className={styles.CommentsWidget}>
             <Flex className={styles.CommentsWidgetHead}>
@@ -20,16 +32,38 @@ const CommentsWidget = () => {
                     <span>Оператор не поздоровался и не предложил товар
                         Оператор не поздоровался и не предложил товар
                         Оператор не поздоровался и не предложил товар
+                        Оператор не поздоровался и не предложил товар
+                        Оператор не поздоровался и не предложил товар
+                        Оператор не поздоровался и не предложил товар
+                        Оператор не поздоровался и не предложил товар
                         Оператор не поздоровался и не предложил товар</span>
                 </Flex>
             </Flex>
+            {
+                addCommentInput &&
+                <Flex className={styles.addCommentInputContainer}>
+                    <input type="text"/>
+                    <BlueCircledIcon icon={<SendBtn/>} size={20}/>
+
+                </Flex>
+            }
             <Flex className={styles.CommentsWidgetControls}>
                 <Flex className={styles.CommentsWidgetShowMore}>
                     <p>Еще</p>
                     <span>4</span>
                 </Flex>
-                <button>
+                <button onClick={() => setOpenModal(true)}>
                     <PlusIcon/>
+                    {
+                        openModal &&
+                        <CustomTextModal
+                            text='Добавить комментарий'
+                            left={true}
+                            bottom={true}
+                            onClick={()=>handleAddCommentClick()}
+                        />
+                    }
+
                 </button>
             </Flex>
         </Flex>

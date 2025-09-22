@@ -548,6 +548,12 @@
       .TextTranscribationWidgetHeadButtons {
         display: flex;
         gap: 20px;
+        .copyBtnContainer {
+          position: relative;
+        }
+        .downloadBtnContainer {
+          position: relative;
+        }
         .copyBtn{
           display: flex;
           width: 32px;
@@ -810,7 +816,7 @@
             line-height: normal;
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
+            -webkit-line-clamp: 2;
             flex: 1 0 0;
           }
         }
@@ -865,6 +871,34 @@
           cursor: pointer;
           border: none;
           outline: none;
+          position: relative;
+        }
+      }
+      .addCommentInputContainer {
+        position: relative;
+        width: 100%;
+        input {
+          display: flex;
+          height: 32px;
+          padding: 10px 8px 10px 14px;
+          justify-content: space-between;
+          align-items: center;
+          align-self: stretch;
+          border-radius: 10px;
+          border: 1px solid rgba(0, 0, 0, 0.10);
+          color: #000;
+          font-family: Mulish;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          width: 100%;
+        }
+        button {
+          position: absolute;
+          top: 50%;
+          right: 8px;
+          transform: translateY(-50%);
         }
       }
     }
@@ -910,6 +944,18 @@
       gap: 10px;
       align-items: center;
       width: 100%;
+      &.hidden {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: 0.3s ease;
+      }
+      &.open {
+        max-height: 40px;
+        overflow: visible;
+        opacity: 1;
+        transition: 0.3s ease;
+      }
       .AudioPlayerRowControls {
         display: flex;
         gap: 10px;
@@ -968,6 +1014,25 @@
       }
 
     }
+
+  }
+}
+
+.CheckListModal {
+  display: flex;
+  width: 287px;
+  padding: 12px 20px 20px 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 9;
+  .CheckListModalHead {
 
   }
 }

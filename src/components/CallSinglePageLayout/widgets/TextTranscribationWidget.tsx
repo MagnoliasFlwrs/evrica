@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss';
 import { Flex, Input } from "antd";
 import CopyIcon from "../../icons/CopyIcon";
@@ -8,6 +8,7 @@ import SearchIcon from "../../ui/CustomSelect/icons/SearchIcon";
 import TranscribationCustomerItem from "../TranscribationItems/TranscribationCustomerItem";
 import TranscribationOperatorItem from "../TranscribationItems/TranscribationOperatorItem";
 import BlueCircledIcon from "../../ui/BlueCircledIcon/BlueCircledIcon";
+import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 
 interface TranscribationItem {
     type: 'operator' | 'customer';
@@ -20,6 +21,8 @@ interface TextTranscribationWidgetProps {
 }
 
 const TextTranscribationWidget: React.FC<TextTranscribationWidgetProps> = () => {
+    const [downloadModal, setDownloadModal] = useState(false);
+    const [copyModal, setCopyModal] = useState(false);
 
     const transcribationData: TranscribationItem[] = [
         {
@@ -48,16 +51,47 @@ const TextTranscribationWidget: React.FC<TextTranscribationWidgetProps> = () => 
             text: 'Неизвестные точные размеры кухни на даче',
         },
     ];
-
+    const handleDownload = ()=>{
+        setDownloadModal(false)
+    }
+    const handleCopy = () => {
+        setCopyModal(false)
+    }
     return (
         <Flex className={styles.TextTranscribationWidget}>
             <Flex className={styles.TextTranscribationWidgetHead}>
                 <p>Текстовая расшифровка разговора</p>
                 <Flex className={styles.TextTranscribationWidgetHeadButtons}>
-                    <button className={styles.copyBtn}>
-                        <CopyIcon />
-                    </button>
-                    <BlueCircledIcon icon={<DownloadIcon />}/>
+                    <Flex className={styles.copyBtnContainer}>
+                        <button className={styles.copyBtn} onClick={() => setCopyModal(true)}>
+                            <CopyIcon/>
+                        </button>
+                        {
+                            copyModal &&
+                            <CustomTextModal
+                                text='Скопировать'
+                                onClick={()=>handleCopy()}
+                                width={96}
+                                top={true}
+                                left={true}
+                            />
+                        }
+                    </Flex>
+
+                    <Flex className={styles.downloadBtnContainer}>
+                    <BlueCircledIcon icon={<DownloadIcon />} onClick={() => setDownloadModal(true)} />
+                        {
+                            downloadModal &&
+                            <CustomTextModal
+                                text='Скачать PDF'
+                                onClick={()=>handleDownload()}
+                                width={96}
+                                top={true}
+                                left={true}
+                            />
+                        }
+                    </Flex>
+
                 </Flex>
             </Flex>
             <Flex className={styles.SearchRow}>

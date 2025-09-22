@@ -90,3 +90,17 @@ body {
 :where(.css-dev-only-do-not-override-45y2o1).ant-table-wrapper .ant-table {
   border-radius: 16px !important;
 }
+.swiper-container {
+  position: relative;
+  overflow: visible; /* Разрешаем overflow для модального окна */
+}
+
+.swiper {
+  overflow-x: hidden;
+  overflow-y: visible; /* Это может не работать в некоторых браузерах */
+}
+
+/* Альтернатива - обертка только для контента */
+.swiper-content-wrapper {
+  overflow-x: hidden;
+}

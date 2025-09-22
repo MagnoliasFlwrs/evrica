@@ -6,6 +6,7 @@ import audio1 from './1.wav'
 import audio2 from './2.wav'
 import WaveSurfer from 'wavesurfer.js';
 import {controlsOptions, getFormattedTime} from "../utils";
+import cn from "classnames";
 
 interface AudioPlayerProps {
     showChannels: boolean;
@@ -29,6 +30,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
         {audio: audio1, id: 1},
         {audio: audio2, id: 2}
     ];
+
+
+    useEffect(() => {
+        if (wavesurfers.current.length > 0) {
+            const speedValue = parseFloat(speed);
+            wavesurfers.current.forEach(wavesurfer => {
+                wavesurfer.setPlaybackRate(speedValue);
+            });
+        }
+    }, [speed]);
 
     useEffect(() => {
         wavesurfers.current = [];
@@ -54,6 +65,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
             });
 
             wavesurfer.load(audio.audio);
+
+            wavesurfer.setPlaybackRate(parseFloat(speed));
+
             wavesurfer.on('ready', () => {
                 const currentDuration = wavesurfer.getDuration();
                 setDuration(prevDuration => Math.max(prevDuration, currentDuration));
@@ -114,15 +128,18 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                     </button>
                 </div>
                 <div className={styles.AudioPlayerWave} onClick={handleSeek}>
-                    <div className='wave-cont'  id={`waveform-${audios[0].id}`}></div>
+                    <div className='wave-cont' id={`waveform-${audios[0].id}`}></div>
                 </div>
                 <div className={styles.AudioPlayerDuration}>
                     {getFormattedTime(currentTime)} / {getFormattedTime(duration)}
                 </div>
             </div>
             {
-                showChannels &&
-                <div className={styles.AudioPlayerRow}>
+                audios[1] &&
+                <div className={cn(styles.AudioPlayerRow, {
+                    [styles.open]: showChannels,
+                    [styles.hidden]: !showChannels
+                })}>
                     <div className={styles.AudioPlayerRowCustomer}>
                         Клиент
                     </div>
@@ -132,6 +149,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                     <div className={styles.AudioPlayerEmpty}></div>
                 </div>
             }
+
 
         </div>
     );

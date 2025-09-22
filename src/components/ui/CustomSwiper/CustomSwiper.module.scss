@@ -1,7 +1,6 @@
 .CustomSwiper {
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
   position: relative;
   display: flex;
   align-items: center;
@@ -19,4 +18,33 @@
       display: none;
     }
   }
+  .swiper-container {
+    position: relative;
+    overflow: visible; /* Разрешаем overflow для модального окна */
+  }
+
+  .swiper {
+    overflow-x: hidden;
+    overflow-y: visible; /* Это может не работать в некоторых браузерах */
+  }
+
+  /* Альтернатива - обертка только для контента */
+  .swiper-content-wrapper {
+    overflow-x: hidden;
+  }
+
+}
+.CustomSwiper .swiper-container {
+  position: relative;
+  overflow: visible; /* Разрешаем overflow для модального окна */
+}
+
+.CustomSwiper .swiper {
+  overflow-x: hidden;
+  overflow-y: visible; /* Это может не работать в некоторых браузерах */
+}
+
+/* Альтернатива - обертка только для контента */
+.CustomSwiper .swiper-content-wrapper {
+  overflow-x: hidden;
 }

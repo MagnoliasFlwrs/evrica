@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import { Flex } from "antd";
+import {Flex} from "antd";
 import styles from '../CallSinglePageLayout.module.scss';
 import { callsOptionsCheckListColors } from '../../CallsFilteredLayout/CallsOptions/utils'
+import CheckListModal from "./CheckListModal";
 
 interface CallsOptionsCheckListsItemProps {
     item: {
@@ -30,6 +31,8 @@ const CallCheckListsItem = ({ item, key }: CallsOptionsCheckListsItemProps) => {
 
     const colorConfig = getColorByPercent(item?.percent);
 
+
+
     return (
         <Flex className={styles.CallsOptionsCheckListsItem} key={key}>
             <Flex className={styles.CallsOptionsCheckListsItemRow}>
@@ -41,9 +44,10 @@ const CallCheckListsItem = ({ item, key }: CallsOptionsCheckListsItemProps) => {
                         border: `1px solid ${colorConfig.color}`,
                     }}
                 >
-                    <span style={{ color: colorConfig.color }}>
-                        {item?.percent}
-                    </span>
+
+                        <span style={{color: colorConfig.color}}>
+                            {item?.percent}
+                        </span>
                 </Flex>
             </Flex>
             <Flex className={styles.CallsOptionsCheckListsItemRow}>

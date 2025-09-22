@@ -9,6 +9,8 @@ interface ICustomTextModalProps {
     left?: boolean;
     right?: boolean;
     bottom?: boolean;
+    onClick?: () => void;
+    width?: number;
 }
 
 const CustomTextModal: React.FC<ICustomTextModalProps> = ({
@@ -17,7 +19,8 @@ const CustomTextModal: React.FC<ICustomTextModalProps> = ({
                                                               top,
                                                               bottom,
                                                               right,
-                                                              left
+                                                              left,
+                                                              onClick, width
                                                           }) => {
     const getPositionStyles = () => {
         const styles: React.CSSProperties = {};
@@ -33,6 +36,9 @@ const CustomTextModal: React.FC<ICustomTextModalProps> = ({
         } else if (right) {
             styles.left = '50%';
         }
+        if (width){
+            styles.width = width;
+        }
 
         return styles;
     };
@@ -47,6 +53,7 @@ const CustomTextModal: React.FC<ICustomTextModalProps> = ({
         <Flex
             className={styles.CustomTextModal}
             style={getPositionStyles()}
+            onClick={onClick}
         >
             {renderContent()}
         </Flex>
