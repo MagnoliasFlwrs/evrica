@@ -345,6 +345,12 @@
     font-weight: 700;
     line-height: normal;
   }
+  .CallDetailsChecklistsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+  }
   .CallDetailsContainerSubTile {
     color: #000;
     font-family: Mulish;
@@ -1028,11 +1034,98 @@
   border-radius: 20px;
   background: #FFF;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 9;
+  //position: absolute;
+  //bottom: 0;
+  //left: 0;
+  //z-index: 9;
   .CheckListModalHead {
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .CheckListModalHeadName {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      p {
+        color: #000;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+      .CallsOptionsCheckListsItemRowPercentMark {
+        border-radius: 4px;
+        display: flex;
+        padding: 2px 5px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        span{
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+        }
+      }
+    }
+    button {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+  .CheckListModalMarkCount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .CheckListModalMarkCountTitle {
+      color: #000;
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+    .CheckListModalMarkCountDescription {
+      color: #000;
+      font-family: Mulish;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      span {
+        color: var(--green, #00C310);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+      }
+    }
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    li {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .CheckListModalMarkCountTitle {
+        color: #000;
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+    }
   }
 }

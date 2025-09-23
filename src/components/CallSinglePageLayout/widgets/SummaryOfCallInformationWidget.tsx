@@ -62,7 +62,8 @@ const SummaryOfCallInformationWidget = () => {
                     <p className={styles.InformationListContainerRowTitle}>Удовлетворенность клиента</p>
                     <Flex className={styles.InformationListContainerModalWrapper} ref={customerSatisfactionRef}>
                         <span className={styles.InformationListContainerRowDescrtiption}>9</span>
-                        <button onClick={handleToggleSatisfactionModal}>
+                        <button onMouseEnter={() => setCustomerSatisfactionModal(true)}
+                                onMouseLeave={() => setCustomerSatisfactionModal(false)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                                  fill="none">
                                 <path d="M5.33276 7.20002L7.99943 4.53336L10.6661 7.20002" stroke="#00C310"
@@ -144,7 +145,10 @@ const SummaryOfCallInformationWidget = () => {
                 <Flex className={styles.Tasks}>
                     <Flex className={styles.TasksContainer} ref={tasksModalRef}>
                         <p>Задачи</p>
-                        <button onClick={handleToggleTasksModal}>4</button>
+                        <button onMouseEnter={() => setTasksModal(true)}
+                                onMouseLeave={() => setTasksModal(false)}>
+                            4
+                        </button>
                         {
                             tasksModal &&
                             <CustomTextModal

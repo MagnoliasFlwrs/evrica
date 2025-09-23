@@ -13,7 +13,7 @@ interface CarouselProps {
     renderItem: (item: any, index: number) => React.ReactNode;
 }
 
-const CustomSwiper: React.FC<CarouselProps> = ({ data, renderItem }) => {
+const CustomSwiper: React.FC<CarouselProps> = ({ data, renderItem  }) => {
     const swiperRef = useRef<any>(null);
     const [isBeginning, setIsBeginning] = useState(true);
     const [isEnd, setIsEnd] = useState(false);

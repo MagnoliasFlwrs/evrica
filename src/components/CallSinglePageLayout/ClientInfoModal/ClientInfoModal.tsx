@@ -14,7 +14,6 @@ const ClientInfoModal:React.FC<ClientInfoModalProps> = ({setOpenClientInfoModal}
     const modalRef = useRef<HTMLDivElement>(null);
 
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        // Проверяем, что клик был именно по контейнеру, а не по модалке
         if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
             setOpenClientInfoModal(false);
         }
@@ -25,7 +24,7 @@ const ClientInfoModal:React.FC<ClientInfoModalProps> = ({setOpenClientInfoModal}
             <Flex
                 className={styles.ClientInfoModal}
                 ref={modalRef}
-                onClick={(e) => e.stopPropagation()} // Предотвращаем всплытие клика
+                onClick={(e) => e.stopPropagation()}
             >
                 <Flex className={styles.ClientInfoModalHead}>
                     <p>Информация по клиенту</p>
@@ -48,7 +47,10 @@ const ClientInfoModal:React.FC<ClientInfoModalProps> = ({setOpenClientInfoModal}
                             <p>Возраст</p>
                             <span>
                                 25 - 30 лет
-                                <button onClick={() => setOpenAgeModal(true)}>
+                                <button
+                                    onMouseEnter={() => setOpenAgeModal(true)}
+                                    onMouseLeave={() => setOpenAgeModal(false)}
+                                >
                                     <BlueArrow/>
                                 </button>
                                 {

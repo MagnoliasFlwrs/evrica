@@ -90,17 +90,18 @@ body {
 :where(.css-dev-only-do-not-override-45y2o1).ant-table-wrapper .ant-table {
   border-radius: 16px !important;
 }
-.swiper-container {
-  position: relative;
-  overflow: visible; /* Разрешаем overflow для модального окна */
+
+
+.checklist-modal-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
 }
 
-.swiper {
-  overflow-x: hidden;
-  overflow-y: visible; /* Это может не работать в некоторых браузерах */
-}
-
-/* Альтернатива - обертка только для контента */
-.swiper-content-wrapper {
-  overflow-x: hidden;
+.checklist-modal-content {
+  pointer-events: auto;
 }
