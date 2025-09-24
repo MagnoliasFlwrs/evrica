@@ -6,7 +6,7 @@ import FilteredCallsBlock from "../components/CallsLayout/FilteredCallsBlock/Fil
 
 const CallsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
-    console.log(isSelected)
+
     return (
         <PageContainer>
             <PageTitle text='Звонки'/>

@@ -480,6 +480,7 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      cursor: pointer;
     }
   }
 }
@@ -836,7 +837,8 @@
           display: flex;
           gap: 5px;
           align-items: center;
-          p {
+          position: relative;
+          .CommentsWidgetShowMoreTitle {
             color: rgba(0, 0, 0, 0.50);
             font-family: Mulish;
             font-size: 12px;
@@ -844,7 +846,7 @@
             font-weight: 500;
             line-height: normal;
           }
-          span {
+          .CommentsWidgetShowMoreCount {
             color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
             text-align: center;
             font-family: Mulish;
@@ -862,6 +864,54 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
+          }
+          .MoreCommentsModal {
+            display: flex;
+            width: 365px;
+            padding: 16px 20px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            border-radius: 20px;
+            background: #FFF;
+            box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+            height: 182px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            ul {
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+              overflow: hidden;
+              overflow-y: auto;
+              li {
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                span {
+                  color: rgba(0, 0, 0, 0.50);
+                  font-family: Mulish;
+                  font-size: 10px;
+                  font-style: normal;
+                  font-weight: 500;
+                  line-height: normal;
+                  width: 89px;
+                  flex-shrink: 0;
+                  margin-top: 2px;
+                }
+                p {
+                  color: #000;
+                  font-family: Mulish;
+                  font-size: 12px;
+                  font-style: normal;
+                  font-weight: 500;
+                  line-height: normal;
+                }
+              }
+            }
           }
         }
         button {
@@ -1127,5 +1177,20 @@
         line-height: normal;
       }
     }
+  }
+  .CallsOptionsMark {
+    display: flex;
+    padding: 4px 8px;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
   }
 }

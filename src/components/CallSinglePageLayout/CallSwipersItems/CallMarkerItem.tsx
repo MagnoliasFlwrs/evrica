@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import { Flex } from "antd";
 import styles from '../CallSinglePageLayout.module.scss';
-import { callsOptionsMarkersColors } from '../../CallsFilteredLayout/CallsOptions/utils'
+import {callsOptionsMarkersColors} from "../../CallsFilteredLayout/CallsOptions/utils";
+import MinusIcon from "./MinusIcon";
+import PlusIcon from "./PlusIcon";
+import {MarkerItem, MarkerModalState} from "../types";
 
 interface CallsOptionsMarkerItemProps {
-    item: {
-        type: string;
-        count: number;
-    };
+    item: MarkerItem;
     key: number;
+    setShowMarkerModal: (value: MarkerModalState) => void;
 }
 
-const CallMarkerItem = ({ item, key }: CallsOptionsMarkerItemProps) => {
+const CallMarkerItem = ({ item, key , setShowMarkerModal }: CallsOptionsMarkerItemProps) => {
     const [isTriggered, setIsTriggered] = useState(false);
 
     const getColorByMarkerType = () => {
@@ -25,11 +26,23 @@ const CallMarkerItem = ({ item, key }: CallsOptionsMarkerItemProps) => {
             case 'не помогли':
                 return callsOptionsMarkersColors.purple;
             default:
-                return callsOptionsMarkersColors.blue; // цвет по умолчанию
+                return callsOptionsMarkersColors.blue;
         }
     };
 
     const colorConfig = getColorByMarkerType();
+
+    const handleClick = (event: React.MouseEvent) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        setShowMarkerModal({
+            show: true,
+            position: {
+                x: rect.left + rect.width / 2,
+                y: rect.bottom
+            },
+            item: item
+        });
+    };
 
     return (
         <Flex className={styles.CallsOptionsMarkerItem} key={key}>
@@ -43,7 +56,9 @@ const CallMarkerItem = ({ item, key }: CallsOptionsMarkerItemProps) => {
                 >
                     {item?.type}
                 </Flex>
-                <Flex className={styles.CallsOptionsMarkCount}>
+                <Flex className={styles.CallsOptionsMarkCount}
+                      onClick={handleClick}
+                >
                     {item?.count}
                 </Flex>
             </Flex>
@@ -52,25 +67,14 @@ const CallMarkerItem = ({ item, key }: CallsOptionsMarkerItemProps) => {
                 isTriggered ?
                     <button className={styles.showTriggered} onClick={() => setIsTriggered(false)}>
                         <span className={styles.triggeredIcon}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="2" viewBox="0 0 12 2"
-                                 fill="none">
-                              <path d="M1.33325 1H10.6666" stroke="white" strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"/>
-                            </svg>
+                            <PlusIcon/>
                         </span>
                         Убрать срабатывание
                     </button>
                     :
                     <button className={styles.showTriggered} onClick={() => setIsTriggered(true)}>
                         <span className={styles.noTriggeredIcon}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
-                                 fill="none">
-                              <path d="M3.33325 8H12.6666" stroke="white" strokeWidth="1.5" strokeLinecap="round"
-                                    strokeLinejoin="round"/>
-                              <path d="M8 3.33337V12.6667" stroke="white" strokeWidth="1.5" strokeLinecap="round"
-                                    strokeLinejoin="round"/>
-                            </svg>
+                            <MinusIcon/>
                         </span>
                         Показать срабатывание
                     </button>

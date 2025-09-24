@@ -6,10 +6,13 @@ import PlusIcon from "../icons/PlusIcon";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import BlueCircledIcon from "../../ui/BlueCircledIcon/BlueCircledIcon";
 import SendBtn from "../../icons/SendBtn";
+import MoreCommentsModal from "../modals/MoreCommentsModal";
 
 const CommentsWidget = () => {
     const [openModal, setOpenModal] = useState(false);
     const [addCommentInput, setAddCommentInput] = useState(false);
+    const [openMoreCommentsModal, setOpenMoreCommentsModal] = useState(false);
+
     const handleAddCommentClick = () => {
         setAddCommentInput(true);
     }
@@ -48,9 +51,18 @@ const CommentsWidget = () => {
                 </Flex>
             }
             <Flex className={styles.CommentsWidgetControls}>
-                <Flex className={styles.CommentsWidgetShowMore}>
-                    <p>Еще</p>
-                    <span>4</span>
+                <Flex className={styles.CommentsWidgetShowMore}
+                      onMouseEnter={() => setOpenMoreCommentsModal(true)}
+                      onMouseLeave={() => setOpenMoreCommentsModal(false)}
+                >
+                    <p className={styles.CommentsWidgetShowMoreTitle}>Еще</p>
+                    <span className={styles.CommentsWidgetShowMoreCount}
+                    >
+                        4
+                    </span>
+                    {
+                        openMoreCommentsModal && <MoreCommentsModal/>
+                    }
                 </Flex>
                 <button onClick={() => setOpenModal(true)}>
                     <PlusIcon/>

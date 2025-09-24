@@ -105,3 +105,17 @@ body {
 .checklist-modal-content {
   pointer-events: auto;
 }
+.marker-modal-content {
+  pointer-events: auto;
+}
+
+.ant-checkbox-label {
+  overflow: hidden;
+  color: #1D1D1F;
+  text-overflow: ellipsis;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

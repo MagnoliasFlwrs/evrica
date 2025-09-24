@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { Flex } from "antd";
 import styles from '../CallSinglePageLayout.module.scss';
-import { callsOptionsCheckListColors } from '../../CallsFilteredLayout/CallsOptions/utils';
 import PlusIcon from "./PlusIcon";
 import MinusIcon from "./MinusIcon";
+import {getColorByPercent} from "../utils";
+import {CheckListItem} from "../types";
 
-interface CheckListItem {
-    type: string;
-    percent: string;
-    checkListCompleting: number;
-}
 
 interface CallsOptionsCheckListsItemProps {
     item: CheckListItem;
@@ -22,17 +18,6 @@ interface CallsOptionsCheckListsItemProps {
 
 const CallCheckListsItem: React.FC<CallsOptionsCheckListsItemProps> = ({ item, setShowCheckListModal }) => {
     const [isTriggered, setIsTriggered] = useState(false);
-
-    const getColorByPercent = (percent: string) => {
-        const percentNumber = parseInt(percent.replace('%', ''), 10);
-        if (percentNumber > 85) {
-            return callsOptionsCheckListColors.green;
-        } else if (percentNumber > 50) {
-            return callsOptionsCheckListColors.orange;
-        } else {
-            return callsOptionsCheckListColors.gray;
-        }
-    };
 
     const colorConfig = getColorByPercent(item?.percent);
 

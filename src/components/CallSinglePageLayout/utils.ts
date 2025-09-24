@@ -1,3 +1,6 @@
+import {callsOptionsCheckListColors, callsOptionsMarkersColors} from "../CallsFilteredLayout/CallsOptions/utils";
+import {MarkerItem} from "./types";
+
 export const getFormattedTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0');
@@ -18,3 +21,14 @@ export const controlsOptions = [
         label: 'x1'
     },
 ];
+
+export const getColorByPercent = (percent: string) => {
+    const percentNumber = parseInt(percent.replace('%', ''), 10);
+    if (percentNumber > 85) {
+        return callsOptionsCheckListColors.green;
+    } else if (percentNumber > 50) {
+        return callsOptionsCheckListColors.orange;
+    } else {
+        return callsOptionsCheckListColors.gray;
+    }
+};

@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import './index.css';
 import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {ErrorPage, MainLayout , CallsLayout} from "./routes/routesConfig/lazyComponents";
+import {ErrorPage, MainLayout, CallsLayout, AnalyticsLayout , LoginLayout} from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
 import CallSinglePageLayout from "./routes/CallSinglePageLayout";
@@ -25,9 +25,18 @@ const App = () => {
                 {
                     path: '/call/:id?',
                     element: <CallSinglePageLayout/>
-                }
+                },
+                {
+                    path: '/analytics',
+                    element: <AnalyticsLayout />,
+                },
             ]
-        }
+        },
+        {
+            path: 'login',
+            element: <LoginLayout />,
+            errorElement: <ErrorPage />,
+        },
     ]
 
     const router = createBrowserRouter(routes);

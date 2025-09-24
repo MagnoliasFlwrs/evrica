@@ -1,0 +1,134 @@
+.LoginLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #F9F9F9;
+  height: 100vh;
+  h1 {
+    margin-top: 215px;
+    color: #000;
+    font-family: Mulish;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .LoginFormContainer {
+    display: flex;
+    padding: 20px 30px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    border-radius: 30px;
+    background: #FFF;
+    width: fit-content;
+    .LoginForm {
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .LoginFormRow {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        span {
+          color: rgba(0, 0, 0, 0.50);
+          font-family: Mulish;
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          &.LoginFormRowLabel {
+            display: block;
+            padding: 0 14px;
+          }
+        }
+        input {
+          display: flex;
+          height: 40px;
+          padding: 10px 8px 10px 14px;
+          align-items: center;
+          gap: 10px;
+          border-radius: 10px;
+          border: 1px solid rgba(0, 0, 0, 0.10);
+          color: #000;
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          outline: none;
+          width: 100%;
+        }
+        .LoginFormRowPassword {
+          position: relative;
+          .visibilityBtn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+          }
+        }
+
+      }
+      button {
+        border: none;
+        background: none;
+        outline: none;
+        cursor: pointer;
+        display: flex;
+        height: 42px;
+        padding: 12px 14px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        align-self: stretch;
+        border-radius: 30px;
+        background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+        color: #FFF;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-top: 20px;
+      }
+      .rememberPass {
+        color: #1D1D1F;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: center;
+        a {
+          overflow: hidden;
+          color: var(--Bue, #007AFF);
+          text-overflow: ellipsis;
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          text-decoration-line: underline;
+          text-decoration-style: solid;
+          text-decoration-skip-ink: auto;
+          text-decoration-thickness: auto;
+          text-underline-offset: auto;
+          text-underline-position: from-font;
+        }
+      }
+
+    }
+  }
+}
+:global(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: #007AFF;
+  border-color: #007AFF;
+}
+:global(.ant-checkbox-wrapper:hover .ant-checkbox-inner) {
+  border-color: #007AFF;
+}

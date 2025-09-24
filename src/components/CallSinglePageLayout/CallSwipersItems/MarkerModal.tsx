@@ -2,24 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import { Flex } from "antd";
 import styles from '../CallSinglePageLayout.module.scss';
 import CloseIcon from "../../ui/CustomSelect/icons/CloseIcon";
-import {callsOptionsCheckListColors} from "../../CallsFilteredLayout/CallsOptions/utils";
 import GreenCheck from "./GreenCheck";
 import GrayCheck from "./GrayCheck";
 import {getColorByPercent} from "../utils";
+import {MarkerModalProps} from "../types";
+import {callsOptionsMarkersColors} from "../../CallsFilteredLayout/CallsOptions/utils";
 
-interface CheckListItem {
-    type: string;
-    percent: string;
-    checkListCompleting: number;
-}
 
-interface CheckListModalProps {
-    position: { x: number; y: number } | null;
-    onClose: () => void;
-    item: CheckListItem | null;
-}
 
-const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item  }) => {
+const MarkerModal: React.FC<MarkerModalProps> = ({ position, onClose, item  }) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -68,56 +59,62 @@ const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item
 
     if (!item) return null;
 
-    const colorConfig = getColorByPercent(item?.percent);
+    const getColorByMarkerType = () => {
+        switch(item?.type.toLowerCase()) {
+            case 'возражение "дорого"':
+                return callsOptionsMarkersColors.blue;
+            case 'не хочу':
+                return callsOptionsMarkersColors.aqua;
+            case 'oбещали перезвонить':
+                return callsOptionsMarkersColors.green;
+            case 'не помогли':
+                return callsOptionsMarkersColors.purple;
+            default:
+                return callsOptionsMarkersColors.blue;
+        }
+    };
+
+    const colorConfig = getColorByMarkerType();
 
     return (
-        <div ref={modalRef} style={modalStyle} className="checklist-modal-content">
+        <div ref={modalRef} style={modalStyle} className="marker-modal-content">
             <Flex className={styles.CheckListModal}>
                 <Flex className={styles.CheckListModalHead} >
                     <Flex className={styles.CheckListModalHeadName} >
-                        <p>HR</p>
                         <Flex
-                            className={styles.CallsOptionsCheckListsItemRowPercentMark}
+                            className={styles.CallsOptionsMark}
                             style={{
                                 backgroundColor: colorConfig.bgColor,
-                                border: `1px solid ${colorConfig.color}`,
-                                cursor: 'pointer'
+                                color: colorConfig.color
                             }}
-
                         >
-                            <span style={{ color: colorConfig.color }}>
-                                {item?.percent}
-                            </span>
+                            {item?.type}
                         </Flex>
                     </Flex>
                     <button onClick={onClose}>
                         <CloseIcon/>
                     </button>
                 </Flex>
-                <Flex className={styles.CheckListModalMarkCount}>
-                    <p className={styles.CheckListModalMarkCountTitle}>Набранно баллов</p>
-                    <p className={styles.CheckListModalMarkCountDescription}><span>85</span>/80</p>
-                </Flex>
                 <ul>
                     <li>
                         <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <GreenCheck/>
+                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
                     </li>
                     <li>
                         <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <GreenCheck/>
+                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
                     </li>
                     <li>
                         <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <GrayCheck/>
+                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
                     </li>
                     <li>
                         <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <GreenCheck/>
+                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
                     </li>
                     <li>
                         <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <GreenCheck/>
+                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
                     </li>
                 </ul>
             </Flex>
@@ -125,4 +122,4 @@ const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item
     );
 };
 
-export default CheckListModal;
+export default MarkerModal;
