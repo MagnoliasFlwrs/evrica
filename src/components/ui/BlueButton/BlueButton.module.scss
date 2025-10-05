@@ -16,4 +16,12 @@
   border: none;
   outline: none;
   cursor: pointer;
+  .iconStart {
+    display: flex;
+    align-items: center;
+  }
+  .iconEnd {
+    display: flex;
+    align-items: center;
+  }
 }

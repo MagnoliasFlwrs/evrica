@@ -215,6 +215,9 @@
   border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10));
   outline: none;
   border-radius: 0;
+  &::before {
+    content: none !important;
+  }
   &::placeholder {
     color: rgba(0, 0, 0, 0.50);
     font-family: Mulish;

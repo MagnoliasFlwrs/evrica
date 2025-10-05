@@ -7,7 +7,7 @@ import styles from '../styles/MainLayout.module.scss';
 const MainLayout = () => {
     const location = useLocation();
 
-    const isCallDetailPage = location.pathname.includes('/call/');
+    const isCallDetailPage = location.pathname.includes('/call/') || location.pathname.includes('/analytics');
 
     return (
         <Flex

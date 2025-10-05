@@ -17,7 +17,8 @@ interface CustomSelectProps {
     placeholder?: string;
     value?: string | string[];
     onChange?: (value: string | string[]) => void;
-    tag?: boolean
+    tag?: boolean,
+    width?: string,
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -26,7 +27,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                                                        placeholder = "Выберите значение",
                                                        value = multiple ? [] : '',
                                                        onChange,
-                                                       tag = false
+                                                       tag = false,
+                                                       width = '247px'
                                                    }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedValues, setSelectedValues] = useState<string | string[]>(value);
@@ -199,6 +201,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             <div
                 className={`${styles.selectHeader} ${isOpen ? styles.open : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
+                style={{minWidth: width}}
             >
                 <div className={styles.selectedValueContainer}>
                     {getDisplayText()}

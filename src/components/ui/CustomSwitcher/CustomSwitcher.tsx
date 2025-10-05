@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Flex } from "antd";
 import styles from './CustomSwitcher.module.scss'
+import cn from "classnames";
 
 interface CustomSwitcherProps {
-    items: { title: string; }[]
+    items: { title: string; }[],
+    disable?:boolean
 }
 
-const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items }) => {
+const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items , disable = false }) => {
     const [activeIndex, setActiveIndex] = useState<number>(items.length > 1 ? 1 : 0);
 
     const handleItemClick = (index: number, e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -35,7 +37,8 @@ const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items }) => {
     };
 
     return (
-        <Flex className={styles.CustomSwitcherContainer}>
+
+        <Flex className={cn(styles.CustomSwitcherContainer, { [styles.disable]: disable })}>
             <span
                 className={styles.Switcher}
                 style={getSwitcherPosition()}

@@ -7,6 +7,14 @@
   border-radius: 40px;
   background: #F3F3F3;
   position: relative;
+  &.disable {
+    pointer-events: none;
+    .Switcher {
+      border-radius: 160px;
+      background: rgba(0, 0, 0, 0.10);
+      pointer-events: none;
+    }
+  }
   .Switcher {
     border-radius: 160px;
     background: #000;

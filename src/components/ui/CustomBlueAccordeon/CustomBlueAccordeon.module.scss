@@ -1,0 +1,54 @@
+.CustomBlueAccordeonContainer {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 30px;
+  background: #FFF;
+  width: 100%;
+  .CustomBlueAccordeonContainerHead{
+    border-radius: 20px;
+    background: var(--light-blue, rgba(0, 122, 255, 0.15));
+    display: flex;
+    padding: 10px 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    p {
+      color: #000;
+      font-family: Mulish;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+    .CustomBlueAccordeonContainerHeadIcon {
+      transform: rotate(180deg);
+      transition: .5s ease;
+      &.open {
+        transform: rotate(0);
+        transition: .5s ease;
+      }
+    }
+  }
+  .CustomBlueAccordeonContainerContent {
+    max-height: 0;
+    overflow: hidden;
+    transition: .3s ease .3s;
+    p {
+      opacity: 0;
+      transition: .3s ease .1s;
+    }
+    &.open {
+      max-height: 1000px;
+      padding-top: 20px;
+      overflow: visible;
+      transition: .3s ease .2s;
+      p {
+        opacity: 1;
+        transition: .3s ease .1s;
+      }
+    }
+  }
+}

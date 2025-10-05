@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex } from "antd";
 import { Calendar } from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-import styles from "../CallsLayout/CategoriesFilter/CategoriesFilter.module.scss"
+import styles from "./AnalyticsFilter.module.scss"
 import '../CallsLayout/CategoriesFilter/reactCalendarCustom.css'
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 
