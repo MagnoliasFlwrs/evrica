@@ -35,20 +35,24 @@
   .CustomBlueAccordeonContainerContent {
     max-height: 0;
     overflow: hidden;
-    transition: .3s ease .3s;
-    p {
+    transition: .3s linear .3s;
+    width: 100%;
+    .ContainerContent {
+      width: 100%;
       opacity: 0;
-      transition: .3s ease .1s;
+      transition: .3s ease .2s;
     }
     &.open {
       max-height: 1000px;
       padding-top: 20px;
       overflow: visible;
-      transition: .3s ease .2s;
-      p {
+      transition: .5s linear .3s;
+      .ContainerContent {
+        width: 100%;
         opacity: 1;
-        transition: .3s ease .1s;
+        transition: .3s ease .2s;
       }
     }
+
   }
 }

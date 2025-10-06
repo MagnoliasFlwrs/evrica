@@ -5,6 +5,8 @@ import BlueButton from "../ui/BlueButton/BlueButton";
 import DownloadIcon from "../icons/DownloadIcon";
 import CategoriesStatsWidget from "./AnalyticResultsComponents/widgets/CategoriesStatsWidget";
 import CustomBlueAccordeon from "../ui/CustomBlueAccordeon/CustomBlueAccordeon";
+import CategoriesWidget from "./AnalyticResultsComponents/widgets/CategoriesWidget";
+import CallsWidgetSwiper from "./AnalyticResultsComponents/widgets/CallsWidgetSwiper";
 
 const AnalyticResults = () => {
 
@@ -31,7 +33,8 @@ const AnalyticResults = () => {
                     </Flex>
                 </Flex>
             </Flex>
-            <CustomBlueAccordeon title='Звонки'/>
+            <CategoriesWidget/>
+            <CustomBlueAccordeon title='Звонки' children={<CallsWidgetSwiper/>}/>
         </Flex>
     );
 };

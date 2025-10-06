@@ -177,4 +177,233 @@
       }
     }
   }
+  .CategoriesWidgetContainer {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    align-self: stretch;
+    border-radius: 30px;
+    background: #FFF;
+    .CategoriesWidgetContainerHead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      .SwiperControls {
+        display: flex;
+        gap: 10px;
+        .SwiperControl {
+          cursor: pointer;
+          display: flex;
+          height: 44px;
+          width: 44px;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          border-radius: 40px;
+          background: #EFEFED;
+          svg path {
+            stroke-opacity: 1;
+          }
+
+          &.SwiperControlDisabled {
+
+            svg path {
+              stroke-opacity:.3;
+            }
+          }
+        }
+      }
+    }
+    .CategoriesWidgetItem {
+      display: flex;
+      padding: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      align-self: stretch;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.10);
+      background: #FFF;
+      min-height: 225px;
+      .CategoriesWidgetItemTitle {
+        overflow: hidden;
+        color: #1D1D1F;
+        text-overflow: ellipsis;
+        font-family: Mulish;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        align-self: stretch;
+        margin-bottom: auto;
+      }
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        li {
+          display: flex;
+          gap: 20px;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          p {
+            overflow: hidden;
+            color: var(--Black, #1D1D1F);
+            text-overflow: ellipsis;
+            font-family: Mulish;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+          }
+          .CheckListsText {
+            font-family: Mulish;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            display: flex;
+            padding: 2px 5px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            &.green {
+              border-radius: 4px;
+              border: 1px solid #00C310;
+              background: rgba(0, 195, 16, 0.20);
+              color: #00C310;
+            }
+            &.yellow {
+              color: #F39600;
+              border-radius: 4px;
+              border: 1px solid #F39600;
+              background: rgba(243, 150, 0, 0.20);
+            }
+            &.red {
+              color: var(--Red, #C3002A);
+              border-radius: 4px;
+              border: 1px solid var(--Red, #C3002A);
+              background: rgba(195, 0, 42, 0.20);
+            }
+          }
+          .DictionaryText {
+            overflow: hidden;
+            color: rgba(0, 0, 0, 0.50);
+            text-overflow: ellipsis;
+            font-family: Mulish;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            &.positive {
+              color: var(--green, #00C310);
+            }
+            &.negative {
+              color: var(--Red, #C3002A);
+            }
+          }
+        }
+      }
+      .DeleteBtn {
+        display: flex;
+        height: 32px;
+        padding: 10px 7px;
+        align-items: center;
+        gap: 10px;
+        align-self: stretch;
+        border-radius: 40px;
+        background: #EFEFED;
+        border: none;
+        outline: none;
+        cursor: pointer;
+
+        p {
+          color: #000;
+          font-family: Mulish;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+        .DeleteIcon {
+          border-radius: 30px;
+          background: #007AFF;
+          display: flex;
+          width: 20px;
+          height: 20px;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          aspect-ratio: 1/1;
+        }
+      }
+    }
+  }
+  .CallsWidgetSwiperContainer {
+    display: flex;
+    justify-content:flex-end ;
+    width: 100%;
+  }
+  .CallsSwiperItem {
+    border-radius: 20px;
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+    background: #FFF;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    ul {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      li {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 20px;
+        justify-content: space-between;
+        p {
+          color: rgba(0, 0, 0, 0.50);
+          font-family: Mulish;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+        span {
+          overflow: hidden;
+          color: var(--Black, #1D1D1F);
+          text-overflow: ellipsis;
+          font-family: Mulish;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+        }
+      }
+    }
+  }
+}
+.WidgetTitle {
+  color: #000;
+  font-family: Mulish;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.SwiperContainer {
+  max-width: calc(100% - 220px);
+  width: 100%;
 }
