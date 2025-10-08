@@ -407,3 +407,11 @@
   max-width: calc(100% - 220px);
   width: 100%;
 }
+.CheckListsWidgetSwiperContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .CheckListsWidgetCheckbox {
+
+  }
+}

@@ -7,6 +7,7 @@ import CategoriesWidgetItem from "./CategoriesWidgetItem";
 import PrevIcon from "./PrevIcon";
 import NextIcon from "./NextIcon";
 import type { Swiper as SwiperType } from 'swiper';
+import { useSwiperManager } from '../../hooks/SwiperManagerContext';
 
 interface SwiperDataItem {
     title: string;
@@ -19,6 +20,7 @@ const CategoriesWidget = () => {
     const navigationPrevRef = useRef<HTMLDivElement>(null);
     const navigationNextRef = useRef<HTMLDivElement>(null);
     const swiperRef = useRef<SwiperType | null>(null);
+    const { registerSwiper, unregisterSwiper, navigateAll, deleteAllSlides } = useSwiperManager();
 
     const [swiperData, setSwiperData] = useState<SwiperDataItem[]>([
         {
@@ -53,12 +55,16 @@ const CategoriesWidget = () => {
         },
     ]);
 
-
     const handleDeleteItem = (index: number) => {
         if (swiperData.length > 1) {
             const newData = swiperData.filter((_, i) => i !== index);
             setSwiperData(newData);
+            deleteAllSlides(index);
         }
+    };
+
+    const handleNavigation = (direction: 'prev' | 'next') => {
+        navigateAll(direction);
     };
 
     return (
@@ -69,12 +75,14 @@ const CategoriesWidget = () => {
                     <Flex
                         className={styles.SwiperControl}
                         ref={navigationPrevRef}
+                        onClick={() => handleNavigation('prev')}
                     >
                         <PrevIcon/>
                     </Flex>
                     <Flex
                         className={styles.SwiperControl}
                         ref={navigationNextRef}
+                        onClick={() => handleNavigation('next')}
                     >
                         <NextIcon/>
                     </Flex>
@@ -85,13 +93,12 @@ const CategoriesWidget = () => {
                     modules={[Navigation]}
                     spaceBetween={20}
                     slidesPerView={4}
-                    navigation={{
-                        prevEl: navigationPrevRef.current,
-                        nextEl: navigationNextRef.current,
-                        disabledClass: styles.SwiperControlDisabled,
-                    }}
-                    onInit={(swiper: SwiperType) => {
+                    allowTouchMove={false}
+                    touchStartPreventDefault={false}
+                    simulateTouch={false}
+                    onSwiper={(swiper: SwiperType) => {
                         swiperRef.current = swiper;
+                        registerSwiper('categories', swiper);
 
                         if (swiper.params.navigation && typeof swiper.params.navigation !== 'boolean') {
                             swiper.params.navigation.prevEl = navigationPrevRef.current;
@@ -100,6 +107,7 @@ const CategoriesWidget = () => {
                         swiper.navigation.init();
                         swiper.navigation.update();
                     }}
+                    onDestroy={() => unregisterSwiper('categories')}
                 >
                     {swiperData.map((item, index) => (
                         <SwiperSlide key={index}>

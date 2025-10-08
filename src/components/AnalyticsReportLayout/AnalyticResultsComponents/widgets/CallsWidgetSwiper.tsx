@@ -4,8 +4,11 @@ import styles from '../../AnalyticsReportLayout.module.scss'
 import {Swiper, SwiperSlide} from "swiper/react";
 import CallsSwiperItem from "./CallsSwiperItem";
 import type { Swiper as SwiperType } from 'swiper';
+import { useSwiperManager } from '../../hooks/SwiperManagerContext';
 
 const CallsWidgetSwiper = () => {
+    const { registerSwiper, unregisterSwiper, activeIndex } = useSwiperManager();
+
     const swiperData = [
         {
             total:130,
@@ -37,14 +40,25 @@ const CallsWidgetSwiper = () => {
             incoming:100,
             recognized:100
         },
-    ]
+    ];
+
     return (
         <Flex className={styles.CallsWidgetSwiperContainer}>
             <Flex className={styles.SwiperContainer}>
                 <Swiper
                     spaceBetween={20}
                     slidesPerView={4}
-                    onSwiper={(swiper:SwiperType) => console.log(swiper)}
+                    allowTouchMove={false}
+                    touchStartPreventDefault={false}
+                    simulateTouch={false}
+                    onSwiper={(swiper: SwiperType) => {
+                        registerSwiper('calls', swiper);
+                        // Синхронизируем с текущим активным индексом
+                        if (swiper.activeIndex !== activeIndex) {
+                            swiper.slideTo(activeIndex);
+                        }
+                    }}
+                    onDestroy={() => unregisterSwiper('calls')}
                 >
                     {swiperData.map((item, index) => (
                         <SwiperSlide key={index}>
@@ -54,7 +68,6 @@ const CallsWidgetSwiper = () => {
                 </Swiper>
             </Flex>
         </Flex>
-
     );
 };
 
