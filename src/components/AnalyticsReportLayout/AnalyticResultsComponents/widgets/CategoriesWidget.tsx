@@ -56,11 +56,11 @@ const CategoriesWidget = () => {
     ]);
 
     const handleDeleteItem = (index: number) => {
-        if (swiperData.length > 1) {
-            const newData = swiperData.filter((_, i) => i !== index);
-            setSwiperData(newData);
-            deleteAllSlides(index);
-        }
+        // if (swiperData.length > 1) {
+        //     const newData = swiperData.filter((_, i) => i !== index);
+        //     setSwiperData(newData);
+        //     deleteAllSlides(index);
+        // }
     };
 
     const handleNavigation = (direction: 'prev' | 'next') => {

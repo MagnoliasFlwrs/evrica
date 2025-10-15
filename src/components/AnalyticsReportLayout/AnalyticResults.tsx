@@ -9,6 +9,7 @@ import CategoriesWidget from "./AnalyticResultsComponents/widgets/CategoriesWidg
 import CallsWidgetSwiper from "./AnalyticResultsComponents/widgets/CallsWidgetSwiper";
 import { SwiperManagerProvider } from "./hooks/SwiperManagerContext";
 import CheckListsWidgetSwiper from "./AnalyticResultsComponents/widgets/CheckListsWidgetSwiper";
+import MarkersWidgetSwiper from "./AnalyticResultsComponents/widgets/MarkersWidgetSwiper";
 
 const AnalyticResults = () => {
     return (
@@ -38,6 +39,7 @@ const AnalyticResults = () => {
                 <CategoriesWidget/>
                 <CustomBlueAccordeon title='Звонки' children={<CallsWidgetSwiper/>}/>
                 <CustomBlueAccordeon title='Чек-листы' children={<CheckListsWidgetSwiper/>}/>
+                <CustomBlueAccordeon title='Маркеры' children={<MarkersWidgetSwiper/>}/>
 
             </Flex>
         </SwiperManagerProvider>

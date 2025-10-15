@@ -411,7 +411,268 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
   .CheckListsWidgetCheckbox {
-
+    width: 100%;
   }
+  .CheckListsWidgetAccordeons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    .CheckListsWidgetAccordeon {
+      width: 100%;
+      .CheckListsWidgetAccordeonHeadRow {
+        display: flex;
+        width: 100%;
+        gap: 20px;
+        align-items: flex-start;
+        .CheckListsWidgetAccordeonHeadColumn{
+          width: 200px;
+          display: flex;
+          flex-direction: column;
+          .CheckListsWidgetAccordeonHead {
+            display: flex;
+            padding: 20px 0;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            p {
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              flex: 1 0 0;
+              overflow: hidden;
+              color: #000;
+              text-overflow: ellipsis;
+              font-family: Mulish;
+              font-size: 16px;
+              font-style: normal;
+              font-weight: 600;
+              line-height: normal;
+            }
+            span {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              svg path {
+
+              }
+            }
+          }
+          .CheckListsWidgetAccordeonHeadList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 20px;
+            p {
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              align-self: stretch;
+              overflow: hidden;
+              color: #6B6B6B;
+              text-overflow: ellipsis;
+              font-family: Mulish;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px; /* 183.333% */
+            }
+          }
+        }
+
+        .CheckListsWidgetAccordeonHeadRowSwiper {
+          width: calc(100% - 220px);
+
+          .CheckListsWidgetAccordeonSlideContainer {
+            display: flex;
+            flex-direction: column;
+            .CheckListsWidgetAccordeonSlide {
+              width: 100%;
+              display: flex;
+              padding: 20px;
+              align-items: center;
+              justify-content: space-between;
+              gap: 20px;
+              align-self: stretch;
+              border-radius: 30px;
+              border: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+              background: #FFF;
+              p {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+                color: var(--Black, #1D1D1F);
+                text-overflow: ellipsis;
+                font-family: Mulish;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                &.notUseTitle {
+                  overflow: hidden;
+                  color: rgba(29, 29, 31, 0.50);
+                  text-overflow: ellipsis;
+                  font-family: Mulish;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+                  text-align: center;
+                  width: 100%;
+                }
+              }
+              .CheckListsWidgetTag {
+                display: flex;
+                padding: 2px 5px;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                font-family: Mulish;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                &.CheckListsWidgetTagGreen {
+                  border-radius: 4px;
+                  border: 1px solid #00C310;
+                  background: rgba(0, 195, 16, 0.20);
+                  color: #00C310;
+                }
+                &.CheckListsWidgetTagYellow {
+                  border-radius: 4px;
+                  border: 1px solid #F39600;
+                  background: rgba(243, 150, 0, 0.20);
+                  color:  #F39600;
+                }
+                &.CheckListsWidgetTagRed {
+                  border-radius: 4px;
+                  border: 1px solid var(--Red, #C3002A);
+                  background: rgba(195, 0, 42, 0.20);
+                  color: #C3002A;
+                }
+              }
+            }
+            .AccordeonSlideChecklistsResults {
+              display: flex;
+              flex-direction: column;
+              //gap: 10px;
+              //padding: 0 20px;
+              padding-top: 20px;
+              .AccordeonSlideChecklistsResult {
+                width: 100%;
+                display: flex;
+                gap: 10px;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 5px 20px;
+                &:hover {
+                  border-radius: 20px;
+                  background: #F3F3F3;
+
+                }
+                .count {
+                  overflow: hidden;
+                  color: var(--Black, #1D1D1F);
+                  text-align: right;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  font-family: Mulish;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+                }
+                .CheckListsWidgetTag {
+                  display: flex;
+                  padding: 2px 5px;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 10px;
+                  font-family: Mulish;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 600;
+                  line-height: normal;
+                  position: relative;
+                  &.CheckListsWidgetTagGreen {
+                    border-radius: 4px;
+                    border: 1px solid #00C310;
+                    background: rgba(0, 195, 16, 0.20);
+                    color: #00C310;
+                  }
+                  &.CheckListsWidgetTagYellow {
+                    border-radius: 4px;
+                    border: 1px solid #F39600;
+                    background: rgba(243, 150, 0, 0.20);
+                    color:  #F39600;
+                  }
+                  &.CheckListsWidgetTagGray {
+                    border-radius: 4px;
+                    border: 1px solid #C0C0C0;
+                    background: rgba(192, 192, 192, 0.20);
+                    color: #C0C0C0;
+                  }
+                }
+              }
+              .AccordeonSlideMarkerResult {
+                width: 100%;
+                display: flex;
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+                padding: 5px 20px;
+                &:hover {
+                  border-radius: 20px;
+                  background: #F3F3F3;
+                }
+                .AccordeonSlideMarkerResultGreen {
+                  display: flex;
+                  padding: 4px 8px;
+                  align-items: center;
+                  gap: 4px;
+                  border-radius: 4px;
+                  background: #EDFBCC;
+                  overflow: hidden;
+                  color: #486A12;
+                  text-overflow: ellipsis;
+                  font-family: Mulish;
+                  font-size: 10px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: normal;
+                  text-transform: uppercase;
+                }
+                .AccordeonSlideMarkerResultCount {
+                  display: flex;
+                  height: 20px;
+                  padding: 0 2px;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 10px;
+                  border-radius: 2px;
+                  border: 1px solid #000;
+                  background: #EFEFED;
+                  color: #000;
+                  text-align: center;
+                  font-family: Mulish;
+                  font-size: 10px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: normal;
+                }
+              }
+            }
+          }
+
+        }
+
+      }
+
+    }
+  }
+
 }
