@@ -3,6 +3,7 @@ import { Checkbox, Flex, CheckboxChangeEvent } from "antd";
 import styles from './LoginLayout.module.scss'
 import ClosedEyeIcon from "../CallSinglePageLayout/icons/ClosedEyeIcon";
 import EyeIcon from "../CallSinglePageLayout/icons/EyeIcon";
+import {useAuth} from "../../store";
 
 interface FormData {
     login: string;
@@ -17,6 +18,7 @@ interface FormErrors {
 
 const LoginForm = () => {
     const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+    const authUser = useAuth((state)=> state.authUser)
     const [formData, setFormData] = useState<FormData>({
         login: '',
         password: '',
@@ -24,7 +26,6 @@ const LoginForm = () => {
     });
     const [errors, setErrors] = useState<FormErrors>({});
 
-    // Правильная типизация для Checkbox
     const handleCheckboxChange = (e: CheckboxChangeEvent) => {
         const checked = e.target.checked;
         console.log(`checked = ${checked}`);
@@ -34,7 +35,6 @@ const LoginForm = () => {
         }));
     };
 
-    // Типизация для обычных input'ов
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -42,7 +42,7 @@ const LoginForm = () => {
             [name]: value
         }));
 
-        // Очищаем ошибку при вводе
+
         if (errors[name as keyof FormErrors]) {
             setErrors(prev => ({
                 ...prev,
@@ -74,9 +74,8 @@ const LoginForm = () => {
         e.preventDefault();
 
         if (validateForm()) {
-            // Форма валидна, можно отправлять данные
             console.log('Данные формы:', formData);
-            // Здесь добавьте логику отправки данных на сервер
+            authUser(formData)
         }
     };
 
