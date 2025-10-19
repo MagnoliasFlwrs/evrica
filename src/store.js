@@ -71,13 +71,12 @@ axiosInstanceAll.interceptors.response.use(
                 const newAccessToken = await refreshTokenPromise;
 
                 if (newAccessToken) {
-                    // Помечаем запрос как перезапущенный
+
                     error.config._retry = true;
                     error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return axiosInstanceAll(error.config);
                 }
             } catch (refreshError) {
-                // Полная очистка при ошибке обновления
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('auth');
@@ -110,16 +109,17 @@ export const useAuth = create(
                     set({ loading: true, error: null });
                     try {
                         const res = await axiosInstanceAuth.post(
-                            `${baseAuthUrl}/login`,
+                            `${baseAuthUrl}/auth/login`,
                             {
-                                password: userData.password,
                                 login: userData.login,
+                                password: userData.password,
                             },
                             {
-                                withCredentials: true,
+                                // withCredentials: true,
                                 headers: {
-                                    'Content-Type': 'application/json',
-                                    accept: '*/*',
+                                    // 'Content-Type': 'application/json',
+                                    'Content-Type': 'text/plain',
+                                    // accept: '*/*',
                                 },
                             },
                         );

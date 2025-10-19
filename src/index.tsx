@@ -6,8 +6,27 @@ import {ErrorPage, MainLayout, CallsLayout, AnalyticsLayout , LoginLayout , Anal
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
 import CallSinglePageLayout from "./routes/CallSinglePageLayout";
+import {useAuth} from "./store";
 
 const App = () => {
+    const isAuth = useAuth((state)=> state.isAuth);
+    const accessToken = useAuth((state)=> state.accessToken);
+
+    const accessTokenLS =  localStorage.getItem('accessToken');
+
+    const initialRoutes = [
+        {
+            path: 'login',
+            element: <LoginLayout />,
+            errorElement: <ErrorPage />,
+        },
+        {
+            path: '*',
+            element: <LoginLayout />,
+        },
+    ];
+
+
     const routes = [
         {
             path: '/',
@@ -36,14 +55,10 @@ const App = () => {
                 },
             ]
         },
-        {
-            path: 'login',
-            element: <LoginLayout />,
-            errorElement: <ErrorPage />,
-        },
     ]
 
-    const router = createBrowserRouter(routes);
+    const allRoutes = isAuth ? [...initialRoutes , ...routes] : [...initialRoutes]
+    const router = createBrowserRouter(allRoutes);
 
     return <RouterProvider router={router} />;
 };
