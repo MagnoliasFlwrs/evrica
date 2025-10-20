@@ -1,5 +1,5 @@
-import React, { useState, FormEvent } from 'react';
-import { Checkbox, Flex, CheckboxChangeEvent } from "antd";
+import React, {useState, FormEvent, useEffect} from 'react';
+import {Checkbox, Flex, CheckboxChangeEvent, notification} from "antd";
 import styles from './LoginLayout.module.scss'
 import ClosedEyeIcon from "../CallSinglePageLayout/icons/ClosedEyeIcon";
 import EyeIcon from "../CallSinglePageLayout/icons/EyeIcon";
@@ -18,13 +18,39 @@ interface FormErrors {
 
 const LoginForm = () => {
     const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-    const authUser = useAuth((state)=> state.authUser)
+    const authUser = useAuth((state)=> state.authUser);
+    const error = useAuth((state)=> state.error);
+    const setError = useAuth((state)=> state.setError);
     const [formData, setFormData] = useState<FormData>({
         login: '',
         password: '',
         remember: false
     });
     const [errors, setErrors] = useState<FormErrors>({});
+    const [api, contextHolder] = notification.useNotification();
+
+    const handleNotificationClose =()=> {
+        setFormData({
+            login: '',
+            password: '',
+            remember: false
+        })
+        setError(false)
+    }
+
+    const openNotificationWithIcon = () => {
+        api['error']({
+            message: 'Ошибка!',
+            description: 'Неправильный логин или пароль!',
+            onClose: () => handleNotificationClose()
+        });
+    };
+
+    useEffect(() => {
+        if (error) {
+            openNotificationWithIcon();
+        }
+    }, [error])
 
     const handleCheckboxChange = (e: CheckboxChangeEvent) => {
         const checked = e.target.checked;
@@ -81,6 +107,7 @@ const LoginForm = () => {
 
     return (
         <Flex className={styles.LoginFormContainer}>
+            {contextHolder}
             <Flex className={styles.LoginForm} component="form" onSubmit={handleSubmit}>
                 <Flex className={styles.LoginFormRow}>
                     <span className={styles.LoginFormRowLabel}>Логин</span>
