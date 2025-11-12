@@ -1,56 +1,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
-import { Mutex } from 'async-mutex';
-import { persist, PersistOptions } from "zustand/middleware";
-
-const mutex = new Mutex();
-let refreshTokenPromise: Promise<string | null> | null = null;
-let isRefreshingToken = false;
-let isSignOut = false;
+import { persist } from "zustand/middleware";
 
 export const baseAuthUrl = process.env.REACT_APP_AUTH_URL || 'https://api.evrika360.com/api';
-
-const base64urlDecode = (str: string): string => {
-    return decodeURIComponent(
-        atob(str.replace(/-/g, '+').replace(/_/g, '/'))
-            .split('')
-            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-    );
-};
-
-const refreshToken = async (): Promise<string | null> => {
-    try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-            throw new Error('Токен отсутствует в хранилище.');
-        }
-
-        const res = await axios.post(
-            `${baseAuthUrl}/auth/refresh`,
-            { refreshToken },
-            { withCredentials: true },
-        );
-
-        if (res.status === 200) {
-            if (res.data.data.access_token) {
-                localStorage.setItem('accessToken', res.data.data.access_token);
-            }
-            if (res.data.data.refresh_token) {
-                localStorage.setItem('refreshToken', res.data.data.refresh_token);
-            }
-            return res.data.data.access_token;
-        }
-        return null;
-    } catch (error) {
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('auth');
-        throw error;
-    } finally {
-        isRefreshingToken = false;
-    }
-};
 
 export const axiosInstanceAuth = axios.create();
 const axiosInstanceAll = axios.create();
@@ -58,37 +10,22 @@ const axiosInstanceAll = axios.create();
 axiosInstanceAll.interceptors.response.use(
     (response) => response,
     async (error) => {
-        if (error.response?.status === 401 && !isSignOut && !error.config._retry) {
-            const release = await mutex.acquire();
-            try {
-                if (!isRefreshingToken) {
-                    isRefreshingToken = true;
-                    refreshTokenPromise = refreshToken();
-                }
+        if (error.response?.status === 401) {
 
-                const newAccessToken = await refreshTokenPromise;
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('auth');
+            localStorage.removeItem('analytics');
+            localStorage.removeItem('calls');
+            useAuth.getState().logout();
 
-                if (newAccessToken) {
-                    error.config._retry = true;
-                    error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosInstanceAll(error.config);
-                }
-            } catch (refreshError) {
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('auth');
-                isSignOut = true;
-                window.location.href = '/auth';
-                return Promise.reject(refreshError);
-            } finally {
-                refreshTokenPromise = null;
-                isRefreshingToken = false;
-                release();
-            }
+            window.location.href = '/auth';
+            return Promise.reject(error);
         }
         return Promise.reject(error);
     },
 );
+
 export { axiosInstanceAll };
 
 interface UserData {
@@ -159,13 +96,12 @@ export const useAuth = create(
                         accessToken: null,
                         isAuth: false
                     });
-                    throw error;
                 }
             },
             getAuthUser: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/user/get-auth-user`,
                         {
                             headers: {
@@ -190,11 +126,9 @@ export const useAuth = create(
                         error: true,
                         loading: false,
                     });
-                    throw error;
                 }
             },
             logout: () => {
-                isSignOut = true;
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('auth');
@@ -205,7 +139,6 @@ export const useAuth = create(
                     error: false,
                     loading: false
                 });
-                isSignOut = false;
             },
         }),
         {

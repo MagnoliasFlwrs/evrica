@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import styles from "../components/AnalyticsLayout/AnalyticsLayout.module.scss";
 import PageTitle from "../components/ui/PageTitle/PageTitle";
@@ -6,9 +6,15 @@ import {Flex} from "antd";
 import CustomSwitcher from "../components/ui/CustomSwitcher/CustomSwitcher";
 import AnalyticsDatePicker from "../components/AnalyticsLayout/AnalyticsDatePicker";
 import AnalyticsTree from "../components/AnalyticsLayout/AnalyticsTree";
+import {useAnalyticsStore} from "../stores/analyticsStore";
 
 const AnalyticsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
+    const getAllAgents = useAnalyticsStore((state)=> state.getAllAgents);
+
+    useEffect(() => {
+        getAllAgents()
+    }, []);
 
     const switchItems = [
         {

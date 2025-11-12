@@ -7,11 +7,21 @@ import {useCallsStore} from "../stores/callsStore";
 
 const CallsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
-    const getPendingCalls = useCallsStore((state)=>state.getPendingCalls)
+    const getPendingCalls = useCallsStore((state)=>state.getPendingCalls);
+    const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
+    const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
+    const getCallsByCategoryId = useCallsStore((state)=>state.getCallsByCategoryId);
 
     useEffect(() => {
-        getPendingCalls()
+        // getPendingCalls();
+        getCallsCategories();
     }, []);
+    useEffect(() => {
+        if(categoryCallsListObj.category_id) {
+            getCallsByCategoryId();
+        }
+    }, [categoryCallsListObj]);
+
     return (
         <PageContainer>
             <PageTitle text='Звонки'/>
