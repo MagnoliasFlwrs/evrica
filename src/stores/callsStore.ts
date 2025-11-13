@@ -34,10 +34,18 @@ export const useCallsStore = create(
                 },
                 category_id: null,
                 page: 1,
-                per_page: 25
+                per_page: 10
             },
             callsCategories: [],
             callsByCategory: null,
+            checkListsByIdObj: {
+                category_id:'',
+                date_start: 1762117201,
+                date_end: 1762203600
+            },
+            checkListsByIdList:[],
+            currentCallId:null,
+            currentCallInfo:null,
             setError: (value: boolean) => set({ error: value }),
             getPendingCalls: async () => {
                 set({ loading: true, error: false });
@@ -67,7 +75,6 @@ export const useCallsStore = create(
                         error: true,
                         loading: false,
                     });
-                    throw error;
                 }
             },
             getCallsCategories: async () => {
@@ -98,7 +105,6 @@ export const useCallsStore = create(
                         error: true,
                         loading: false,
                     });
-                    throw error;
                 }
             },
             getCallsByCategoryId: async () => {
@@ -142,23 +148,106 @@ export const useCallsStore = create(
                         error: true,
                         loading: false,
                     });
-                    throw error;
                 }
             },
+            setCurrentCallId: (id: number | string | null) => set({currentCallId: id}),
             setCategoryId: (id: number | string) =>
                 set((state) => ({
                     categoryCallsListObj: {
                         ...state.categoryCallsListObj,
                         category_id: id
                     },
+                    checkListsByIdObj: {
+                        ...state.checkListsByIdObj,
+                        category_id: id
+                    },
                 })),
+            setCategoryCallsListObjPage: (page: number ) => {
+                set((state) => ({
+                    categoryCallsListObj: {
+                        ...state.categoryCallsListObj,
+                        page: page
+                    },
+                }));
+                get().getCallsByCategoryId();
+            },
+            setCategoryCallsListObjPerPage: (count: number ) => {
+                set((state) => ({
+                    categoryCallsListObj: {
+                        ...state.categoryCallsListObj,
+                        per_page: count
+                    },
+                }));
+                get().getCallsByCategoryId();
+            },
+
+            getChecklistsByCategoryId: async () => {
+                set({ loading: true, error: false });
+                try {
+                    const { checkListsByIdObj } = get();
+
+                    const queryString = qs.stringify(checkListsByIdObj, {
+                        arrayFormat: 'indices',
+                        encode: false
+                    });
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-checklists?${queryString}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            checkListsByIdList: res.data.data
+                        });
+
+                        return res.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
+            getCurrentCallInfo: async (id : string | null | number) => {
+                set({ loading: true, error: false });
+                try {
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-call?call_id=${id}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            currentCallInfo: res.data.data
+                        });
+
+                        return res.data.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
         }),
         {
             name: 'calls',
-            partialize: (state) => ({
-                callsByCategory:state.callsByCategory,
-                callsCategories:state.callsCategories,
-            } as any),
         }
     ),
 );

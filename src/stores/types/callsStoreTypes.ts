@@ -23,6 +23,11 @@ export interface CategoryCallsListObj {
     page: number;
     per_page: number;
 }
+export interface CheckListsByIdObj {
+    category_id: string | number | null;
+    date_start: number;
+    date_end: number;
+}
 
 
 export interface DictionariesSearch {
@@ -32,48 +37,6 @@ export interface DictionariesSearch {
 
 export interface ChecklistsSearch {
 
-}
-
-export interface CallInfo {
-    id: number;
-    call_id: number;
-    recognition_id: string;
-    id_at_the_client: string;
-    agent_name: string;
-    extension_number: string;
-    file_name: string;
-    file_name_base64: string;
-    bitrate_origin: string | null;
-    chanel_count: number;
-    file_path: string;
-    reverse: number;
-    status_audio_id: number;
-    date_converted: string;
-    date_send_to_recognition: string;
-    date_recognition: string;
-    json_path: string | null;
-    phone_transactions: string | null;
-    wait_time: string | null;
-    hold_time: string | null;
-    max_pause: string | null;
-    ring_time: string;
-    in_docker: number;
-    created_at: string;
-    update_at: string;
-    audio_file_duration: number;
-    recognition_uuid: string;
-    checked_status: string | null;
-    comment: string | null;
-    checked_for_tariff: number;
-    average_audio_file_duration: number | null;
-    external_link: string | null;
-    is_transfered: number;
-    receiving_type: string | null;
-    deal_id: string | null;
-    activity_id: string | null;
-    crm_stage: string | null;
-    dictionaries_search: DictionariesSearch;
-    checklists_search: ChecklistsSearch[];
 }
 
 export interface Call {
@@ -120,16 +83,151 @@ export interface CallsByCategory {
     paginator: Paginator;
 }
 
+export interface Word {
+    word: string;
+    endTime: string;
+    startTime: string;
+    confidence: number;
+}
+
+export interface Alternative {
+    text: string;
+    words: Word[];
+    confidence: number;
+}
+
+export interface Chunk {
+    channelTag: string;
+    alternatives: Alternative[];
+}
+
+export interface RecognitionResponse {
+    "@type": string;
+    chunks: Chunk[];
+}
+
+export interface JsonData {
+    id: string;
+    done: boolean;
+    response: RecognitionResponse;
+    createdAt: string;
+    createdBy: string;
+    modifiedAt: string;
+}
+
+export interface CallInfo {
+    id: number;
+    call_id: number;
+    recognition_id: string;
+    id_at_the_client: string;
+    agent_name: string;
+    extension_number: string;
+    file_name: string;
+    file_name_base64: string;
+    bitrate_origin: string | null;
+    chanel_count: number;
+    file_path: string;
+    reverse: number;
+    status_audio_id: number;
+    date_converted: string;
+    date_send_to_recognition: string;
+    date_recognition: string;
+    json_path: string | null;
+    phone_transactions: string | null;
+    json: JsonData;
+    json_text: string;
+    text_channel_1: string;
+    text_channel_2: string;
+    wait_time: string | null;
+    hold_time: string | null;
+    max_pause: string | null;
+    ring_time: string;
+    in_docker: number;
+    created_at: string;
+    update_at: string;
+    audio_file_duration: number;
+    recognition_uuid: string;
+    checked_status: string | null;
+    comment: string | null;
+    checked_for_tariff: number;
+    average_audio_file_duration: number | null;
+    external_link: string | null;
+    is_transfered: number;
+    receiving_type: string | null;
+    deal_id: string | null;
+    activity_id: string | null;
+    crm_stage: string | null;
+    dictionaries_search: DictionariesSearch;
+    checklists_search: ChecklistsSearch[];
+    call: Call;
+}
+
+export interface CurrentCallInfo {
+    id: number;
+    call_id: number;
+    recognition_id: string;
+    id_at_the_client: string;
+    agent_name: string;
+    extension_number: string;
+    file_name: string;
+    file_name_base64: string;
+    bitrate_origin: string | null;
+    chanel_count: number;
+    file_path: string;
+    reverse: number;
+    status_audio_id: number;
+    date_converted: string;
+    date_send_to_recognition: string;
+    date_recognition: string;
+    json_path: string | null;
+    phone_transactions: string | null;
+    json: JsonData;
+    json_text: string;
+    text_channel_1: string;
+    text_channel_2: string;
+    wait_time: string | null;
+    hold_time: string | null;
+    max_pause: string | null;
+    ring_time: string;
+    in_docker: number;
+    created_at: string;
+    update_at: string;
+    audio_file_duration: number;
+    recognition_uuid: string;
+    checked_status: string | null;
+    comment: string | null;
+    checked_for_tariff: number;
+    average_audio_file_duration: number | null;
+    external_link: string | null;
+    is_transfered: number;
+    receiving_type: string | null;
+    deal_id: string | null;
+    activity_id: string | null;
+    crm_stage: string | null;
+    dictionaries_search: DictionariesSearch;
+    checklists_search: ChecklistsSearch[];
+    call: Call;
+}
+
 export interface CallsState {
     error: boolean;
     loading: boolean;
     pendingCalls: [];
     callsCategories: [];
+    checkListsByIdList: [];
+    currentCallInfo: CurrentCallInfo | null; // Изменено с [] на CurrentCallInfo | null
+    checkListsByIdObj: CheckListsByIdObj;
     callsByCategory: CallsByCategory | null;
+    currentCallId: string | null | number;
     categoryCallsListObj: CategoryCallsListObj;
     setError: (value: boolean) => void;
     getPendingCalls: () => Promise<any>;
     getCallsCategories: () => Promise<any>;
     getCallsByCategoryId: () => Promise<any>;
+    getChecklistsByCategoryId: () => Promise<any>;
     setCategoryId: (id: number | string) => void;
+    setCategoryCallsListObjPerPage: (count: number) => void;
+    setCategoryCallsListObjPage: (page: number) => void;
+    setCurrentCallId: (id: string | null | number) => void;
+    getCurrentCallInfo: (id: string | null | number) => Promise<CurrentCallInfo>; // Обновлен возвращаемый тип
 }

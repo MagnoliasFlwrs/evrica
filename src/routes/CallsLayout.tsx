@@ -11,15 +11,17 @@ const CallsLayout = () => {
     const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
     const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
     const getCallsByCategoryId = useCallsStore((state)=>state.getCallsByCategoryId);
+    const getChecklistsByCategoryId = useCallsStore((state)=>state.getChecklistsByCategoryId);
 
     useEffect(() => {
-        // getPendingCalls();
         getCallsCategories();
     }, []);
     useEffect(() => {
         if(categoryCallsListObj.category_id) {
             getCallsByCategoryId();
+            getChecklistsByCategoryId();
         }
+        console.log(categoryCallsListObj.category_id)
     }, [categoryCallsListObj]);
 
     return (

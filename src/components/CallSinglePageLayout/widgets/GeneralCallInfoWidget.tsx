@@ -1,14 +1,24 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex} from "antd";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import BlueArrow from "../../icons/BlueArrow";
+import {useCallsStore} from "../../../stores/callsStore";
+import {formatDateTime, formatSecondsToTimeWithHours} from "../utils";
 
 const GeneralCallInfoWidget = () => {
     const [attentionModal, setAttentionModal] = React.useState(false);
     const [categoryModal, setCategoryModal] = React.useState(false);
     const attentionModalRef = useRef<HTMLDivElement>(null);
     const categoryModalRef = useRef<HTMLDivElement>(null);
+    const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
+    const [callType, setCallType] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if(currentCallInfo) {
+            setCallType(currentCallInfo.call.call_type)
+        }
+    }, [currentCallInfo]);
 
     const handleToggleAttentionModal = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -55,11 +65,11 @@ const GeneralCallInfoWidget = () => {
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>ID</p>
-                        <span>11132211</span>
+                        <span>{currentCallInfo?.call_id}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Дата и время</p>
-                        <span>11 апр 2025 12:53</span>
+                        <span>{formatDateTime(currentCallInfo?.call?.date_call ?? '')}</span>
                     </Flex>
                 </Flex>
 
@@ -71,15 +81,15 @@ const GeneralCallInfoWidget = () => {
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Тип</p>
-                        <span>Входящий</span>
+                        <span>{callType === 'in' ?  'Входящий' : 'Исходящий'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Продолжительность</p>
-                        <span>00:11:15</span>
+                        <span>{currentCallInfo?.audio_file_duration ? formatSecondsToTimeWithHours(currentCallInfo?.audio_file_duration) : '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Ожидание</p>
-                        <span>1</span>
+                        <span>{currentCallInfo?.wait_time ?? 'не указано'}</span>
                     </Flex>
                 </Flex>
 
@@ -107,7 +117,7 @@ const GeneralCallInfoWidget = () => {
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Оператор</p>
-                        <span>Иванов Иван</span>
+                        <span>{currentCallInfo?.agent_name ?? 'не указано'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Категория</p>

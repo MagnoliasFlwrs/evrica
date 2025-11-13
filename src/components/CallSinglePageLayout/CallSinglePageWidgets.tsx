@@ -5,6 +5,7 @@ import GeneralCallInfoWidget from "./widgets/GeneralCallInfoWidget";
 import CustomerInfoWidget from "./widgets/CustomerInfoWidget";
 import StagesOfConversationWidget from "./widgets/StagesOfConversationWidget";
 import SummaryOfCallInformationWidget from "./widgets/SummaryOfCallInformationWidget";
+import {useCallsStore} from "../../stores/callsStore";
 
 const CallSinglePageWidgets = () => {
     return (

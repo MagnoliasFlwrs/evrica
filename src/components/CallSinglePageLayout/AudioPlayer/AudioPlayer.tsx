@@ -2,19 +2,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import BaseSelect from "../../ui/BaseSelect/BaseSelect";
 import PlayIcon from "../icons/PlayIcon";
-import audio1 from './1.wav'
-import audio2 from './2.wav'
 import WaveSurfer from 'wavesurfer.js';
 import {controlsOptions, getFormattedTime} from "../utils";
 import cn from "classnames";
+import {useCallsStore} from "../../../stores/callsStore";
 
 interface AudioPlayerProps {
     showChannels: boolean;
-}
-
-interface AudioItem {
-    audio: string;
-    id: number;
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
@@ -23,38 +17,22 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
 
-    const waveforms = useRef<HTMLDivElement[]>([]);
-    const wavesurfers = useRef<WaveSurfer[]>([]);
+    const waveformRef = useRef<HTMLDivElement>(null);
+    const wavesurfer = useRef<WaveSurfer | null>(null);
 
-    const audios: AudioItem[] = [
-        {audio: audio1, id: 1},
-        {audio: audio2, id: 2}
-    ];
-
+    const currentCallInfo = useCallsStore((state) => state.currentCallInfo);
 
     useEffect(() => {
-        if (wavesurfers.current.length > 0) {
-            const speedValue = parseFloat(speed);
-            wavesurfers.current.forEach(wavesurfer => {
-                wavesurfer.setPlaybackRate(speedValue);
-            });
-        }
-    }, [speed]);
+        if (!currentCallInfo?.file_path) return;
 
-    useEffect(() => {
-        wavesurfers.current = [];
-        waveforms.current = [];
+        const audioUrl = `https://api.evrika360.com${currentCallInfo.file_path}`;
+        const containerId = `waveform-${currentCallInfo.call_id}`;
 
-        const createWaveSurferInstance = (audio: AudioItem) => {
-            const containerId = `waveform-${audio.id}`;
-            const container = document.getElementById(containerId);
+        if (waveformRef.current) {
+            waveformRef.current.id = containerId;
 
-            if (!container) {
-                return null;
-            }
-
-            const wavesurfer = WaveSurfer.create({
-                container: container,
+            wavesurfer.current = WaveSurfer.create({
+                container: `#${containerId}`,
                 height: 30,
                 barWidth: 1,
                 waveColor: '#E5E5E5',
@@ -64,50 +42,66 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                 plugins: [],
             });
 
-            wavesurfer.load(audio.audio);
+            wavesurfer.current.load(audioUrl);
+            wavesurfer.current.setPlaybackRate(parseFloat(speed));
 
-            wavesurfer.setPlaybackRate(parseFloat(speed));
-
-            wavesurfer.on('ready', () => {
-                const currentDuration = wavesurfer.getDuration();
-                setDuration(prevDuration => Math.max(prevDuration, currentDuration));
-            });
-            wavesurfer.on('audioprocess', () => {
-                setCurrentTime(wavesurfer.getCurrentTime());
+            wavesurfer.current.on('ready', () => {
+                const currentDuration = wavesurfer.current?.getDuration() || 0;
+                setDuration(currentDuration);
             });
 
-            return wavesurfer;
-        };
+            wavesurfer.current.on('audioprocess', () => {
+                setCurrentTime(wavesurfer.current?.getCurrentTime() || 0);
+            });
 
-        const waveSurferInstances = audios.map(audio => createWaveSurferInstance(audio)).filter((instance): instance is WaveSurfer => instance !== null);
-
-        wavesurfers.current = waveSurferInstances;
+            wavesurfer.current.on('finish', () => {
+                setIsPlaying(false);
+            });
+        }
 
         return () => {
-            waveSurferInstances.forEach((wavesurfer) => wavesurfer.destroy());
+            if (wavesurfer.current) {
+                wavesurfer.current.destroy();
+                wavesurfer.current = null;
+            }
         };
-    }, []);
+    }, [currentCallInfo]);
+
+    useEffect(() => {
+        if (wavesurfer.current) {
+            const speedValue = parseFloat(speed);
+            wavesurfer.current.setPlaybackRate(speedValue);
+        }
+    }, [speed]);
 
     const togglePlay = () => {
+        if (!wavesurfer.current) return;
+
         const newIsPlaying = !isPlaying;
         setIsPlaying(newIsPlaying);
-        wavesurfers.current.forEach(wavesurfer => {
-            newIsPlaying ? wavesurfer.play() : wavesurfer.pause();
-        });
+
+        newIsPlaying ? wavesurfer.current.play() : wavesurfer.current.pause();
     };
 
     const handleSeek = (event: React.MouseEvent<HTMLDivElement>) => {
-        const target = event.target as HTMLDivElement;
-        const seekTime = event.nativeEvent.offsetX / target.offsetWidth * duration;
-        wavesurfers.current.forEach(wavesurfer => {
-            wavesurfer.seekTo(seekTime / wavesurfer.getDuration());
-        });
+        if (!wavesurfer.current || !duration) return;
+
+        const target = event.currentTarget;
+        const rect = target.getBoundingClientRect();
+        const seekTime = (event.clientX - rect.left) / target.offsetWidth * duration;
+
+        wavesurfer.current.seekTo(seekTime / duration);
         setCurrentTime(seekTime);
-        setIsPlaying(true);
-        wavesurfers.current.forEach(wavesurfer => {
-            wavesurfer.play();
-        });
+
+        if (!isPlaying) {
+            setIsPlaying(true);
+            wavesurfer.current.play();
+        }
     };
+
+    if (!currentCallInfo?.file_path) {
+        return <div className={styles.AudioPlayer}>Аудиофайл не найден</div>;
+    }
 
     return (
         <div className={styles.AudioPlayer}>
@@ -127,15 +121,21 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                         <PlayIcon/>
                     </button>
                 </div>
-                <div className={styles.AudioPlayerWave} onClick={handleSeek}>
-                    <div className='wave-cont' id={`waveform-${audios[0].id}`}></div>
+                <div
+                    className={styles.AudioPlayerWave}
+                    onClick={handleSeek}
+                    ref={waveformRef}
+                >
+                    {/* Контейнер для waveform будет создан автоматически */}
                 </div>
                 <div className={styles.AudioPlayerDuration}>
                     {getFormattedTime(currentTime)} / {getFormattedTime(duration)}
                 </div>
             </div>
-            {
-                audios[1] &&
+
+            {/* Закомментированная обработка второго канала */}
+            {/*
+            {audios[1] &&
                 <div className={cn(styles.AudioPlayerRow, {
                     [styles.open]: showChannels,
                     [styles.hidden]: !showChannels
@@ -149,8 +149,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                     <div className={styles.AudioPlayerEmpty}></div>
                 </div>
             }
-
-
+            */}
         </div>
     );
 };

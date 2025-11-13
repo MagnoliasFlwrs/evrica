@@ -8,7 +8,6 @@ import {useCallsStore} from "../../../stores/callsStore";
 import {Call} from "../../../stores/types/callsStoreTypes";
 import {ColumnsType} from "antd/lib/table";
 
-
 const { Text } = Typography;
 
 const CallsTable = () => {
@@ -20,7 +19,10 @@ const CallsTable = () => {
 
     const [data, setData] = useState<Call[]>([]);
     const callsByCategory = useCallsStore((state)=>state.callsByCategory);
-    console.log(callsByCategory);
+    const loading = useCallsStore((state)=>state.loading);
+    const setCurrentCallId = useCallsStore((state)=>state.setCurrentCallId);
+    const setCategoryCallsListObjPage = useCallsStore((state)=>state.setCategoryCallsListObjPage);
+    const setCategoryCallsListObjPerPage = useCallsStore((state)=>state.setCategoryCallsListObjPerPage);
 
     useEffect(() => {
         if(callsByCategory?.data?.calls) {
@@ -46,6 +48,20 @@ const CallsTable = () => {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        setCategoryCallsListObjPage(page);
+    };
+
+
+    const handlePageSizeChange = (value: string) => {
+        const newPageSize = Number(value);
+        setPageSize(newPageSize);
+        setCurrentPage(1);
+        setCategoryCallsListObjPerPage(newPageSize);
+        setCategoryCallsListObjPage(1);
+    };
+
     const columns: ColumnsType<Call> = [
         {
             title: 'ID',
@@ -60,7 +76,7 @@ const CallsTable = () => {
             title: 'Тип звонка',
             dataIndex: 'call_type',
             key: 'call_type',
-            sorter: true,
+            // sorter: true,
             render: (text: string, record: Call) => {
                 const callTypeMap: { [key: string]: string } = {
                     'in': 'Входящий',
@@ -87,7 +103,7 @@ const CallsTable = () => {
             title: 'Длительность звонка',
             dataIndex: 'call_duration',
             key: 'call_duration',
-            sorter: true,
+            // sorter: true,
             render: (text: string, record: Call) => {
                 return <span className={styles.tableText}>{text}</span>;
             }
@@ -104,77 +120,18 @@ const CallsTable = () => {
             title: 'Имя клиента',
             dataIndex: 'subject_name',
             key: 'subject_name',
-            sorter: true,
+            // sorter: true,
             render: (text: string, record: Call) => {
                 return <span className={styles.tableText}>{text || 'Не указано'}</span>;
             }
         },
-        // {
-        //     title: 'Чек-листы',
-        //     dataIndex: 'checklists',
-        //     key: 'checklists',
-        //     render: (checklists: string[], record: Call, index: number) => (
-        //         checklists.length === 1 ? (
-        //             <span className={styles.checklistItem}>{checklists[0]}</span>
-        //         ) : (
-        //             <Flex
-        //                 className={styles.manyItemsContainer}
-        //                 onClick={(e) => {
-        //                     e.stopPropagation();
-        //                     setVisibleChecklistIndex(visibleChecklistIndex === index ? null : index);
-        //                     setVisibleMarkerslistIndex(null);
-        //                 }}
-        //                 style={{ cursor: 'pointer', position: 'relative' }}
-        //             >
-        //                 <span className={styles.checklistItemLength}>{`${checklists.length}`}</span>
-        //                 {visibleChecklistIndex === index && (
-        //                     <Flex className={styles.manyItemsContainerModal}>
-        //                         {checklists.map((item, i) => (
-        //                             <span className={styles.checklistItem} key={i}>{item}</span>
-        //                         ))}
-        //                     </Flex>
-        //                 )}
-        //             </Flex>
-        //         )
-        //     )
-        // },
-        // {
-        //     title: 'Маркеры',
-        //     dataIndex: 'markers',
-        //     key: 'markers',
-        //     render: (markers: Array<{ value: string; label: string }>, record: Call, index: number) => (
-        //         markers.length === 1 ? (
-        //             <Tag className={`${styles.tag} ${styles[markers[0].value]}`}>
-        //                 {markers[0].label}
-        //             </Tag>
-        //         ) : (
-        //             <Flex
-        //                 className={styles.manyItemsContainer}
-        //                 onClick={(e) => {
-        //                     e.stopPropagation();
-        //                     setVisibleMarkerslistIndex(visibleMarkerslistIndex === index ? null : index);
-        //                     setVisibleChecklistIndex(null);
-        //                 }}
-        //                 style={{ cursor: 'pointer', position: 'relative' }}
-        //             >
-        //                 <span className={styles.markerItemLength}>{`${markers.length}`}</span>
-        //                 {visibleMarkerslistIndex === index && (
-        //                     <Flex className={styles.manyItemsContainerModal}>
-        //                         {markers.map((marker, i) => (
-        //                             <Tag
-        //                                 className={`${styles.tag} ${styles[marker.value]}`}
-        //                                 key={marker.value}
-        //                             >
-        //                                 {marker.label}
-        //                             </Tag>
-        //                         ))}
-        //                     </Flex>
-        //                 )}
-        //             </Flex>
-        //         )
-        //     )
-        // }
     ];
+
+    const onRowClick = (id : number | string | null) => {
+        setCurrentCallId(id);
+        navigate(`/call/${id}`);
+
+    }
 
     const customFooter = () => (
         <Flex
@@ -187,10 +144,7 @@ const CallsTable = () => {
                     <Text strong>Показать:</Text>
                     <CustomPaginationSelect
                         value={pageSize.toString()}
-                        onChange={(value) => {
-                            setPageSize(Number(value));
-                            setCurrentPage(1);
-                        }}
+                        onChange={handlePageSizeChange}
                         options={[
                             { value: '10', label: '10' },
                             { value: '20', label: '20' },
@@ -205,10 +159,10 @@ const CallsTable = () => {
 
             <Flex align="center" gap="middle" className={styles.CustomPagination}>
                 <Pagination
-                    current={currentPage}
-                    pageSize={pageSize}
+                    current={callsByCategory?.paginator?.currentPage || currentPage}
+                    pageSize={callsByCategory?.paginator?.perPage || pageSize}
                     total={callsByCategory?.paginator?.totalCount || 0}
-                    onChange={setCurrentPage}
+                    onChange={handlePageChange}
                     showSizeChanger={false}
                     showQuickJumper={false}
                     showLessItems
@@ -239,11 +193,12 @@ const CallsTable = () => {
                 dataSource={data}
                 className={styles.CallsTable}
                 pagination={false}
+                loading={loading}
                 footer={customFooter}
                 rowKey="id"
                 onRow={(record: Call) => ({
                     onClick: () => {
-                        navigate(`/call/${record.id}`);
+                        onRowClick(record.id);
                     },
                     style: {
                         cursor: 'pointer',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import PageTitle from "../components/ui/PageTitle/PageTitle";
 import {Breadcrumb, Flex} from "antd";
@@ -10,8 +10,16 @@ import CallSinglePageWidgets from "../components/CallSinglePageLayout/CallSingle
 import CallDetails from "../components/CallSinglePageLayout/CallDetails";
 import CallTranscribationWidgets from "../components/CallSinglePageLayout/CallTranscribationWidgets";
 import AudioPlayerBlock from "../components/CallSinglePageLayout/AudioPlayerBlock";
+import {useCallsStore} from "../stores/callsStore";
 
 const CallSinglePageLayout = () => {
+    const getCurrentCallInfo = useCallsStore((state)=> state.getCurrentCallInfo);
+    const currentCallId = useCallsStore((state)=> state.currentCallId);
+
+    useEffect(() => {
+        getCurrentCallInfo(currentCallId)
+    }, [currentCallId]);
+
     return (
         <PageContainer>
             <Breadcrumb

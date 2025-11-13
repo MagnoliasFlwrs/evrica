@@ -32,3 +32,33 @@ export const getColorByPercent = (percent: string) => {
         return callsOptionsCheckListColors.gray;
     }
 };
+
+export const formatDateTime = (dateString: string): string => {
+    const months = [
+        'янв', 'фев', 'мар', 'апр', 'мая', 'июн',
+        'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
+    ];
+
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day} ${month} ${year} ${hours}:${minutes}`;
+};
+
+export const formatSecondsToTimeWithHours = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        secs.toString().padStart(2, '0')
+    ].join(':');
+};
+
