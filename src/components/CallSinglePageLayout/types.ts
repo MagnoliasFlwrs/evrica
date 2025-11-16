@@ -35,3 +35,32 @@ export interface MarkerModalState {
     position: { x: number; y: number } | null;  // добавить null
     item: MarkerItem | null;
 }
+
+export interface TranscribationItem {
+    type: 'operator' | 'customer';
+    time: string;
+    text: string;
+    words: Word[];
+}
+
+export interface Word {
+    word: string;
+    endTime: string;
+    startTime: string;
+    confidence: number;
+}
+
+export interface Alternative {
+    text: string;
+    words: Word[];
+    confidence: number;
+}
+
+export interface TranscribationChunk {
+    channelTag: string;
+    alternatives: Alternative[];
+}
+
+export interface TextTranscribationWidgetProps {
+    // data?: TranscribationItem[];
+}

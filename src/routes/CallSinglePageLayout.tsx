@@ -39,7 +39,7 @@ const CallSinglePageLayout = () => {
                 <BlueButton text='Скачать отчет' icon={<DownloadIcon/>}/>
             </Flex>
             <CallSinglePageWidgets/>
-            <AudioPlayerBlock/>
+            {/*<AudioPlayerBlock/>*/}
             <CallDetails/>
             <CallTranscribationWidgets/>
 
