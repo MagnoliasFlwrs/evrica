@@ -12,6 +12,7 @@ const CallsLayout = () => {
     const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
     const getCallsByCategoryId = useCallsStore((state)=>state.getCallsByCategoryId);
     const getChecklistsByCategoryId = useCallsStore((state)=>state.getChecklistsByCategoryId);
+    const getDictionariesByCategoryId = useCallsStore((state)=>state.getDictionariesByCategoryId);
 
     useEffect(() => {
         getCallsCategories();
@@ -20,8 +21,8 @@ const CallsLayout = () => {
         if(categoryCallsListObj.category_id) {
             getCallsByCategoryId();
             getChecklistsByCategoryId();
+            getDictionariesByCategoryId();
         }
-        console.log(categoryCallsListObj.category_id)
     }, [categoryCallsListObj]);
 
     return (

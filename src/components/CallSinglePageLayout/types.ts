@@ -1,3 +1,5 @@
+import {ChecklistsSearch} from "../../stores/types/callsStoreTypes";
+
 export interface CheckListItem {
     type: string;
     percent: string;
@@ -23,11 +25,10 @@ export interface ModalState<T = any> {
     item: T | null;
 }
 
-// types.ts
 export interface CheckListModalState {
     show: boolean;
-    position: { x: number; y: number } | null;  // добавить null
-    item: CheckListItem | null;
+    position: { x: number; y: number } | null;
+    item: ChecklistsSearch | null;
 }
 
 export interface MarkerModalState {

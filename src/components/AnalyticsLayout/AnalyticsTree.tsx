@@ -104,12 +104,14 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
     useEffect(() => {
         if (allAgents && allAgents.length > 0) {
             const transformedData = transformAgentsToTreeData(allAgents);
+            console.log(transformedData)
             setTreeData(transformedData);
 
             const firstLevelKeys = transformedData.map(item => item.key);
             setExpandedKeys(firstLevelKeys);
         }
     }, [allAgents]);
+
     useEffect(() => {
         if (treeData.length > 0 && checkedKeys.length > 0) {
             const names = getAgentNamesByKeys(treeData, checkedKeys);
@@ -117,6 +119,7 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
         } else {
             setSelectedAgentNames([]);
         }
+        console.log(treeData)
     }, [checkedKeys, treeData]);
 
     useEffect(() => {
@@ -195,6 +198,8 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
     useEffect(() => {
         console.log('Currently selected agents:', selectedAgentNames);
     }, [selectedAgentNames]);
+
+    console.log(treeData)
 
     return (
         <Flex className={styles.CategoriesTree}>

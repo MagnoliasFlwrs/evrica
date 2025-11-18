@@ -29,14 +29,46 @@ export interface CheckListsByIdObj {
     date_end: number;
 }
 
+export interface ChecklistsSearch {
+    id: number;
+    category_id: number;
+    checklist_id: number;
+    limit_result: number;
+    color_success: string | null;
+    color_reject: string | null;
+    reverse: number;
+    unique_result: number;
+    date_start: string | null;
+    date_stop: string | null;
+    search_in_call: number;
+    search_out_call: number;
+    checklist: {
+        id: number;
+        name: string;
+        limit_result: number;
+        color_success: string | null;
+        color_reject: string | null;
+        date_start: string | null;
+        date_stop: string | null;
+        search_in_call: number;
+        search_out_call: number;
+        dictionaries: {
+            system: any[];
+            client: any[];
+        };
+        found_count_by_period: {
+            all: any;
+        };
+    };
+    relevant: boolean;
+    successfully: any[];
+    unsuccessfully: any[];
+    average: any[];
+}
 
 export interface DictionariesSearch {
     system: any[];
     client: any[];
-}
-
-export interface ChecklistsSearch {
-
 }
 
 export interface Call {
@@ -215,7 +247,8 @@ export interface CallsState {
     pendingCalls: [];
     callsCategories: [];
     checkListsByIdList: [];
-    currentCallInfo: CurrentCallInfo | null; // Изменено с [] на CurrentCallInfo | null
+    dictionariesByIdList: [];
+    currentCallInfo: CurrentCallInfo | null;
     checkListsByIdObj: CheckListsByIdObj;
     callsByCategory: CallsByCategory | null;
     currentCallId: string | null | number;
@@ -225,9 +258,10 @@ export interface CallsState {
     getCallsCategories: () => Promise<any>;
     getCallsByCategoryId: () => Promise<any>;
     getChecklistsByCategoryId: () => Promise<any>;
+    getDictionariesByCategoryId: () => Promise<any>;
     setCategoryId: (id: number | string) => void;
     setCategoryCallsListObjPerPage: (count: number) => void;
     setCategoryCallsListObjPage: (page: number) => void;
     setCurrentCallId: (id: string | null | number) => void;
-    getCurrentCallInfo: (id: string | null | number) => Promise<CurrentCallInfo>; // Обновлен возвращаемый тип
+    getCurrentCallInfo: (id: string | null | number) => Promise<CurrentCallInfo>;
 }

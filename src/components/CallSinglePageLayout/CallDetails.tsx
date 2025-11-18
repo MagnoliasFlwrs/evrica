@@ -9,6 +9,8 @@ import Portal from "./Portal";
 import {checkListData, markersData} from "./mockData";
 import MarkerModal from "./CallSwipersItems/MarkerModal";
 import {CheckListModalState, MarkerModalState} from "./types";
+import {useCallsStore} from "../../stores/callsStore";
+import {ChecklistsSearch, DictionariesSearch} from "../../stores/types/callsStoreTypes";
 
 const CallDetails = () => {
     const [modalState, setModalState] = useState<CheckListModalState>({
@@ -23,7 +25,19 @@ const CallDetails = () => {
         item: null
     });
 
-    // Закрытие модалок при клике вне области
+    const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
+    const [markers, setMarkers] = useState<DictionariesSearch | null>(null);
+    const [checklistsData, setChecklists] = useState<ChecklistsSearch[]>([]);
+
+    console.log("currentCallInfo", currentCallInfo);
+
+    useEffect(() => {
+        if(currentCallInfo) {
+            setChecklists(currentCallInfo.checklists_search);
+            setMarkers(currentCallInfo.dictionaries_search);
+        }
+    }, [currentCallInfo]);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             // Если открыта модалка чек-листа
@@ -62,8 +76,6 @@ const CallDetails = () => {
             item: null
         });
     };
-
-    // Функции для открытия модалок с автоматическим закрытием другой
     const handleOpenCheckListModal = (state: CheckListModalState) => {
         // Закрываем модалку маркера если открыта
         if (markerModalState.show) {
@@ -80,22 +92,27 @@ const CallDetails = () => {
         setMarkerModalState(state);
     };
 
+    console.log(checklistsData)
     return (
         <Flex className={styles.CallDetailsContainer}>
             <p className={styles.CallDetailsContainerTile}>Детали разговора</p>
-            <Flex className={styles.CallDetailsChecklistsContainer}>
-                <p className={styles.CallDetailsContainerSubTile}>Чек-листы</p>
-                <CustomSwiper
-                    data={checkListData}
-                    renderItem={(item, index) => (
-                        <CallCheckListsItem
-                            item={item}
-                            key={index}
-                            setShowCheckListModal={handleOpenCheckListModal}
-                        />
-                    )}
-                />
-            </Flex>
+            {
+                checklistsData.length > 0 &&
+                <Flex className={styles.CallDetailsChecklistsContainer}>
+                    <p className={styles.CallDetailsContainerSubTile}>Чек-листы</p>
+                    <CustomSwiper
+                        data={checklistsData}
+                        renderItem={(item, index) => (
+                            <CallCheckListsItem
+                                item={item}
+                                key={index}
+                                setShowCheckListModal={handleOpenCheckListModal}
+                            />
+                        )}
+                    />
+                </Flex>
+            }
+
 
             <p className={styles.CallDetailsContainerSubTile}>Маркеры</p>
             <CustomSwiper

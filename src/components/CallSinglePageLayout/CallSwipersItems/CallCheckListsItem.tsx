@@ -5,21 +5,22 @@ import PlusIcon from "./PlusIcon";
 import MinusIcon from "./MinusIcon";
 import {getColorByPercent} from "../utils";
 import {CheckListItem} from "../types";
+import {ChecklistsSearch} from "../../../stores/types/callsStoreTypes";
 
 
 interface CallsOptionsCheckListsItemProps {
-    item: CheckListItem;
+    item: ChecklistsSearch;
     setShowCheckListModal: (value: {
         show: boolean;
         position: { x: number; y: number } | null;
-        item: CheckListItem | null;
+        item: ChecklistsSearch | null;
     }) => void;
 }
 
 const CallCheckListsItem: React.FC<CallsOptionsCheckListsItemProps> = ({ item, setShowCheckListModal }) => {
     const [isTriggered, setIsTriggered] = useState(false);
 
-    const colorConfig = getColorByPercent(item?.percent);
+    const colorConfig = getColorByPercent(item?.limit_result);
 
     const handlePercentClick = (event: React.MouseEvent) => {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -35,8 +36,9 @@ const CallCheckListsItem: React.FC<CallsOptionsCheckListsItemProps> = ({ item, s
 
     return (
         <Flex className={styles.CallsOptionsCheckListsItem}>
+
             <Flex className={styles.CallsOptionsCheckListsItemRow}>
-                <p className={styles.CallsOptionsCheckListsItemRowType}>{item?.type}</p>
+                <p className={styles.CallsOptionsCheckListsItemRowType}>{item?.checklist.name}</p>
                 <Flex
                     className={styles.CallsOptionsCheckListsItemRowPercentMark}
                     style={{
@@ -47,16 +49,16 @@ const CallCheckListsItem: React.FC<CallsOptionsCheckListsItemProps> = ({ item, s
                     onClick={handlePercentClick}
                 >
                     <span style={{ color: colorConfig.color }}>
-                        {item?.percent}
+                        {item?.limit_result}
                     </span>
                 </Flex>
             </Flex>
-            <Flex className={styles.CallsOptionsCheckListsItemRow}>
-                <p className={styles.CallsOptionsCheckListsItemRowCompleting}>Выполнение чек-листа</p>
-                <Flex className={styles.CallsOptionsCheckListsItemRowCheckListMark}>
-                    <span>{item?.checkListCompleting}</span>
-                </Flex>
-            </Flex>
+            {/*<Flex className={styles.CallsOptionsCheckListsItemRow}>*/}
+            {/*    <p className={styles.CallsOptionsCheckListsItemRowCompleting}>Выполнение чек-листа</p>*/}
+            {/*    <Flex className={styles.CallsOptionsCheckListsItemRowCheckListMark}>*/}
+            {/*        <span>{item?.checkListCompleting}</span>*/}
+            {/*    </Flex>*/}
+            {/*</Flex>*/}
             {isTriggered ? (
                 <button className={styles.showTriggered} onClick={() => setIsTriggered(false)}>
                     <span className={styles.triggeredIcon}>

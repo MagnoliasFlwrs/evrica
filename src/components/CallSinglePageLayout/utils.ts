@@ -22,11 +22,10 @@ export const controlsOptions = [
     },
 ];
 
-export const getColorByPercent = (percent: string) => {
-    const percentNumber = parseInt(percent.replace('%', ''), 10);
-    if (percentNumber > 85) {
+export const getColorByPercent = (percent: number) => {
+    if (percent > 85) {
         return callsOptionsCheckListColors.green;
-    } else if (percentNumber > 50) {
+    } else if (percent > 50) {
         return callsOptionsCheckListColors.orange;
     } else {
         return callsOptionsCheckListColors.gray;

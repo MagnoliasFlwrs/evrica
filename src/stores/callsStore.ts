@@ -44,6 +44,7 @@ export const useCallsStore = create(
                 date_end: 1762203600
             },
             checkListsByIdList:[],
+            dictionariesByIdList:[],
             currentCallId:null,
             currentCallInfo:null,
             setError: (value: boolean) => set({ error: value }),
@@ -205,6 +206,41 @@ export const useCallsStore = create(
                             loading: false,
                             error: false,
                             checkListsByIdList: res.data.data
+                        });
+
+                        return res.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
+            getDictionariesByCategoryId: async () => {
+                set({ loading: true, error: false });
+                try {
+                    const { checkListsByIdObj } = get();
+
+                    const queryString = qs.stringify(checkListsByIdObj, {
+                        arrayFormat: 'indices',
+                        encode: false
+                    });
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-dictionaries?${queryString}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            dictionariesByIdList: res.data.data
                         });
 
                         return res.data;

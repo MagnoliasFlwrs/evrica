@@ -6,6 +6,7 @@ import {callsOptionsCheckListColors} from "../../CallsFilteredLayout/CallsOption
 import GreenCheck from "./GreenCheck";
 import GrayCheck from "./GrayCheck";
 import {getColorByPercent} from "../utils";
+import {ChecklistsSearch} from "../../../stores/types/callsStoreTypes";
 
 interface CheckListItem {
     type: string;
@@ -16,7 +17,7 @@ interface CheckListItem {
 interface CheckListModalProps {
     position: { x: number; y: number } | null;
     onClose: () => void;
-    item: CheckListItem | null;
+    item: ChecklistsSearch | null;
 }
 
 const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item  }) => {
@@ -68,7 +69,7 @@ const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item
 
     if (!item) return null;
 
-    const colorConfig = getColorByPercent(item?.percent);
+    // const colorConfig = getColorByPercent(item?.percent);
 
     return (
         <div ref={modalRef} style={modalStyle} className="checklist-modal-content">
@@ -78,16 +79,16 @@ const CheckListModal: React.FC<CheckListModalProps> = ({ position, onClose, item
                         <p>HR</p>
                         <Flex
                             className={styles.CallsOptionsCheckListsItemRowPercentMark}
-                            style={{
-                                backgroundColor: colorConfig.bgColor,
-                                border: `1px solid ${colorConfig.color}`,
-                                cursor: 'pointer'
-                            }}
+                            // style={{
+                            //     backgroundColor: colorConfig.bgColor,
+                            //     border: `1px solid ${colorConfig.color}`,
+                            //     cursor: 'pointer'
+                            // }}
 
                         >
-                            <span style={{ color: colorConfig.color }}>
-                                {item?.percent}
-                            </span>
+                            {/*<span style={{ color: colorConfig.color }}>*/}
+                            {/*    {item?.percent}*/}
+                            {/*</span>*/}
                         </Flex>
                     </Flex>
                     <button onClick={onClose}>

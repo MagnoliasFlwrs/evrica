@@ -1,27 +1,97 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import { persist } from "zustand/middleware";
+import {Mutex} from "async-mutex";
 
 export const baseAuthUrl = process.env.REACT_APP_AUTH_URL || 'https://api.evrika360.com/api';
 
 export const axiosInstanceAuth = axios.create();
 const axiosInstanceAll = axios.create();
 
+// Fix: Add explicit type for refreshTokenPromise
+let refreshTokenPromise: Promise<string | null> | null = null;
+let isRefreshingToken = false;
+let isSignOut = false;
+const mutex = new Mutex();
+
+const refreshToken = async (): Promise<string | null> => {
+    try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+            const res = await axios.post(
+                `${baseAuthUrl}/auth/get-auth-user-by-refresh-token`,
+                { refreshToken },
+                { withCredentials: true },
+            );
+            if (res.status === 200) {
+                if ('accessToken' in res.data) {
+                    localStorage.setItem('accessToken', res.data.accessToken);
+                }
+                if ('refreshToken' in res.data)
+                    localStorage.setItem('refreshToken', res.data.refreshToken);
+                return res.data.accessToken;
+            } else {
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('employee');
+                localStorage.removeItem('maintenance');
+                localStorage.removeItem('auth');
+            }
+        }
+        return null;
+    } finally {
+        isRefreshingToken = false;
+    }
+};
+
+axiosInstanceAll.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
+
 axiosInstanceAll.interceptors.response.use(
     (response) => response,
     async (error) => {
-        if (error.response?.status === 401) {
+        if (error.response && error.response.status === 401 && !isSignOut) {
+            const release = await mutex.acquire();
+            try {
+                if (!isRefreshingToken) {
+                    isRefreshingToken = true;
 
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('auth');
-            localStorage.removeItem('analytics');
-            localStorage.removeItem('calls');
-            useAuth.getState().logout();
-
-            window.location.href = '/auth';
-            return Promise.reject(error);
+                    if (!refreshTokenPromise) refreshTokenPromise = refreshToken();
+                }
+                const newAccessToken = await refreshTokenPromise;
+                if (newAccessToken) {
+                    const originalRequest = error.config;
+                    originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    return axios(originalRequest);
+                } else {
+                    refreshTokenPromise = null;
+                    release();
+                }
+            } catch (refreshError) {
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('employee');
+                localStorage.removeItem('maintenance');
+                localStorage.removeItem('auth');
+                localStorage.removeItem('conversationLog');
+                window.location.href = '/auth';
+                return Promise.reject(refreshError);
+            } finally {
+                refreshTokenPromise = null;
+                release();
+            }
         }
+
         return Promise.reject(error);
     },
 );
