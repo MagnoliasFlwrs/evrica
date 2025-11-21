@@ -47,6 +47,8 @@ export const useCallsStore = create(
             dictionariesByIdList:[],
             currentCallId:null,
             currentCallInfo:null,
+            promptList:[],
+            aiJsonList:[],
             setError: (value: boolean) => set({ error: value }),
             getPendingCalls: async () => {
                 set({ loading: true, error: false });
@@ -281,6 +283,65 @@ export const useCallsStore = create(
                     });
                 }
             },
+            getPromptList: async (id : string | null | number) => {
+                set({ loading: true, error: false });
+                try {
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/proxy/get-prompt-list?org_id=${id}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            promptList: res.data.data
+                        });
+
+                        return res.data.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
+            getAiJsonList: async (orgId : string | null | number , callInfoId :number | undefined ) => {
+                set({ loading: true, error: false });
+                try {
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/proxy/get-prompt-result-by-call-info-id?org_id=${orgId}&call_info_id=${callInfoId}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            aiJsonList: res.data.data
+                        });
+
+                        return res.data.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
+
         }),
         {
             name: 'calls',

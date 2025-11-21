@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {JSX, useEffect, useRef, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex} from "antd";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import BlueArrow from "../../icons/BlueArrow";
 import {useCallsStore} from "../../../stores/callsStore";
 import {formatDateTime, formatSecondsToTimeWithHours} from "../utils";
+import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
 
 const GeneralCallInfoWidget = () => {
     const [attentionModal, setAttentionModal] = React.useState(false);
@@ -13,6 +14,20 @@ const GeneralCallInfoWidget = () => {
     const categoryModalRef = useRef<HTMLDivElement>(null);
     const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
     const [callType, setCallType] = useState<string | undefined>(undefined);
+    const aiJsonList = useCallsStore((state) => state.aiJsonList);
+
+    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
+
+    useEffect(() => {
+        if (aiJsonList && aiJsonList.length > 0) {
+            // Обрабатываем первый элемент массива (или все, если нужно)
+            const firstAiJson = aiJsonList[0];
+            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
+                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
+            );
+            setSystemJsonList(filteredSystem);
+        }
+    }, [aiJsonList]);
 
     useEffect(() => {
         if(currentCallInfo) {
@@ -45,6 +60,8 @@ const GeneralCallInfoWidget = () => {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
+    const baseSystemData = systemJsonList[0].result;
+    console.log(baseSystemData)
 
     return (
         <Flex className={styles.GeneralCallInfoWidget}>
@@ -56,8 +73,9 @@ const GeneralCallInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Статус решения проблемы</p>
-                        <span>Не решен</span>
-                        {/*TO DO цвета */}
+                        <span>
+                            {baseSystemData?.информация_по_звонку?.статус_решения_проблемы || 'Не решен'}
+                        </span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Категория звонка</p>
@@ -76,8 +94,9 @@ const GeneralCallInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Качество проработки звонка</p>
-                        <span>Высокое</span>
-                        {/*TO DO цвета */}
+                        <span>
+                            {baseSystemData?.информация_по_звонку?.качество_проработки_звонка || 'Высокое'}
+                        </span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Тип</p>
@@ -97,7 +116,9 @@ const GeneralCallInfoWidget = () => {
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Требует внимания</p>
                         <Flex className={styles.IconRow} ref={attentionModalRef}>
-                            <span>Да</span>
+                            <span>
+                                {baseSystemData?.информация_по_звонку?.["требует_звонок_незамедлительного_внимания (проблемный звонок)"].да_или_нет === 'да' ? 'Да' : 'Нет'}
+                            </span>
                             <button
                                 onMouseEnter={() => setAttentionModal(true)}
                                 onMouseLeave={() => setAttentionModal(false)}
@@ -107,13 +128,12 @@ const GeneralCallInfoWidget = () => {
                             {
                                 attentionModal &&
                                 <CustomTextModal
-                                    text='Стандартный запрос на подбор автомобиля'
+                                    text={baseSystemData?.информация_по_звонку?.["требует_звонок_незамедлительного_внимания (проблемный звонок)"]?.объяснение}
                                     top={true}
                                     left={true}
                                 />
                             }
                         </Flex>
-
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Оператор</p>

@@ -11,14 +11,24 @@ import CallDetails from "../components/CallSinglePageLayout/CallDetails";
 import CallTranscribationWidgets from "../components/CallSinglePageLayout/CallTranscribationWidgets";
 import AudioPlayerBlock from "../components/CallSinglePageLayout/AudioPlayerBlock";
 import {useCallsStore} from "../stores/callsStore";
+import {useAuth} from "../store";
 
 const CallSinglePageLayout = () => {
     const getCurrentCallInfo = useCallsStore((state)=> state.getCurrentCallInfo);
     const currentCallId = useCallsStore((state)=> state.currentCallId);
+    const user = useAuth((state)=> state.user);
+    const getPromptList = useCallsStore((state)=>state.getPromptList);
+    const getAiJsonList = useCallsStore((state) => state.getAiJsonList);
+    const currentCallInfo = useCallsStore((state) => state.currentCallInfo);
 
     useEffect(() => {
         getCurrentCallInfo(currentCallId)
     }, [currentCallId]);
+
+    useEffect(() => {
+        getPromptList(user.id)
+        getAiJsonList(user?.id , currentCallInfo?.id)
+    }, [currentCallInfo]);
 
     return (
         <PageContainer>

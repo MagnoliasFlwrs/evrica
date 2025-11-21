@@ -240,6 +240,115 @@ export interface CurrentCallInfo {
     checklists_search: ChecklistsSearch[];
     call: Call;
 }
+export interface PromptItem {
+    id: number;
+    question_label: string;
+    org_id: number | null;
+    category_id: number | null;
+    question_types: string;
+}
+
+export type PromptList = PromptItem[];
+
+export interface AiJsonList {
+    id: number;
+    answers: {
+        custom: any[]; // Можно заменить на более конкретный тип, если известна структура
+        system: AiSystemAnswer[];
+    };
+}
+
+export interface AiSystemAnswer {
+    name: string;
+    result: {
+        рекомендации: {
+            маркетинг: Recommendation;
+            операционный_бизнес: Recommendation;
+            качество_обслуживания: Recommendation;
+        };
+        данные_о_клиенте: ClientData;
+        информация_по_звонку: CallInfo;
+        информация_по_менеджеру: ManagerInfo;
+        удовлетворенность_клиента: CustomerSatisfaction;
+        классификация_инсайтов_клиента: CustomerInsights;
+    };
+}
+
+export interface Recommendation {
+    действие: string;
+    приоритет: string;
+}
+
+export interface ClientData {
+    имя: string;
+    пол: string;
+    возраст: string;
+    должность: string;
+    место_работы: string;
+    наличие_детей: string;
+    где_живет_клиент: string;
+    хобби_и_интересы: string;
+    семейное_положение: string;
+    сфера_деятельности: string;
+    информация_о_близких: RelativeInfo;
+    причина_оценки_возраста: string;
+}
+
+export interface RelativeInfo {
+    имя: string;
+    возраст: string;
+    место_работы: string;
+    степень_родства: string;
+}
+
+export interface CallInfo {
+    суть_звонка: string;
+    инициатор_тем: string;
+    первичный_трафик: string;
+    какой_следующий_шаг: string;
+    выявленная_проблема: string;
+    кто_управляет_беседой: string;
+    статус_решения_проблемы: string;
+    дата_следующего_контакта: string;
+    чем_интересовался_клиент: string;
+    качество_проработки_звонка: string;
+    требует_ли_прослушивания_руководством: string;
+    объяснение_ответа_даты_следующего_контакта: string;
+    комментарий_по_необходимости_прослушивания_руководством: string[];
+    "требует_звонок_незамедлительного_внимания (проблемный звонок)": {
+        да_или_нет: string;
+        объяснение: string;
+    };
+}
+
+export interface ManagerInfo {
+    что_должен_сделать_менеджер: string;
+}
+
+export interface CustomerSatisfaction {
+    рекомендации: string[];
+    начальная_оценка: SatisfactionScore;
+    окончательная_оценка: SatisfactionScore;
+    сравнение_удовлетворенности: string;
+}
+
+export interface SatisfactionScore {
+    балл: string;
+    причина: string;
+}
+
+export interface CustomerInsights {
+    боли: InsightCategory;
+    интересы: InsightCategory;
+    потребности: InsightCategory;
+}
+
+export interface InsightCategory {
+    тип: string;
+    категории: string[];
+    упоминания: number;
+    интенсивность: number;
+}
 
 export interface CallsState {
     error: boolean;
@@ -248,6 +357,8 @@ export interface CallsState {
     callsCategories: [];
     checkListsByIdList: [];
     dictionariesByIdList: [];
+    promptList: PromptList;
+    aiJsonList: AiJsonList[]; // Теперь правильно типизирован
     currentCallInfo: CurrentCallInfo | null;
     checkListsByIdObj: CheckListsByIdObj;
     callsByCategory: CallsByCategory | null;
@@ -264,4 +375,6 @@ export interface CallsState {
     setCategoryCallsListObjPage: (page: number) => void;
     setCurrentCallId: (id: string | null | number) => void;
     getCurrentCallInfo: (id: string | null | number) => Promise<CurrentCallInfo>;
+    getPromptList: (id: string | null | number) => Promise<PromptList>;
+    getAiJsonList: (orgId: string | null | number, callInfoId: number | undefined) => Promise<any>;
 }

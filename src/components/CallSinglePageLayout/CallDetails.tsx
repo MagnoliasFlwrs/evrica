@@ -29,8 +29,6 @@ const CallDetails = () => {
     const [markers, setMarkers] = useState<DictionariesSearch | null>(null);
     const [checklistsData, setChecklists] = useState<ChecklistsSearch[]>([]);
 
-    console.log("currentCallInfo", currentCallInfo);
-
     useEffect(() => {
         if(currentCallInfo) {
             setChecklists(currentCallInfo.checklists_search);
@@ -92,7 +90,6 @@ const CallDetails = () => {
         setMarkerModalState(state);
     };
 
-    console.log(checklistsData)
     return (
         <Flex className={styles.CallDetailsContainer}>
             <p className={styles.CallDetailsContainerTile}>Детали разговора</p>

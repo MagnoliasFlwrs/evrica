@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './CustomSelect.module.scss';
 import CloseIcon from "./icons/CloseIcon";
-import {Flex, Input, Tag} from "antd";
+import {Flex, Input, InputRef, Tag} from "antd";
 import DownArrow from "./icons/DownArrow";
 import Check from "./icons/Check";
 import SearchIcon from "./icons/SearchIcon";
@@ -19,6 +19,8 @@ interface CustomSelectProps {
     onChange?: (value: string | string[]) => void;
     tag?: boolean,
     width?: string,
+    searchable?: boolean;
+    defaultValue?: string | string[];
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -28,13 +30,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                                                        value = multiple ? [] : '',
                                                        onChange,
                                                        tag = false,
-                                                       width = '247px'
+                                                       width = '247px',
+                                                       searchable = false,
+                                                       defaultValue = multiple ? [] : ''
                                                    }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedValues, setSelectedValues] = useState<string | string[]>(value);
+
+    const [selectedValues, setSelectedValues] = useState<string | string[]>(
+        value !== undefined ? value : defaultValue
+    );
     const [searchTerm, setSearchTerm] = useState<string>('');
     const selectRef = useRef<HTMLDivElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
+    // const searchInputRef = useRef<HTMLInputElement>(null);
+    const searchInputRef = useRef<InputRef>(null);
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -50,14 +59,17 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     }, []);
 
     useEffect(() => {
-        setSelectedValues(value);
+        // Обновляем состояние только если value передан явно
+        if (value !== undefined) {
+            setSelectedValues(value);
+        }
     }, [value]);
 
     useEffect(() => {
-        if (isOpen && multiple && searchInputRef.current) {
+        if (isOpen && multiple && searchable && searchInputRef.current) {
             searchInputRef.current.focus();
         }
-    }, [isOpen, multiple]);
+    }, [isOpen, multiple, searchable]);
 
     const handleSelect = (optionValue: string) => {
         let newValues: string | string[];
@@ -66,7 +78,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             const currentValues = Array.isArray(selectedValues) ? selectedValues : [];
 
             if (optionValue === 'any') {
-
                 if (currentValues.length === filteredOptions.length) {
                     newValues = [];
                 } else {
@@ -80,7 +91,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 }
             }
         } else {
-
             newValues = optionValue;
             setIsOpen(false);
         }
@@ -178,7 +188,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             const values = Array.isArray(selectedValues) ? selectedValues : [];
             return values.includes(optionValue);
         } else {
-
             if (optionValue === '') {
                 return selectedValues === '';
             }
@@ -189,7 +198,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     const filteredOptions = options.filter(option =>
         option.label.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
 
     const allSelected = multiple &&
         Array.isArray(selectedValues) &&
@@ -225,7 +233,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                         </button>
                     </div>
 
-                    {multiple && (
+                    {multiple && searchable && ( // Показываем поиск только если multiple И searchable=true
                         <div className={styles.searchContainer}>
                             <Input
                                 type="text"
@@ -235,21 +243,22 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className={styles.searchInput}
                                 onClick={(e) => e.stopPropagation()}
+                                ref={searchInputRef}
                             />
                         </div>
                     )}
 
-                    {!multiple && (
-                        <div
-                            className={`${styles.optionAll} ${isOptionSelected('') ? styles.selected : ''}`}
-                            onClick={() => handleSelect('')}
-                        >
-                            Любой
-                            <span className={styles.checkbox}>
-                                {isOptionSelected('') ? <Check/> : ''}
-                            </span>
-                        </div>
-                    )}
+                    {/*{!multiple && (*/}
+                    {/*    <div*/}
+                    {/*        className={`${styles.optionAll} ${isOptionSelected('') ? styles.selected : ''}`}*/}
+                    {/*        onClick={() => handleSelect('')}*/}
+                    {/*    >*/}
+                    {/*        Любой*/}
+                    {/*        <span className={styles.checkbox}>*/}
+                    {/*            {isOptionSelected('') ? <Check/> : ''}*/}
+                    {/*        </span>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     {filteredOptions.map(option => (
                         <div
