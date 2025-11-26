@@ -17,11 +17,11 @@ const AudioPlayerBlock = () => {
             <div className={styles.AudioPlayerBlockHead}>
                 <p>Аудиозапись</p>
                 <div className={styles.AudioPlayerBlockHeadBtns}>
-                    <OutlinedButton
-                        icon={isHideSpeechStages ? <ClosedEyeIcon/> : <EyeIcon/>}
-                        text={isHideSpeechStages ? 'Скрыть этапы разговора': 'Показать этапы разговора'}
-                        onClick={() => {setHideSpeechStages(!isHideSpeechStages)}}
-                    />
+                    {/*<OutlinedButton*/}
+                    {/*    icon={isHideSpeechStages ? <ClosedEyeIcon/> : <EyeIcon/>}*/}
+                    {/*    text={isHideSpeechStages ? 'Скрыть этапы разговора': 'Показать этапы разговора'}*/}
+                    {/*    onClick={() => {setHideSpeechStages(!isHideSpeechStages)}}*/}
+                    {/*/>*/}
                     <OutlinedButton
                         icon={showChannels ? <EyeIcon/> : <ClosedEyeIcon/> }
                         text={showChannels ? 'Скрыть каналы' : 'Показать каналы'}

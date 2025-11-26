@@ -166,16 +166,17 @@ const TextTranscribationWidget: React.FC<TextTranscribationWidgetProps> = () => 
                 </Flex>
             </Flex>
             <Flex className={styles.SearchRow}>
-                <button>
-                    <HideSpeechStagesIcon />
-                    Скрыть этапы разговора
-                </button>
+                {/*<button>*/}
+                {/*    <HideSpeechStagesIcon />*/}
+                {/*    Скрыть этапы разговора*/}
+                {/*</button>*/}
                 <Input
                     prefix={<SearchIcon />}
                     placeholder='Поиск по расшифровке'
                     className={styles.SearchRowInput}
                     value={searchQuery}
                     onChange={handleSearchChange}
+                    style={{marginLeft:'auto'}}
                 />
             </Flex>
             <Flex className={styles.transcribation}>

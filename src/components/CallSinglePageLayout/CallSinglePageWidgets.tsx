@@ -13,7 +13,7 @@ const CallSinglePageWidgets = () => {
             <Flex className={styles.CallSinglePageWidgetsColumn}>
                 <GeneralCallInfoWidget/>
                 <CustomerInfoWidget/>
-                <StagesOfConversationWidget/>
+                {/*<StagesOfConversationWidget/>*/}
             </Flex>
             <Flex className={styles.CallSinglePageWidgetsColumn}>
                 <SummaryOfCallInformationWidget/>

@@ -60,8 +60,7 @@ const GeneralCallInfoWidget = () => {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    const baseSystemData = systemJsonList[0].result;
-    console.log(baseSystemData)
+    const baseSystemData = systemJsonList[0]?.result;
 
     return (
         <Flex className={styles.GeneralCallInfoWidget}>
@@ -159,7 +158,7 @@ const GeneralCallInfoWidget = () => {
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Номер</p>
-                        <span>101</span>
+                        <span>{currentCallInfo?.call?.phone_number_short}</span>
                     </Flex>
                 </Flex>
             </Flex>

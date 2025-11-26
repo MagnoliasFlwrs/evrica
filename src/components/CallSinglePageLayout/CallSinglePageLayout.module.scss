@@ -124,6 +124,7 @@
   border-radius: 30px;
   background: #FFF;
   width: 100%;
+  flex: 1;
 
   button {
     border-radius: 2px;
@@ -176,7 +177,7 @@
   border-radius: 30px;
   border: 1px solid rgba(0, 0, 0, 0.10);
   background: #FFF;
-  height: 584px;
+  height: 430px;
   .InformationListContainer {
     display: flex;
     flex-direction: column;
@@ -254,7 +255,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      height: 412px;
+      height: 300px;
       overflow: auto;
       p {
         color: rgba(0, 0, 0, 0.50);

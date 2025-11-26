@@ -5,6 +5,7 @@ import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import {useCallsStore} from "../../../stores/callsStore";
 import {useAuth} from "../../../store";
+import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
 
 const SummaryOfCallInformationWidget = () => {
     const [customerCallInfoList, setCustomerCallInfoList] = useState<string>(''); // изменено на string
@@ -15,10 +16,22 @@ const SummaryOfCallInformationWidget = () => {
     const promptList = useCallsStore((state) => state.promptList);
     const aiJsonList = useCallsStore((state) => state.aiJsonList);
     const loading = useCallsStore((state) => state.loading);
+    const [totalScore , setTotalScore] = useState(0);
+
+    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
 
     useEffect(() => {
-        console.log('aiJsonList' , aiJsonList);
+        if (aiJsonList && aiJsonList.length > 0) {
+            const firstAiJson = aiJsonList[0];
+            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
+                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
+            );
+            setSystemJsonList(filteredSystem);
+        }
     }, [aiJsonList]);
+    const baseSystemData = systemJsonList[0]?.result;
+
+    console.log(baseSystemData);
 
     const summaryOfCallInformationOptios = promptList.map(item => ({
         value: item.id.toString(),
@@ -84,7 +97,7 @@ const SummaryOfCallInformationWidget = () => {
                         <Flex className={styles.InformationListContainerRow}>
                             <p className={styles.InformationListContainerRowTitle}>Удовлетворенность клиента</p>
                             <Flex className={styles.InformationListContainerModalWrapper} ref={customerSatisfactionRef}>
-                                <span className={styles.InformationListContainerRowDescrtiption}>9</span>
+                                <span className={styles.InformationListContainerRowDescrtiption}>{baseSystemData?.удовлетворенность_клиента?.окончательная_оценка?.балл}</span>
                                 <button onMouseEnter={() => setCustomerSatisfactionModal(true)}
                                         onMouseLeave={() => setCustomerSatisfactionModal(false)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
@@ -103,12 +116,12 @@ const SummaryOfCallInformationWidget = () => {
                                         content={
                                             <ul className={styles.customerSatisfactionList}>
                                                 <li>
-                                                    <p>Клиент обратился с конкретным запросом</p>
-                                                    <span>5</span>
+                                                    <p>{baseSystemData?.удовлетворенность_клиента.начальная_оценка.причина}</p>
+                                                    <span>{baseSystemData?.удовлетворенность_клиента.начальная_оценка.балл}</span>
                                                 </li>
                                                 <li>
-                                                    <p>Менеджер предоставил клиенту подробную информацию</p>
-                                                    <span>9</span>
+                                                    <p>{baseSystemData?.удовлетворенность_клиента.окончательная_оценка.причина}</p>
+                                                    <span>{baseSystemData?.удовлетворенность_клиента.окончательная_оценка.балл}</span>
                                                 </li>
                                             </ul>
                                         }
@@ -121,28 +134,32 @@ const SummaryOfCallInformationWidget = () => {
                         <ul className={styles.InformationList}>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Чем интересовался клиент</p>
-                                <span>Маленькая кухня для дачи, интересуется дизайном</span>
+                                <span>{baseSystemData?.информация_по_звонку.чем_интересовался_клиент}</span>
+                            </li>
+                            <li className={styles.InformationListContainerRow}>
+                                <p>Суть звонка</p>
+                                <span>{baseSystemData?.информация_по_звонку.суть_звонка}</span>
                             </li>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Итоги коммуникации</p>
-                                <span>Клиент пообещала перезвонить и записаться на консультацию</span>
+                                <span>{baseSystemData?.информация_по_звонку.объяснение_ответа_даты_следующего_контакта}</span>
                             </li>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Удовлетворенность</p>
-                                <span>7/10</span>
+                                <span>{baseSystemData?.удовлетворенность_клиента.окончательная_оценка.балл} / 10</span>
                             </li>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Подробности
                                     удовлетворенности</p>
-                                <span>Клиент в целом доволен, заинтересована в предложении. Оценка могла быть выше, если бы предложили онлайн консултацию</span>
+                                <span>{baseSystemData?.удовлетворенность_клиента.сравнение_удовлетворенности}</span>
                             </li>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Возможные сложности</p>
-                                <span>Неизвестные точные размеры кухни на даче</span>
+                                <span>{baseSystemData?.информация_по_звонку.выявленная_проблема}</span>
                             </li>
                             <li className={styles.InformationListContainerRow}>
                                 <p>Рекомендации</p>
-                                <span>Предложите клиенту возможность прислать примерные размеры и фото помещения для предварительной онлайн-консультации. Это повысит заинтересованность и лояльность клиента.</span>
+                                <span>{baseSystemData?.удовлетворенность_клиента.рекомендации.map((item)=> <span>{item}</span>)}</span>
                             </li>
                         </ul>
                         <Flex className={styles.Tasks}>
@@ -150,7 +167,7 @@ const SummaryOfCallInformationWidget = () => {
                                 <p>Задачи</p>
                                 <button onMouseEnter={() => setTasksModal(true)}
                                         onMouseLeave={() => setTasksModal(false)}>
-                                    4
+                                    1
                                 </button>
                                 {
                                     tasksModal &&
@@ -160,18 +177,8 @@ const SummaryOfCallInformationWidget = () => {
                                         content={
                                             <ul className={styles.TasksContainerList}>
                                                 <li>
-                                                    <p>1. Отправить сообщение в WhatsApp, назначить встречу.</p>
+                                                    <p>{baseSystemData?.информация_по_менеджеру.что_должен_сделать_менеджер}</p>
 
-                                                </li>
-                                                <li>
-                                                    <p>2. Перезвонить в понедельник 17 апреля</p>
-                                                </li>
-                                                <li>
-                                                    <p>3. Отправить сообщение в WhatsApp, назначить встречу.</p>
-
-                                                </li>
-                                                <li>
-                                                    <p>4. Перезвонить в понедельник 17 апреля</p>
                                                 </li>
                                             </ul>
                                         }
