@@ -7,7 +7,6 @@ import {useCallsStore} from "../../../stores/callsStore";
 import { findCategoryIdsInTree} from "./helpers";
 import {Category, CategoryLocation, SubLocation} from "./types";
 
-
 const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [searchValue, setSearchValue] = useState('');
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
@@ -34,6 +33,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
             })) || [],
         }));
     };
+
     const highlightMatches = (data: TreeDataNode[], searchText: string): TreeDataNode[] => {
         if (!searchText) return data;
 
@@ -64,7 +64,6 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
             return newItem;
         });
     };
-
 
     const treeData: TreeDataNode[] = useMemo(() => {
         return convertToTreeData(callsCategories);
@@ -116,6 +115,23 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         setAutoExpandParent(false);
     };
 
+    // Обработчик клика на заголовок для разворачивания/сворачивания
+    const onTitleClick = (node: TreeDataNode) => {
+        const key = node.key as React.Key;
+
+        // Если у узла есть дети, обрабатываем разворачивание/сворачивание
+        if (node.children && node.children.length > 0) {
+            if (expandedKeys.includes(key)) {
+                // Сворачиваем
+                setExpandedKeys(expandedKeys.filter(k => k !== key));
+            } else {
+                // Разворачиваем
+                setExpandedKeys([...expandedKeys, key]);
+            }
+            setAutoExpandParent(false);
+        }
+    };
+
     useEffect(() => {
         setIsSelected(selectedCount);
     }, [selectedCount]);
@@ -124,7 +140,56 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         setSearchValue(e.target.value);
     };
 
-    const treeDataWithHighlights = highlightMatches(treeData, searchValue);
+    // Функция для получения фактического title
+    const getActualTitle = (node: TreeDataNode): React.ReactNode => {
+        if (typeof node.title === 'function') {
+            // Если title - функция, вызываем её с node как DataNode
+            return node.title(node as TreeDataNode);
+        }
+        return node.title;
+    };
+
+    // Функция для создания кастомного title с обработчиком клика
+    const createCustomTitle = (node: TreeDataNode, originalTitle: React.ReactNode) => {
+        const hasChildren = node.children && node.children.length > 0;
+
+        return (
+            <span
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (hasChildren) {
+                        onTitleClick(node);
+                    }
+                }}
+                style={{
+                    cursor: hasChildren ? 'pointer' : 'default',
+                    display: 'inline-block',
+                    width: '100%',
+                    padding: '2px 0'
+                }}
+            >
+                {originalTitle}
+            </span>
+        );
+    };
+
+    const treeDataWithHighlights = useMemo(() => {
+        const highlightedData = highlightMatches(treeData, searchValue);
+
+        // Рекурсивно добавляем кастомные title
+        const addCustomTitles = (nodes: TreeDataNode[]): TreeDataNode[] => {
+            return nodes.map(node => {
+                const actualTitle = getActualTitle(node);
+                return {
+                    ...node,
+                    title: createCustomTitle(node, actualTitle),
+                    children: node.children ? addCustomTitles(node.children) : undefined
+                };
+            });
+        };
+
+        return addCustomTitles(highlightedData);
+    }, [treeData, searchValue, expandedKeys]);
 
     return (
         <Flex className={styles.CategoriesTree}>
@@ -157,8 +222,8 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
                     autoExpandParent={autoExpandParent}
                     className={styles.CategoriesTreeWidget}
                     switcherIcon={<DownOutlined />}
-                    // Делаем возможность выбора только одного элемента
                     selectable={true}
+                    expandAction={false}
                 />
             </Flex>
         </Flex>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Flex} from "antd";
 import styles from "./CustomDatePicker.module.scss";
 import {CustomDatePickerProps} from "./types";
@@ -11,7 +11,6 @@ import BlueButton from "../BlueButton/BlueButton";
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-
 const CustomDatePicker = ({
                               openCustomDatePicker,
                               setOpenCustomDatePicker,
@@ -20,6 +19,12 @@ const CustomDatePicker = ({
                           }: CustomDatePickerProps) => {
     const [value, onChange] = useState<Value>(selectedDate || new Date());
     const [activePeriod, setActivePeriod] = useState<string>('all');
+
+    useEffect(() => {
+        if (selectedDate) {
+            onChange(selectedDate);
+        }
+    }, [selectedDate]);
 
     const handleApply = () => {
         onDateChange?.(value);

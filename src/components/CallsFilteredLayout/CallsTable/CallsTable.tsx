@@ -196,6 +196,25 @@ const CallsTable = () => {
                 loading={loading}
                 footer={customFooter}
                 rowKey="id"
+                locale={{
+                    emptyText: (
+                        <div style={{ padding: '40px 0' }}>
+                            <div style={{
+                                fontSize: '16px',
+                                color: '#8C8C8C',
+                                marginBottom: '8px'
+                            }}>
+                                Нет данных
+                            </div>
+                            <div style={{
+                                fontSize: '14px',
+                                color: '#BFBFBF'
+                            }}>
+                                По вашему запросу ничего не найдено
+                            </div>
+                        </div>
+                    )
+                }}
                 onRow={(record: Call) => ({
                     onClick: () => {
                         onRowClick(record.id);

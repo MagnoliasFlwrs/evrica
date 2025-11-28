@@ -22,6 +22,8 @@ export interface CategoryCallsListObj {
     category_id: string | number | null;
     page: number;
     per_page: number;
+    date_start: null | number;
+    date_end:null | number;
 }
 export interface CheckListsByIdObj {
     category_id: string | number | null;
@@ -377,4 +379,5 @@ export interface CallsState {
     getCurrentCallInfo: (id: string | null | number) => Promise<CurrentCallInfo>;
     getPromptList: (id: string | null | number) => Promise<PromptList>;
     getAiJsonList: (orgId: string | null | number, callInfoId: number | undefined) => Promise<any>;
+    setCategoryCallsFilterDate: (startDate: number | null, endDate: number | null) => void;
 }

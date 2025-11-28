@@ -16,6 +16,10 @@
   border: none;
   outline: none;
   cursor: pointer;
+  transition: background 0.5s;
+  &:hover {
+    background: var(--Miscellaneous-Floating-Tab---Text-Selected, #006ee8);
+  }
   .iconStart {
     display: flex;
     align-items: center;

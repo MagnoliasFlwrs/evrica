@@ -30,11 +30,13 @@ export const useCallsStore = create(
                     checklist_score_vector: null,
                     checklist_score_vector_value: null,
                     client_phone: null,
-                    worked_dictionaries: []
+                    worked_dictionaries: [],
                 },
                 category_id: null,
                 page: 1,
-                per_page: 10
+                per_page: 10,
+                date_start: null,
+                date_end: null,
             },
             callsCategories: [],
             callsByCategory: null,
@@ -114,11 +116,14 @@ export const useCallsStore = create(
                 set({ loading: true, error: false });
                 try {
                     const { categoryCallsListObj } = get();
+
                     const queryParams = {
                         filters: JSON.stringify(categoryCallsListObj.filters),
                         category_id: categoryCallsListObj.category_id,
                         page: categoryCallsListObj.page,
-                        'per-page': categoryCallsListObj.per_page
+                        'per-page': categoryCallsListObj.per_page,
+                        date_start: categoryCallsListObj.date_start,
+                        date_end: categoryCallsListObj.date_end,
                     };
 
                     const queryString = qs.stringify(queryParams, {
@@ -341,6 +346,15 @@ export const useCallsStore = create(
                     });
                 }
             },
+            setCategoryCallsFilterDate: (startDate: null | number, endDate: null | number) => {
+                set((state) => ({
+                    categoryCallsListObj: {
+                        ...state.categoryCallsListObj,
+                        date_start: startDate,
+                        date_end: endDate,
+                    }
+                }))
+            }
 
         }),
         {
