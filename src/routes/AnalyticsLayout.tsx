@@ -12,6 +12,9 @@ const AnalyticsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
     const getAllAgents = useAnalyticsStore((state)=> state.getAllAgents);
 
+    // состояние чтобы понимать на какой вкладке и какой контент рисовать
+    const [selectedSwitchItem, setSelectedSwitchItem] = useState(1);
+
     useEffect(() => {
         getAllAgents()
     }, []);
@@ -29,12 +32,19 @@ const AnalyticsLayout = () => {
         <PageContainer>
             <Flex className={styles.AnalyticPageLayoutHead}>
                 <PageTitle text='Аналитика'/>
-                <CustomSwitcher items={switchItems}/>
+                <CustomSwitcher items={switchItems} setSelectedSwitchItem={setSelectedSwitchItem}/>
             </Flex>
-            <Flex className={styles.AnalyticPageLayoutFilter}>
-                <AnalyticsTree setIsSelected={setIsSelected}/>
-                <AnalyticsDatePicker/>
-            </Flex>
+            {
+                selectedSwitchItem == 0 && <p>categories</p>
+            }
+            {
+                selectedSwitchItem == 1 &&
+                <Flex className={styles.AnalyticPageLayoutFilter}>
+                    <AnalyticsTree setIsSelected={setIsSelected}/>
+                    <AnalyticsDatePicker/>
+                </Flex>
+            }
+
         </PageContainer>
     );
 };

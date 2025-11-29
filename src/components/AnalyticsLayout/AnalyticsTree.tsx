@@ -90,6 +90,85 @@ const getAgentNamesByKeys = (treeData: TreeDataNode[], keys: React.Key[]): strin
     return agentNames;
 };
 
+const getAllChildKeys = (node: TreeDataNode): React.Key[] => {
+    let keys: React.Key[] = [node.key as React.Key];
+
+    if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+            keys = keys.concat(getAllChildKeys(child));
+        });
+    }
+
+    return keys;
+};
+
+// Функция для получения всех ключей, которые нужно развернуть при выборе узла
+const getExpandedKeysForNode = (nodeKey: React.Key, treeData: TreeDataNode[]): React.Key[] => {
+    const keysToExpand: React.Key[] = [nodeKey];
+
+    // Находим узел в дереве
+    const findNode = (nodes: TreeDataNode[], targetKey: React.Key): TreeDataNode | null => {
+        for (const node of nodes) {
+            if (node.key === targetKey) {
+                return node;
+            }
+            if (node.children) {
+                const found = findNode(node.children, targetKey);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
+
+    const node = findNode(treeData, nodeKey);
+
+    // Если у узла есть дети, добавляем все дочерние ключи для разворачивания
+    if (node && node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+            keysToExpand.push(child.key as React.Key);
+            // Рекурсивно добавляем детей детей
+            if (child.children && child.children.length > 0) {
+                const childKeys = getAllChildKeys(child).slice(1); // Исключаем сам child.key, так как он уже добавлен
+                keysToExpand.push(...childKeys);
+            }
+        });
+    }
+
+    return keysToExpand;
+};
+
+// Функция для создания кастомного title с обработчиком клика
+const createCustomTitle = (node: TreeDataNode, originalTitle: React.ReactNode, onTitleClick: (node: TreeDataNode) => void) => {
+    const hasChildren = node.children && node.children.length > 0;
+
+    return (
+        <span
+            onClick={(e) => {
+                e.stopPropagation();
+                if (hasChildren) {
+                    onTitleClick(node);
+                }
+            }}
+            style={{
+                cursor: hasChildren ? 'pointer' : 'default',
+                display: 'inline-block',
+                width: '100%',
+                padding: '2px 0'
+            }}
+        >
+            {originalTitle}
+        </span>
+    );
+};
+
+
+const getActualTitle = (node: TreeDataNode): React.ReactNode => {
+    if (typeof node.title === 'function') {
+        return node.title(node as TreeDataNode);
+    }
+    return node.title;
+};
+
 const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [searchValue, setSearchValue] = useState('');
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
@@ -169,11 +248,42 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
             setSelectedAgentNames(names);
             console.log('Selected agent names:', names);
         }
+
+        if (info.checked && info.node) {
+            const keysToExpand = getExpandedKeysForNode(info.node.key as React.Key, treeData);
+
+            setExpandedKeys(prev => {
+                const newExpandedKeys = [...prev];
+                keysToExpand.forEach(key => {
+                    if (!newExpandedKeys.includes(key)) {
+                        newExpandedKeys.push(key);
+                    }
+                });
+                return newExpandedKeys;
+            });
+
+            setAutoExpandParent(false);
+        }
     };
 
     const onExpand = (expandedKeys: React.Key[]) => {
         setExpandedKeys(expandedKeys);
         setAutoExpandParent(false);
+    };
+
+    const onTitleClick = (node: TreeDataNode) => {
+        const key = node.key as React.Key;
+
+        if (node.children && node.children.length > 0) {
+            if (expandedKeys.includes(key)) {
+                // Сворачиваем
+                setExpandedKeys(expandedKeys.filter(k => k !== key));
+            } else {
+                // Разворачиваем
+                setExpandedKeys([...expandedKeys, key]);
+            }
+            setAutoExpandParent(false);
+        }
     };
 
     const selectedCount = checkedKeys.length;
@@ -186,7 +296,24 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
         setSearchValue(e.target.value);
     };
 
-    const treeDataWithHighlights = highlightMatches(treeData, searchValue);
+    // Обновляем treeData с кастомными title для обработки кликов
+    const treeDataWithHighlightsAndCustomTitles = React.useMemo(() => {
+        const highlightedData = highlightMatches(treeData, searchValue);
+
+        // Рекурсивно добавляем кастомные title
+        const addCustomTitles = (nodes: TreeDataNode[]): TreeDataNode[] => {
+            return nodes.map(node => {
+                const actualTitle = getActualTitle(node);
+                return {
+                    ...node,
+                    title: createCustomTitle(node, actualTitle, onTitleClick),
+                    children: node.children ? addCustomTitles(node.children) : undefined
+                };
+            });
+        };
+
+        return addCustomTitles(highlightedData);
+    }, [treeData, searchValue, expandedKeys]);
 
     const handleCreateReport = () => {
         console.log('Creating report with agents:', selectedAgentNames);
@@ -223,7 +350,7 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
                 />
             </Flex>
             <Flex className={styles.CategoriesTreeTotal}>
-                <Flex className={styles.CategoriesTreeTotalInner}>
+                <Flex className={selectedCount > 0 ? styles.CategoriesTreeTotalInnerActive : styles.CategoriesTreeTotalInner}>
                     <span>{selectedCount}</span>
                 </Flex>
                 <p className={styles.choosen}>Выбрано</p>
@@ -241,12 +368,13 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
                         onSelect={onSelect}
                         onCheck={onCheck}
                         onExpand={onExpand}
-                        treeData={treeDataWithHighlights}
+                        treeData={treeDataWithHighlightsAndCustomTitles}
                         checkedKeys={checkedKeys}
                         expandedKeys={expandedKeys}
                         autoExpandParent={autoExpandParent}
                         className={styles.CategoriesTreeWidget}
                         switcherIcon={<DownOutlined />}
+                        expandAction={false}
                     />
                 ) : (
                     <p>Загрузка данных...</p>

@@ -5,15 +5,19 @@ import cn from "classnames";
 
 interface CustomSwitcherProps {
     items: { title: string; }[],
-    disable?:boolean
+    disable?: boolean,
+    setSelectedSwitchItem?: (value: number) => void,
 }
 
-const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items , disable = false }) => {
+const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items, disable = false, setSelectedSwitchItem }) => {
     const [activeIndex, setActiveIndex] = useState<number>(items.length > 1 ? 1 : 0);
 
     const handleItemClick = (index: number, e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         setActiveIndex(index);
+        if (setSelectedSwitchItem) {
+            setSelectedSwitchItem(index);
+        }
     };
 
     const getSwitcherPosition = () => {
@@ -37,7 +41,6 @@ const CustomSwitcher: React.FC<CustomSwitcherProps> = ({ items , disable = false
     };
 
     return (
-
         <Flex className={cn(styles.CustomSwitcherContainer, { [styles.disable]: disable })}>
             <span
                 className={styles.Switcher}

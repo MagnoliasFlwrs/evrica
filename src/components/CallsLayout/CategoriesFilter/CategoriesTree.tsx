@@ -34,6 +34,54 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         }));
     };
 
+    // Функция для рекурсивного получения всех дочерних ключей узла
+    const getAllChildKeys = (node: TreeDataNode): React.Key[] => {
+        let keys: React.Key[] = [node.key as React.Key];
+
+        if (node.children && node.children.length > 0) {
+            node.children.forEach(child => {
+                keys = keys.concat(getAllChildKeys(child));
+            });
+        }
+
+        return keys;
+    };
+
+    // Функция для получения всех ключей, которые нужно развернуть при выборе узла
+    const getExpandedKeysForNode = (nodeKey: React.Key, treeData: TreeDataNode[]): React.Key[] => {
+        const keysToExpand: React.Key[] = [nodeKey];
+
+        // Находим узел в дереве
+        const findNode = (nodes: TreeDataNode[], targetKey: React.Key): TreeDataNode | null => {
+            for (const node of nodes) {
+                if (node.key === targetKey) {
+                    return node;
+                }
+                if (node.children) {
+                    const found = findNode(node.children, targetKey);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+
+        const node = findNode(treeData, nodeKey);
+
+        // Если у узла есть дети, добавляем все дочерние ключи для разворачивания
+        if (node && node.children && node.children.length > 0) {
+            node.children.forEach(child => {
+                keysToExpand.push(child.key as React.Key);
+                // Рекурсивно добавляем детей детей
+                if (child.children && child.children.length > 0) {
+                    const childKeys = getAllChildKeys(child).slice(1); // Исключаем сам child.key, так как он уже добавлен
+                    keysToExpand.push(...childKeys);
+                }
+            });
+        }
+
+        return keysToExpand;
+    };
+
     const highlightMatches = (data: TreeDataNode[], searchText: string): TreeDataNode[] => {
         if (!searchText) return data;
 
@@ -105,6 +153,24 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         } else {
             setCategoryId('');
             console.log('Reset category ID in store (checkbox)');
+        }
+
+        // НОВАЯ ЛОГИКА: Разворачиваем дочерние узлы при выборе чекбокса
+        if (info.checked && info.node) {
+            const keysToExpand = getExpandedKeysForNode(info.node.key as React.Key, treeData);
+
+            // Добавляем новые ключи к уже развернутым, исключая дубликаты
+            setExpandedKeys(prev => {
+                const newExpandedKeys = [...prev];
+                keysToExpand.forEach(key => {
+                    if (!newExpandedKeys.includes(key)) {
+                        newExpandedKeys.push(key);
+                    }
+                });
+                return newExpandedKeys;
+            });
+
+            setAutoExpandParent(false);
         }
 
         console.log('Checked category IDs:', categoryIds);
@@ -205,7 +271,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
                 />
             </Flex>
             <Flex className={styles.CategoriesTreeTotal}>
-                <Flex className={styles.CategoriesTreeTotalInner}>
+                <Flex className={selectedCount > 0 ? styles.CategoriesTreeTotalInnerActive : styles.CategoriesTreeTotalInner}>
                     <span>{selectedCount}</span>
                 </Flex>
                 <p>Выбрано</p>
