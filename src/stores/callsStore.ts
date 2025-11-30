@@ -45,6 +45,18 @@ export const useCallsStore = create(
                 date_start: 1762117201,
                 date_end: 1762203600
             },
+            categoriesCheckListsObj: {
+                category_id:'',
+                date_start: 1762117201,
+                date_end: 1762203600
+            },
+            categoriesDictionariesObj: {
+                category_id:'',
+                date_start: 1762117201,
+                date_end: 1762203600
+            },
+            categoriesDictionariesList:null,
+            categoriesChecklistsList:[],
             checkListsByIdList:[],
             dictionariesByIdList:[],
             currentCallId:null,
@@ -169,6 +181,14 @@ export const useCallsStore = create(
                         ...state.checkListsByIdObj,
                         category_id: id
                     },
+                    categoriesCheckListsObj: {
+                        ...state.categoriesCheckListsObj,
+                        category_id: id
+                    },
+                    categoriesDictionariesObj: {
+                        ...state.categoriesDictionariesObj,
+                        category_id: id
+                    }
                 })),
             setCategoryCallsListObjPage: (page: number ) => {
                 set((state) => ({
@@ -224,6 +244,41 @@ export const useCallsStore = create(
                     });
                 }
             },
+            getCategoriesCheckLists: async () => {
+                set({ loading: true, error: false });
+                try {
+                    const { categoriesCheckListsObj } = get();
+
+                    const queryString = qs.stringify(categoriesCheckListsObj, {
+                        arrayFormat: 'indices',
+                        encode: false
+                    });
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-checklists?${queryString}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            categoriesChecklistsList: res.data.data
+                        });
+
+                        return res.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
             getDictionariesByCategoryId: async () => {
                 set({ loading: true, error: false });
                 try {
@@ -248,6 +303,41 @@ export const useCallsStore = create(
                             loading: false,
                             error: false,
                             dictionariesByIdList: res.data.data
+                        });
+
+                        return res.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
+            getCategoriesDictionaries: async () => {
+                set({ loading: true, error: false });
+                try {
+                    const { categoriesDictionariesObj } = get();
+
+                    const queryString = qs.stringify(categoriesDictionariesObj, {
+                        arrayFormat: 'indices',
+                        encode: false
+                    });
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-dictionaries?${queryString}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            categoriesDictionariesList: res.data.data
                         });
 
                         return res.data;
@@ -350,6 +440,16 @@ export const useCallsStore = create(
                 set((state) => ({
                     categoryCallsListObj: {
                         ...state.categoryCallsListObj,
+                        date_start: startDate,
+                        date_end: endDate,
+                    },
+                    categoriesCheckListsObj: {
+                        ...state.categoriesCheckListsObj,
+                        date_start: startDate,
+                        date_end: endDate,
+                    },
+                    categoriesDictionariesObj: {
+                        ...state.categoriesDictionariesObj,
                         date_start: startDate,
                         date_end: endDate,
                     }

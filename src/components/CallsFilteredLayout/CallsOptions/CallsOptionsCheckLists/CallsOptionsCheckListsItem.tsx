@@ -1,37 +1,23 @@
 import React from 'react';
 import { Flex } from "antd";
 import styles from '../CallsOptions.module.scss';
-import { callsOptionsCheckListColors } from '../utils'
+import {ChecklistsSearch} from "../../../../stores/types/callsStoreTypes";
+import {getColorByPercent} from "../../../CallSinglePageLayout/utils";
 
 interface CallsOptionsCheckListsItemProps {
-    item: {
-        type: string;
-        percent: string;
-        checkListCompleting: number;
-    };
+    item: ChecklistsSearch;
     key: number;
 }
 
 const CallsOptionsCheckListsItem = ({ item, key }: CallsOptionsCheckListsItemProps) => {
 
-    const getColorByPercent = (percent: string) => {
-        const percentNumber = parseInt(percent.replace('%', ''), 10);
 
-        if (percentNumber > 85) {
-            return callsOptionsCheckListColors.green;
-        } else if (percentNumber > 50) {
-            return callsOptionsCheckListColors.orange;
-        } else {
-            return callsOptionsCheckListColors.gray;
-        }
-    };
-
-    const colorConfig = getColorByPercent(item?.percent);
+    const colorConfig = getColorByPercent(item?.limit_result);
 
     return (
         <Flex className={styles.CallsOptionsCheckListsItem} key={key}>
             <Flex className={styles.CallsOptionsCheckListsItemRow}>
-                <p className={styles.CallsOptionsCheckListsItemRowType}>{item?.type}</p>
+                <p className={styles.CallsOptionsCheckListsItemRowType}>{item?.checklist.name}</p>
                 <Flex
                     className={styles.CallsOptionsCheckListsItemRowPercentMark}
                     style={{
@@ -40,14 +26,14 @@ const CallsOptionsCheckListsItem = ({ item, key }: CallsOptionsCheckListsItemPro
                     }}
                 >
                     <span style={{ color: colorConfig.color }}>
-                        {item?.percent}
+                        {item?.limit_result}
                     </span>
                 </Flex>
             </Flex>
             <Flex className={styles.CallsOptionsCheckListsItemRow}>
                 <p className={styles.CallsOptionsCheckListsItemRowCompleting}>Выполнение чек-листа</p>
                 <Flex className={styles.CallsOptionsCheckListsItemRowCheckListMark}>
-                    <span>{item?.checkListCompleting}</span>
+                    <span>{item?.limit_result}</span>
                 </Flex>
             </Flex>
         </Flex>

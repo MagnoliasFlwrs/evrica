@@ -27,8 +27,8 @@ export interface CategoryCallsListObj {
 }
 export interface CheckListsByIdObj {
     category_id: string | number | null;
-    date_start: number;
-    date_end: number;
+    date_start: number | null;
+    date_end: number | null;
 }
 
 export interface ChecklistsSearch {
@@ -255,7 +255,7 @@ export type PromptList = PromptItem[];
 export interface AiJsonList {
     id: number;
     answers: {
-        custom: any[]; // Можно заменить на более конкретный тип, если известна структура
+        custom: any[];
         system: AiSystemAnswer[];
     };
 }
@@ -352,6 +352,61 @@ export interface InsightCategory {
     интенсивность: number;
 }
 
+export interface Dictionary {
+    id: number;
+    name: string;
+    description: string | null;
+    query: string;
+    reverse: number;
+    negative_weight: number | null;
+    positive_weight: number | null;
+    color_success: string | null;
+    color_reject: string | null;
+    color_not_exist?: string | null;
+    search_in_channel_1: number;
+    search_in_channel_2: number;
+    search_in_call: number;
+    search_out_call: number;
+    is_valid: number;
+    updated_at: string | null;
+    who_updated: number | null;
+    in_dashboard?: number | null;
+    from_system_dictionary?: number | null;
+    found: any[];
+    found_count_by_period: {
+        day: any[];
+        month: any[];
+        all: any[];
+    };
+    loaded_period_data: boolean;
+    worked_call_infos: any[];
+}
+
+export interface CategoryDictionary {
+    id: number;
+    category_id: number;
+    dictionary_id: number;
+    dictionary_type: "system" | "client";
+    positive_weight: number;
+    negative_weight: number;
+    color_success: string | null;
+    color_reject: string | null;
+    reverse: number;
+    who_delete: number | null;
+    channel: number | null;
+    created_at: string | null;
+    updated_at: string | null;
+    deleted_at: string | null;
+    search_in_call: number;
+    search_out_call: number;
+    dictionary: Dictionary;
+}
+
+
+export interface CategoriesDictionariesList {
+    system: CategoryDictionary[];
+    client: CategoryDictionary[];
+}
 export interface CallsState {
     error: boolean;
     loading: boolean;
@@ -380,4 +435,10 @@ export interface CallsState {
     getPromptList: (id: string | null | number) => Promise<PromptList>;
     getAiJsonList: (orgId: string | null | number, callInfoId: number | undefined) => Promise<any>;
     setCategoryCallsFilterDate: (startDate: number | null, endDate: number | null) => void;
+    categoriesChecklistsList:ChecklistsSearch[],
+    getCategoriesCheckLists:() => Promise<any>;
+    categoriesCheckListsObj:CheckListsByIdObj;
+    categoriesDictionariesObj:CheckListsByIdObj;
+    categoriesDictionariesList:CategoriesDictionariesList | null;
+    getCategoriesDictionaries:() => Promise<any>;
 }
