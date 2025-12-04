@@ -34,13 +34,13 @@ const CallsFilteredLayout = () => {
             setSelectedDate(null);
         }
     }, [date_start, date_end]);
-    useEffect(() => {
-        if (categoryCallsListObj.category_id) {
-            getCallsByCategoryId();
-            getCategoriesCheckLists();
-            getCategoriesDictionaries();
-        }
-    }, [categoryCallsListObj]);
+    // useEffect(() => {
+    //     if (categoryCallsListObj.category_id) {
+    //         getCallsByCategoryId();
+    //         getCategoriesCheckLists();
+    //         getCategoriesDictionaries();
+    //     }
+    // }, [categoryCallsListObj]);
 
     const handleDateChange = (date: Value) => {
         setSelectedDate(date);

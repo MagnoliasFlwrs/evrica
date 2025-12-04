@@ -1,6 +1,6 @@
 import {create} from "zustand/index";
 import {persist} from "zustand/middleware";
-import {axiosInstanceAuth, baseAuthUrl} from "../store";
+import {axiosInstanceAll, baseAuthUrl} from "../store";
 import qs from 'qs';
 import {CallsState} from "./types/callsStoreTypes";
 
@@ -32,7 +32,7 @@ export const useCallsStore = create(
                     client_phone: null,
                     worked_dictionaries: [],
                 },
-                category_id: null,
+                categories: null,
                 page: 1,
                 per_page: 10,
                 date_start: null,
@@ -63,11 +63,13 @@ export const useCallsStore = create(
             currentCallInfo:null,
             promptList:[],
             aiJsonList:[],
+            callsByCategories:[],
+            categoriesIds:null,
             setError: (value: boolean) => set({ error: value }),
             getPendingCalls: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/organization/get-pending-calls`,
                         {
                             headers: {
@@ -97,7 +99,7 @@ export const useCallsStore = create(
             getCallsCategories: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/location`,
                         {
                             headers: {
@@ -124,27 +126,27 @@ export const useCallsStore = create(
                     });
                 }
             },
-            getCallsByCategoryId: async () => {
+            getCallsByCategories: async () => {
                 set({ loading: true, error: false });
                 try {
+                    const { categoriesIds } = get();
                     const { categoryCallsListObj } = get();
 
                     const queryParams = {
                         filters: JSON.stringify(categoryCallsListObj.filters),
-                        category_id: categoryCallsListObj.category_id,
+                        categories: categoryCallsListObj?.categories?.join(','),
                         page: categoryCallsListObj.page,
                         'per-page': categoryCallsListObj.per_page,
                         date_start: categoryCallsListObj.date_start,
                         date_end: categoryCallsListObj.date_end,
                     };
-
                     const queryString = qs.stringify(queryParams, {
                         arrayFormat: 'indices',
                         encode: false
                     });
 
-                    const res = await axiosInstanceAuth.get(
-                        `${baseAuthUrl}/category/get-category-calls?${queryString}`,
+                    const res = await axiosInstanceAll.get(
+                        `${baseAuthUrl}/category/get-categories-with-calls-and-discts-and-checklists?${queryString}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -158,7 +160,7 @@ export const useCallsStore = create(
                         set({
                             loading: false,
                             error: false,
-                            callsByCategory: res.data
+                            callsByCategories: res.data
                         });
 
                         return res.data;
@@ -170,13 +172,16 @@ export const useCallsStore = create(
                     });
                 }
             },
-            setCurrentCallId: (id: number | string | null) => set({currentCallId: id}),
-            setCategoryId: (id: number | string) =>
+            setCategoriesIds: (arr: number[]) =>
                 set((state) => ({
                     categoryCallsListObj: {
                         ...state.categoryCallsListObj,
-                        category_id: id
+                        categories: arr
                     },
+                })),
+            setCurrentCallId: (id: number | string | null) => set({currentCallId: id}),
+            setCategoryId: (id: number | string) =>
+                set((state) => ({
                     checkListsByIdObj: {
                         ...state.checkListsByIdObj,
                         category_id: id
@@ -197,7 +202,7 @@ export const useCallsStore = create(
                         page: page
                     },
                 }));
-                get().getCallsByCategoryId();
+                get().getCallsByCategories();
             },
             setCategoryCallsListObjPerPage: (count: number ) => {
                 set((state) => ({
@@ -206,9 +211,8 @@ export const useCallsStore = create(
                         per_page: count
                     },
                 }));
-                get().getCallsByCategoryId();
+                get().getCallsByCategories();
             },
-
             getChecklistsByCategoryId: async () => {
                 set({ loading: true, error: false });
                 try {
@@ -218,7 +222,7 @@ export const useCallsStore = create(
                         arrayFormat: 'indices',
                         encode: false
                     });
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/category/get-category-checklists?${queryString}`,
                         {
                             headers: {
@@ -253,7 +257,7 @@ export const useCallsStore = create(
                         arrayFormat: 'indices',
                         encode: false
                     });
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/category/get-category-checklists?${queryString}`,
                         {
                             headers: {
@@ -288,7 +292,7 @@ export const useCallsStore = create(
                         arrayFormat: 'indices',
                         encode: false
                     });
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/category/get-category-dictionaries?${queryString}`,
                         {
                             headers: {
@@ -323,7 +327,7 @@ export const useCallsStore = create(
                         arrayFormat: 'indices',
                         encode: false
                     });
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/category/get-category-dictionaries?${queryString}`,
                         {
                             headers: {
@@ -352,7 +356,7 @@ export const useCallsStore = create(
             getCurrentCallInfo: async (id : string | null | number) => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/category/get-category-call?call_id=${id}`,
                         {
                             headers: {
@@ -381,7 +385,7 @@ export const useCallsStore = create(
             getPromptList: async (id : string | null | number) => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/proxy/get-prompt-list?org_id=${id}`,
                         {
                             headers: {
@@ -410,7 +414,7 @@ export const useCallsStore = create(
             getAiJsonList: async (orgId : string | null | number , callInfoId :number | undefined ) => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/proxy/get-prompt-result-by-call-info-id?org_id=${orgId}&call_info_id=${callInfoId}`,
                         {
                             headers: {

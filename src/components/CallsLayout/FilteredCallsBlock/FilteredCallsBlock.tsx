@@ -6,15 +6,17 @@ import {useCallsStore} from "../../../stores/callsStore";
 
 const FilteredCallsBlock = ({isSelected}: CategoriesFilterSelectedState) => {
     const callsByCategory = useCallsStore((state)=>state.callsByCategory);
+    const callsByCategories = useCallsStore((state)=>state.callsByCategories);
     const [callsCount , setCallsCount] = useState(0);
 
     useEffect(() => {
-        if (callsByCategory && callsByCategory.paginator) {
-            setCallsCount(callsByCategory.paginator.totalCount);
+        if (callsByCategories && callsByCategories?.paginator) {
+            setCallsCount(callsByCategories?.paginator?.totalCount);
         } else {
             setCallsCount(0);
         }
-    }, [callsByCategory]);
+        console.log(callsByCategories)
+    }, [callsByCategories]);
 
     return (
         <Flex className={styles.FilteredCallsBlock}>

@@ -18,8 +18,8 @@ export interface Filters {
 }
 
 export interface CategoryCallsListObj {
-    filters: Filters;
-    category_id: string | number | null;
+    filters?: Filters;
+    categories:  number[] | null;
     page: number;
     per_page: number;
     date_start: null | number;
@@ -424,7 +424,7 @@ export interface CallsState {
     setError: (value: boolean) => void;
     getPendingCalls: () => Promise<any>;
     getCallsCategories: () => Promise<any>;
-    getCallsByCategoryId: () => Promise<any>;
+    getCallsByCategoryId?: () => Promise<any>;
     getChecklistsByCategoryId: () => Promise<any>;
     getDictionariesByCategoryId: () => Promise<any>;
     setCategoryId: (id: number | string) => void;
@@ -441,4 +441,9 @@ export interface CallsState {
     categoriesDictionariesObj:CheckListsByIdObj;
     categoriesDictionariesList:CategoriesDictionariesList | null;
     getCategoriesDictionaries:() => Promise<any>;
+    callsByCategories:any,
+    categoriesIds:number[] | null;
+    getCallsByCategories:() => Promise<any[]>;
+    setCategoriesIds: (arr: number[]) => void;
+
 }

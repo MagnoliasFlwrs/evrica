@@ -1,6 +1,6 @@
 import {create} from "zustand/index";
 import {persist} from "zustand/middleware";
-import {axiosInstanceAuth, baseAuthUrl} from "../store";
+import {axiosInstanceAll, baseAuthUrl} from "../store";
 
 interface AnalyticsState {
     error: boolean;
@@ -24,7 +24,7 @@ export const useAnalyticsStore = create(
             getAllAgents: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAuth.get(
+                    const res = await axiosInstanceAll.get(
                         `${baseAuthUrl}/location/get-all-with-agents`,
                         {
                             headers: {
@@ -49,7 +49,6 @@ export const useAnalyticsStore = create(
                         error: true,
                         loading: false,
                     });
-                    throw error;
                 }
             },
         }),

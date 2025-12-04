@@ -37,6 +37,13 @@ const refreshToken = async (): Promise<string | null> => {
                 localStorage.removeItem('maintenance');
                 localStorage.removeItem('auth');
             }
+        } else {
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('employee');
+            localStorage.removeItem('maintenance');
+            localStorage.removeItem('auth');
+
         }
         return null;
     } finally {
@@ -171,7 +178,7 @@ export const useAuth = create(
             getAuthUser: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAll.get(
+                    const res = await axiosInstanceAuth.get(
                         `${baseAuthUrl}/user/get-auth-user`,
                         {
                             headers: {

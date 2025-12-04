@@ -7,23 +7,18 @@ import {useCallsStore} from "../stores/callsStore";
 
 const CallsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
-    const getPendingCalls = useCallsStore((state)=>state.getPendingCalls);
     const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
     const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
-    const getCallsByCategoryId = useCallsStore((state)=>state.getCallsByCategoryId);
-    const getChecklistsByCategoryId = useCallsStore((state)=>state.getChecklistsByCategoryId);
-    const getDictionariesByCategoryId = useCallsStore((state)=>state.getDictionariesByCategoryId);
+    const getCallsByCategories = useCallsStore((state)=>state.getCallsByCategories)
 
     useEffect(() => {
         getCallsCategories();
     }, []);
     useEffect(() => {
-        if(categoryCallsListObj.category_id) {
-            getCallsByCategoryId();
-            getChecklistsByCategoryId();
-            getDictionariesByCategoryId();
+        if(categoryCallsListObj.categories && categoryCallsListObj?.categories?.length > 0) {
+            getCallsByCategories()
         }
-    }, [categoryCallsListObj]);
+    }, [categoryCallsListObj.categories]);
 
     return (
         <PageContainer>

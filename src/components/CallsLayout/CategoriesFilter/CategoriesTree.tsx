@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Input, Tree, TreeDataNode, TreeProps } from "antd";
 import styles from './CategoriesFilter.module.scss'
-import {DownOutlined,  SearchOutlined} from "@ant-design/icons";
+import {DownOutlined, SearchOutlined} from "@ant-design/icons";
 import {CategoriesFilterProps} from "../types";
 import {useCallsStore} from "../../../stores/callsStore";
 import { findCategoryIdsInTree} from "./helpers";
@@ -16,8 +16,10 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
     const callsCategories = useCallsStore((state) => state.callsCategories);
     const setCategoryId = useCallsStore((state)=> state.setCategoryId);
+    const setCategoriesIds = useCallsStore((state)=>state.setCategoriesIds);
 
     const selectedCount = selectedCategoryIds.length;
+
     const convertToTreeData = (categories: CategoryLocation[]): TreeDataNode[] => {
         return categories?.map((location: CategoryLocation) => ({
             title: location.name,
@@ -124,18 +126,9 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         const categoryIds = findCategoryIdsInTree(selectedKeys as React.Key[], treeData);
         setSelectedCategoryIds(categoryIds);
 
-        // Берем первую выбранную категорию (так как можно выбрать только одну)
-        if (categoryIds.length > 0) {
-            const firstCategoryId = categoryIds[0];
-            setCategoryId(firstCategoryId);
-            console.log('Set category ID in store:', firstCategoryId);
-        } else {
-            // Если ничего не выбрано, сбрасываем category_id
-            setCategoryId('');
-            console.log('Reset category ID in store');
-        }
-
-        console.log('Selected category IDs:', categoryIds);
+        console.log('categoryIds' , categoryIds)
+        setCategoriesIds(categoryIds);
+        console.log('Set categories IDs in store:', categoryIds);
     };
 
     const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
@@ -145,15 +138,9 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         const categoryIds = findCategoryIdsInTree(checkedKeys as React.Key[], treeData);
         setSelectedCategoryIds(categoryIds);
 
-        // Также обновляем category_id в store при выборе чекбоксами
-        if (categoryIds.length > 0) {
-            const firstCategoryId = categoryIds[0];
-            setCategoryId(firstCategoryId);
-            console.log('Set category ID in store (checkbox):', firstCategoryId);
-        } else {
-            setCategoryId('');
-            console.log('Reset category ID in store (checkbox)');
-        }
+        // Устанавливаем массив ID категорий в store
+        setCategoriesIds(categoryIds);
+        console.log('Set categories IDs in store (checkbox):', categoryIds);
 
         // НОВАЯ ЛОГИКА: Разворачиваем дочерние узлы при выборе чекбокса
         if (info.checked && info.node) {
@@ -200,7 +187,10 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
 
     useEffect(() => {
         setIsSelected(selectedCount);
-    }, [selectedCount]);
+        // Также вызываем setCategoriesIds при изменении selectedCategoryIds
+        // на случай, если категории были изменены другим способом
+        setCategoriesIds(selectedCategoryIds);
+    }, [selectedCount, selectedCategoryIds]);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
@@ -260,7 +250,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     return (
         <Flex className={styles.CategoriesTree}>
             <Flex className={styles.CategoriesTreeHead}>
-                <p>Выберите категорию</p>
+                <p>Выберите категории</p>
                 <Input
                     prefix={<SearchOutlined />}
                     placeholder="Поиск по названию"
