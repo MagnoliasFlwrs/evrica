@@ -31,6 +31,7 @@ const transformAgentsToTreeData = (agentsData: any[]): TreeDataNode[] => {
                         .map((category: any) => {
                             const agentNodes = category.agents.map((agent: any) => ({
                                 key: `agent-${category.id}-${agent.agent_name}`,
+                                id:category.id,
                                 title: agent.agent_name.replace(/"/g, ''),
                                 isLeaf: true,
                                 agentName: agent.agent_name.replace(/"/g, ''),
@@ -38,6 +39,7 @@ const transformAgentsToTreeData = (agentsData: any[]): TreeDataNode[] => {
 
                             return {
                                 key: `category-${category.id}`,
+                                id:category.id,
                                 title: category.name,
                                 children: agentNodes,
                             };
@@ -45,6 +47,7 @@ const transformAgentsToTreeData = (agentsData: any[]): TreeDataNode[] => {
 
                     return {
                         key: `subloc-${subLoc.id}`,
+                        id:subLoc.id,
                         title: subLoc.name,
                         children: categoryNodes,
                     };
@@ -52,6 +55,7 @@ const transformAgentsToTreeData = (agentsData: any[]): TreeDataNode[] => {
 
             return {
                 key: `loc-${location.id}`,
+                id:location.id,
                 title: location.name,
                 children: subLocationNodes,
             };
@@ -179,9 +183,13 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
     const navigate = useNavigate();
     const allAgents = useAnalyticsStore((state)=> state.allAgents);
+    const setAgentName = useAnalyticsStore((state)=> state.setAgentName);
+    const setCategoryId = useAnalyticsStore((state)=> state.setCategoryId);
+
 
     useEffect(() => {
         if (allAgents && allAgents.length > 0) {
+            console.log(allAgents)
             const transformedData = transformAgentsToTreeData(allAgents);
             console.log(transformedData)
             setTreeData(transformedData);

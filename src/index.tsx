@@ -2,7 +2,15 @@ import React, {Suspense} from 'react';
 import './index.css';
 import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {ErrorPage, MainLayout, CallsLayout, AnalyticsLayout , LoginLayout , AnalyticsReportLayout} from "./routes/routesConfig/lazyComponents";
+import {
+    ErrorPage,
+    MainLayout,
+    CallsLayout,
+    AnalyticsLayout,
+    LoginLayout,
+    AnalyticsReportLayout,
+    DashboardLayout
+} from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
 import CallSinglePageLayout from "./routes/CallSinglePageLayout";
@@ -34,6 +42,14 @@ const App = () => {
             errorElement: <ErrorPage />,
             children: [
                 {
+                    index:true,
+                    element: <DashboardLayout />,
+                },
+                {
+                    path: '/dashboard',
+                    element: <DashboardLayout />,
+                },
+                {
                     path: '/calls',
                     element: <CallsLayout />,
                 },
@@ -53,6 +69,7 @@ const App = () => {
                     path: '/analytics-report',
                     element: <AnalyticsReportLayout />,
                 },
+
             ]
         },
     ]

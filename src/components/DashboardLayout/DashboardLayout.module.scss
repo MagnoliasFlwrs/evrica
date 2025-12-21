@@ -1,0 +1,109 @@
+.dashboardHead {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    color: #000;
+    font-family: Mulish;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .dashboardButtons {
+    display: flex;
+    gap: 20px;
+    .dashboardButton {
+      display: flex;
+      padding: 14px;
+      align-items: center;
+      gap: 10px;
+      width: 44px;
+      height: 44px;
+      border-radius: 1000px;
+      cursor: pointer;
+      &:hover {
+        background: #000;
+        svg path {
+          stroke: #fff;
+        }
+      }
+    }
+  }
+}
+.chartCard {
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #FFF;
+  padding: 20px;
+  margin-top: 20px;
+  width: fit-content;
+  .callsChartContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .callsChartContainerTitle {
+      color: #000;
+      font-family: Mulish;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+    .callsChartBarContainer {
+      height: 300px;
+    }
+    .callsChartContainerTotal {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      .callsChartContainerTotalTitle {
+        color: #1D1D1F;
+        font-family: Mulish;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+      .callsChartLegend {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        .callsChartLegendItem {
+          display: flex;
+          gap: 10px;
+
+          &:first-child {
+            span {
+              background: #007AFF;
+            }
+          }
+          &:last-child {
+            span {
+              background: #007AFF66;
+            }
+          }
+          span {
+            width: 15px;
+            height: 15px;
+            border-radius: 2px;
+            flex-shrink: 0;
+          }
+          p {
+            color: #1D1D1F;
+            font-family: Mulish;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+          }
+        }
+
+      }
+    }
+  }
+
+}

@@ -456,8 +456,10 @@ export const useCallsStore = create(
                         ...state.categoriesDictionariesObj,
                         date_start: startDate,
                         date_end: endDate,
-                    }
+                    },
+
                 }))
+                get().getCallsByCategories()
             }
 
         }),
