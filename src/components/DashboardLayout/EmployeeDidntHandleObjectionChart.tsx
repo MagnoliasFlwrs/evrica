@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -23,62 +23,37 @@ ChartJS.register(
 
 interface DailyStat {
     date: string;
+    high_quality: number;
+    low_quality: number;
+    medium_quality:number;
     total_calls: number;
-    calls: number;
 }
 
 interface CallsChartData {
-    total_calls_7_days: number;
+    total_7_days: {
+        high_quality: number;
+        low_quality: number;
+        medium_quality:number;
+        total_calls: number;
+    };
     daily_stats: DailyStat[];
 }
 
 interface CallsChartProps {
-    data?: CallsChartData;
+    chartDataArr?: CallsChartData | null;
+    title?: string;
+    labels: string[];
 }
 
-const CallsChart: React.FC<CallsChartProps> = () => {
+const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : CallsChartProps) => {
     const chartRef = useRef<ChartJS<'bar'>>(null);
+    const [data, setData] = useState<CallsChartData | null>(null);
 
-    const exampleData: CallsChartData = {
-        total_calls_7_days: 1395,
-        daily_stats: [
-            {
-                date: "2025-12-17",
-                total_calls: 197,
-                calls: 18
-            },
-            {
-                date: "2025-12-16",
-                total_calls: 271,
-                calls: 24
-            },
-            {
-                date: "2025-12-15",
-                total_calls: 199,
-                calls: 27
-            },
-            {
-                date: "2025-12-14",
-                total_calls: 96,
-                calls: 10
-            },
-            {
-                date: "2025-12-13",
-                total_calls: 169,
-                calls: 24
-            },
-            {
-                date: "2025-12-12",
-                total_calls: 232,
-                calls: 24
-            },
-            {
-                date: "2025-12-11",
-                total_calls: 231,
-                calls: 29
-            }
-        ]
-    };
+    useEffect(() => {
+        if (chartDataArr) {
+            setData(chartDataArr)
+        }
+    }, [chartDataArr]);
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -88,27 +63,45 @@ const CallsChart: React.FC<CallsChartProps> = () => {
     };
 
     const chartData = {
-        labels: exampleData.daily_stats.map(item => formatDate(item.date)).reverse(),
+        labels: data?.daily_stats.map(item => formatDate(item.date)).reverse(),
         datasets: [
             {
-                label: 'Все звонки',
-                data: exampleData.daily_stats.map(item => item.total_calls).reverse(),
+                label:labels[0],
+                data: data?.daily_stats.map(item => item.total_calls).reverse(),
                 backgroundColor: '#007AFF',
                 borderColor: '#007AFF',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
-
             },
             {
-                label: 'Звонки',
-                data: exampleData.daily_stats.map(item => item.calls).reverse(),
-                backgroundColor: '#007AFF66',
-                borderColor: '#007AFF66',
+                label: labels[1],
+                data: data?.daily_stats.map(item => item.high_quality).reverse(),
+                backgroundColor: '#4DA6FF',
+                borderColor: '#4DA6FF',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
             },
+            {
+                label:labels[2],
+                data: data?.daily_stats.map(item => item.medium_quality).reverse(),
+                backgroundColor: '#80C1FF',
+                borderColor: '#80C1FF',
+                borderWidth: 1,
+                borderRadius: 10,
+                // barThickness: 40,
+            },
+            {
+                label:labels[3],
+                data: data?.daily_stats.map(item => item.low_quality).reverse(),
+                backgroundColor: '#B3DDFF',
+                borderColor: '#B3DDFF',
+                borderWidth: 1,
+                borderRadius: 10,
+                // barThickness: 40,
+            },
+
         ],
     };
 
@@ -183,21 +176,27 @@ const CallsChart: React.FC<CallsChartProps> = () => {
             }
         }
     };
-
     return (
         <Flex className={styles.callsChartContainer}>
-            <p className={styles.callsChartContainerTitle}>Статистика звонков за 7 дней</p>
-
+            <p className={styles.callsChartContainerTitle}>{title}</p>
             <Flex className={styles.callsChartContainerTotal}>
-                <p className={styles.callsChartContainerTotalTitle}>Всего звонков: {exampleData.total_calls_7_days}</p>
+                <p className={styles.callsChartContainerTotalTitle}>Всего звонков: {data?.total_7_days?.total_calls}</p>
                 <Flex className={styles.callsChartLegend}>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span></span>
-                        <p>Все звонки</p>
+                        <span style={{background:'#007AFF'}}></span>
+                        <p>{labels[0]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span></span>
-                        <p>Звонки</p>
+                        <span style={{background:'#4DA6FF'}}></span>
+                        <p>{labels[1]}</p>
+                    </Flex>
+                    <Flex className={styles.callsChartLegendItem}>
+                        <span style={{background:'#80C1FF'}}></span>
+                        <p>{labels[2]}</p>
+                    </Flex>
+                    <Flex className={styles.callsChartLegendItem}>
+                        <span style={{background:'#B3DDFF'}}></span>
+                        <p>{labels[3]}</p>
                     </Flex>
                 </Flex>
             </Flex>
@@ -213,4 +212,4 @@ const CallsChart: React.FC<CallsChartProps> = () => {
     );
 };
 
-export default CallsChart;
+export default EmployeeDidntHandleObjectionChart;

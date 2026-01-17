@@ -32,13 +32,21 @@
     }
   }
 }
+.dashboardCards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
 .chartCard {
   border-radius: 30px;
   border: 1px solid rgba(0, 0, 0, 0.10);
   background: #FFF;
   padding: 20px;
-  margin-top: 20px;
-  width: fit-content;
+  width: 45%;
+  &.chartCardMax {
+    width: calc(55% - 20px);
+  }
   .callsChartContainer {
     display: flex;
     flex-direction: column;
@@ -52,7 +60,7 @@
       line-height: normal;
     }
     .callsChartBarContainer {
-      height: 300px;
+      height: 200px;
     }
     .callsChartContainerTotal {
       margin-top: 20px;
