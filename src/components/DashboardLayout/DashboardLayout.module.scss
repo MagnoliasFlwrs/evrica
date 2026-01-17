@@ -43,9 +43,9 @@
   border: 1px solid rgba(0, 0, 0, 0.10);
   background: #FFF;
   padding: 20px;
-  width: 45%;
+  width: fit-content;
   &.chartCardMax {
-    width: calc(55% - 20px);
+
   }
   .callsChartContainer {
     display: flex;
@@ -60,7 +60,7 @@
       line-height: normal;
     }
     .callsChartBarContainer {
-      height: 200px;
+      height: 250px;
     }
     .callsChartContainerTotal {
       margin-top: 20px;
