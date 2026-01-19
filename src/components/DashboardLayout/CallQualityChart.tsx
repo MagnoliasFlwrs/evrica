@@ -45,7 +45,7 @@ interface CallsChartProps {
     labels: string[];
 }
 
-const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : CallsChartProps) => {
+const CallQualityChart = ({chartDataArr , title , labels} : CallsChartProps) => {
     const chartRef = useRef<ChartJS<'bar'>>(null);
     const [data, setData] = useState<CallsChartData | null>(null);
 
@@ -77,8 +77,8 @@ const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : Cal
             {
                 label: labels[1],
                 data: data?.daily_stats.map(item => item.high_quality).reverse(),
-                backgroundColor: '#4DA6FF',
-                borderColor: '#4DA6FF',
+                backgroundColor: '#bff864',
+                borderColor: '#bff864',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -86,8 +86,8 @@ const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : Cal
             {
                 label:labels[2],
                 data: data?.daily_stats.map(item => item.medium_quality).reverse(),
-                backgroundColor: '#80C1FF',
-                borderColor: '#80C1FF',
+                backgroundColor: '#ffb848',
+                borderColor: '#ffb848',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -95,8 +95,8 @@ const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : Cal
             {
                 label:labels[3],
                 data: data?.daily_stats.map(item => item.low_quality).reverse(),
-                backgroundColor: '#B3DDFF',
-                borderColor: '#B3DDFF',
+                backgroundColor: '#fabeb4',
+                borderColor: '#fabeb4',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -180,22 +180,22 @@ const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : Cal
         <Flex className={styles.callsChartContainer}>
             <p className={styles.callsChartContainerTitle}>{title}</p>
             <Flex className={styles.callsChartContainerTotal}>
-                <p className={styles.callsChartContainerTotalTitle}>Всего звонков: {data?.total_7_days?.total_calls}</p>
+                <p className={styles.callsChartContainerTotalTitle}>Всего звонков за 7 дней: {data?.total_7_days?.total_calls}</p>
                 <Flex className={styles.callsChartLegend}>
                     <Flex className={styles.callsChartLegendItem}>
                         <span style={{background:'#007AFF'}}></span>
                         <p>{labels[0]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#4DA6FF'}}></span>
+                        <span style={{background:'#bff864'}}></span>
                         <p>{labels[1]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#80C1FF'}}></span>
+                        <span style={{background:'#ffb848'}}></span>
                         <p>{labels[2]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#B3DDFF'}}></span>
+                        <span style={{background:'#fabeb4'}}></span>
                         <p>{labels[3]}</p>
                     </Flex>
                 </Flex>
@@ -212,4 +212,4 @@ const EmployeeDidntHandleObjectionChart = ({chartDataArr , title , labels} : Cal
     );
 };
 
-export default EmployeeDidntHandleObjectionChart;
+export default CallQualityChart;

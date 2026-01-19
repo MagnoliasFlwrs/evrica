@@ -10,7 +10,7 @@ import {useDashboardStore} from "../stores/dashboardStore";
 import CustomChart from "../components/DashboardLayout/CustomChart";
 import ProblemCallsChart from "../components/DashboardLayout/ProblemCallsChart";
 import DealProbabilityChart from "../components/DashboardLayout/DealProbabilityChart";
-import EmployeeDidntHandleObjectionChart from "../components/DashboardLayout/EmployeeDidntHandleObjectionChart";
+import CallQualityChart from "../components/DashboardLayout/CallQualityChart";
 
 const DashboardLayout = () => {
     const user = useAuth((state)=> state.user);
@@ -45,6 +45,8 @@ const DashboardLayout = () => {
         }
 
     }, [user])
+
+    console.log(callsQuality)
 
 
 
@@ -83,20 +85,22 @@ const DashboardLayout = () => {
                             <CustomChart chartDataArr={riskOfLosingAClient} title='Риск потери клиента' labels={['Все звонков' , 'Риск потери']}/>
                         </Flex>
                         <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
-                            <EmployeeDidntHandleObjectionChart chartDataArr={employeeDidntHandleObjection} title='Сотрудник не отработал возражение' labels={['Все' +
-                            ' звонки' , 'Высокое качество', 'Среднее качество' , 'Низкое качество']}/>
-                        </Flex>
-                        <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
                             <DealProbabilityChart chartDataArr={dealProbabilityLastDays} title='Вероятность заключения сделки' labels={['Все' +
                             ' звонки' , 'Высокая вероятность' , 'Средняя вероятность', 'Низкая вероятность']}/>
                         </Flex>
                         <Flex className={styles.chartCard} >
-                            <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Сотрудник управляет беседой' labels={['Всего звонков' , 'Сотрудник управляет']}/>
+                            <CallQualityChart chartDataArr={callsQuality} title='Качество проработки звонка' labels={['Все' +
+                            ' звонки' , 'Высокое качество', 'Среднее качество', 'Низкое качество']}/>
                         </Flex>
                         <Flex className={styles.chartCard} >
-                            <CustomChart chartDataArr={callsQuality} title='Качество проработки звонка' labels={['Все' +
-                            ' звонки' , 'Звонки']}/>
+                            <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Сотрудник управляет беседой' labels={['Всего звонков' , 'Сотрудник управляет']}/>
                         </Flex>
+
+                        <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
+                            <CustomChart chartDataArr={employeeDidntHandleObjection} title='Сотрудник не отработал возражение' labels={['Все' +
+                            ' звонки' , 'Не отработано']}/>
+                        </Flex>
+
                         <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
                             <ProblemCallsChart chartDataArr={problemCallsPriorityLastDays} title='Проблемный звонок' labels={['Все звонки' , 'Высокий приоритет',  'Средний приоритет', 'Низкий приоритет']}/>
                         </Flex>

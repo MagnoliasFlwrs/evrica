@@ -13,25 +13,25 @@ export const useCallsStore = create(
             loading: false,
             pendingCalls: [],
             categoryCallsListObj: {
-                filters: {
-                    call_types: [],
-                    employees: [],
-                    clients: [],
-                    call_is_checked_statuses: [],
-                    checklist_statuses: [],
-                    call_time: {
-                        to: null,
-                        from: null
-                    },
-                    call_time_outs: {
-                        to: null,
-                        from: null
-                    },
-                    checklist_score_vector: null,
-                    checklist_score_vector_value: null,
-                    client_phone: null,
-                    worked_dictionaries: [],
-                },
+                // filters: {
+                //     call_types: [],
+                //     employees: [],
+                //     clients: [],
+                //     call_is_checked_statuses: [],
+                //     checklist_statuses: [],
+                //     call_time: {
+                //         to: null,
+                //         from: null
+                //     },
+                //     call_time_outs: {
+                //         to: null,
+                //         from: null
+                //     },
+                //     checklist_score_vector: null,
+                //     checklist_score_vector_value: null,
+                //     client_phone: null,
+                //     worked_dictionaries: [],
+                // },
                 categories: null,
                 page: 1,
                 per_page: 10,
@@ -133,7 +133,7 @@ export const useCallsStore = create(
                     const { categoryCallsListObj } = get();
 
                     const queryParams = {
-                        filters: JSON.stringify(categoryCallsListObj.filters),
+                        // filters: JSON.stringify(categoryCallsListObj.filters),
                         categories: categoryCallsListObj?.categories?.join(','),
                         page: categoryCallsListObj.page,
                         'per-page': categoryCallsListObj.per_page,
