@@ -59,6 +59,7 @@ const DashboardLayout = () => {
         });
     };
 
+
     return (
         <PageContainer>
             <Flex className={styles.dashboardHead}>
@@ -79,7 +80,7 @@ const DashboardLayout = () => {
                     :
                     <Flex className={styles.dashboardCards}>
                         <Flex className={styles.chartCard} >
-                            <CustomChart chartDataArr={riskOfLosingAClient} title='Риск потери клиента' labels={['Все звонки' , 'Звонки']}/>
+                            <CustomChart chartDataArr={riskOfLosingAClient} title='Риск потери клиента' labels={['Все звонков' , 'Риск потери']}/>
                         </Flex>
                         <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
                             <EmployeeDidntHandleObjectionChart chartDataArr={employeeDidntHandleObjection} title='Сотрудник не отработал возражение' labels={['Все' +
@@ -90,8 +91,7 @@ const DashboardLayout = () => {
                             ' звонки' , 'Высокая вероятность' , 'Средняя вероятность', 'Низкая вероятность']}/>
                         </Flex>
                         <Flex className={styles.chartCard} >
-                            <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Кто управляет беседой' labels={['Все' +
-                            ' звонки' , 'Звонки']}/>
+                            <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Сотрудник управляет беседой' labels={['Всего звонков' , 'Сотрудник управляет']}/>
                         </Flex>
                         <Flex className={styles.chartCard} >
                             <CustomChart chartDataArr={callsQuality} title='Качество проработки звонка' labels={['Все' +

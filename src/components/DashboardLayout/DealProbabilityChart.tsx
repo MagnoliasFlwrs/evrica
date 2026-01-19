@@ -78,8 +78,8 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
             {
                 label: labels[1],
                 data: data?.daily_stats.map(item => item.high_probability).reverse(),
-                backgroundColor: '#4DA6FF',
-                borderColor: '#4DA6FF',
+                backgroundColor: '#bff864',
+                borderColor: '#bff864',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -87,8 +87,8 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
             {
                 label:labels[2],
                 data: data?.daily_stats.map(item => item.medium_probability).reverse(),
-                backgroundColor: '#80C1FF',
-                borderColor: '#80C1FF',
+                backgroundColor: '#ffb848',
+                borderColor: '#ffb848',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -96,8 +96,8 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
             {
                 label:labels[3],
                 data: data?.daily_stats.map(item => item.low_probability).reverse(),
-                backgroundColor: '#B3DDFF',
-                borderColor: '#B3DDFF',
+                backgroundColor: '#fabeb4',
+                borderColor: '#fabeb4',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -189,15 +189,15 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
                         <p>{labels[0]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#4DA6FF'}}></span>
+                        <span style={{background:'#bff864'}}></span>
                         <p>{labels[1]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#80C1FF'}}></span>
+                        <span style={{background:'#ffb848'}}></span>
                         <p>{labels[2]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#B3DDFF'}}></span>
+                        <span style={{background:'#fabeb4'}}></span>
                         <p>{labels[3]}</p>
                     </Flex>
                 </Flex>

@@ -71,8 +71,8 @@ const CustomChart: React.FC<CallsChartProps> = ({chartDataArr , title , labels }
             {
                 label:labels[1],
                 data: data?.daily_stats.map(item => item.calls).reverse(),
-                backgroundColor: '#007AFF66',
-                borderColor: '#007AFF66',
+                backgroundColor: '#ffa800',
+                borderColor: '#ffa800',
                 borderWidth: 1,
                 borderRadius: 10,
                 // barThickness: 40,
@@ -157,14 +157,14 @@ const CustomChart: React.FC<CallsChartProps> = ({chartDataArr , title , labels }
             <p className={styles.callsChartContainerTitle}>{title}</p>
 
             <Flex className={styles.callsChartContainerTotal}>
-                <p className={styles.callsChartContainerTotalTitle}>Всего звонков: {data?.total_calls_7_days}</p>
+                <p className={styles.callsChartContainerTotalTitle}>Всего звонков за 7 дней: {data?.total_calls_7_days}</p>
                 <Flex className={styles.callsChartLegend}>
                     <Flex className={styles.callsChartLegendItem}>
                         <span></span>
                         <p>{labels[0]}</p>
                     </Flex>
                     <Flex className={styles.callsChartLegendItem}>
-                        <span></span>
+                        <span style={{background:'#ffa800'}}></span>
                         <p>{labels[1]}</p>
                     </Flex>
                 </Flex>
