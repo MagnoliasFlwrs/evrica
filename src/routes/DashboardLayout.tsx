@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import styles from '../components/DashboardLayout/DashboardLayout.module.scss'
-import {Flex, Modal} from "antd";
+import {Flex, Modal, Spin} from "antd";
 import {useAuth} from "../store";
 import Profile from "../icons/Profile";
 import LogoutIcon from "../components/icons/LogoutIcon";
@@ -16,6 +16,7 @@ const DashboardLayout = () => {
     const user = useAuth((state)=> state.user);
     const logout = useAuth((state)=> state.logout);
     const getRiskOfLosingAClient = useDashboardStore((state) => state.getRiskOfLosingAClient);
+    const loading = useDashboardStore((state) => state.loading);
     const getWhoIsControlOfTheConversation = useDashboardStore((state) => state.getWhoIsControlOfTheConversation);
     const getCallsQualityLastDays = useDashboardStore((state) => state.getCallsQualityLastDays);
     const getEmployeeDidntHandleObjection = useDashboardStore((state) => state.getEmployeeDidntHandleObjection);
@@ -43,7 +44,7 @@ const DashboardLayout = () => {
             getProblemCallsPriorityLastDays(user?.organization_id,7);
         }
 
-    }, [])
+    }, [user])
 
 
 
@@ -61,7 +62,7 @@ const DashboardLayout = () => {
     return (
         <PageContainer>
             <Flex className={styles.dashboardHead}>
-                <p>Привет, {user?.fullName || 'Пользователь'}</p>
+                <p>Привет, {user?.login || 'Пользователь'}</p>
                 <Flex className={styles.dashboardButtons}>
                     <a href="#" className={styles.dashboardButton}>
                         <Profile/>
@@ -72,32 +73,36 @@ const DashboardLayout = () => {
                 </Flex>
 
             </Flex>
-            <Flex className={styles.dashboardCards}>
-                <Flex className={styles.chartCard} >
-                    <CustomChart chartDataArr={riskOfLosingAClient} title='Риск потери клиента' labels={['Все звонки' , 'Звонки']}/>
-                </Flex>
-                <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
-                    <EmployeeDidntHandleObjectionChart chartDataArr={employeeDidntHandleObjection} title='Сотрудник не отработал возражение' labels={['Все' +
-                    ' звонки' , 'Высокое качество', 'Среднее качество' , 'Низкое качество']}/>
-                </Flex>
-                <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
-                    <DealProbabilityChart chartDataArr={dealProbabilityLastDays} title='Вероятность заключения сделки' labels={['Все' +
-                    ' звонки' , 'Высокая вероятность' , 'Средняя вероятность', 'Низкая вероятность']}/>
-                </Flex>
-                <Flex className={styles.chartCard} >
-                    <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Кто управляет беседой' labels={['Все' +
-                    ' звонки' , 'Звонки']}/>
-                </Flex>
-                <Flex className={styles.chartCard} >
-                    <CustomChart chartDataArr={callsQuality} title='Качество проработки звонка' labels={['Все' +
-                    ' звонки' , 'Звонки']}/>
-                </Flex>
-                <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
-                    <ProblemCallsChart chartDataArr={problemCallsPriorityLastDays} title='Проблемный звонок' labels={['Все звонки' , 'Высокий приоритет',  'Средний приоритет', 'Низкий приоритет']}/>
-                </Flex>
-            </Flex>
+            {
+                loading ?
+                    <Spin/>
+                    :
+                    <Flex className={styles.dashboardCards}>
+                        <Flex className={styles.chartCard} >
+                            <CustomChart chartDataArr={riskOfLosingAClient} title='Риск потери клиента' labels={['Все звонки' , 'Звонки']}/>
+                        </Flex>
+                        <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
+                            <EmployeeDidntHandleObjectionChart chartDataArr={employeeDidntHandleObjection} title='Сотрудник не отработал возражение' labels={['Все' +
+                            ' звонки' , 'Высокое качество', 'Среднее качество' , 'Низкое качество']}/>
+                        </Flex>
+                        <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
+                            <DealProbabilityChart chartDataArr={dealProbabilityLastDays} title='Вероятность заключения сделки' labels={['Все' +
+                            ' звонки' , 'Высокая вероятность' , 'Средняя вероятность', 'Низкая вероятность']}/>
+                        </Flex>
+                        <Flex className={styles.chartCard} >
+                            <CustomChart chartDataArr={whoIsControlOfTheConversation} title='Кто управляет беседой' labels={['Все' +
+                            ' звонки' , 'Звонки']}/>
+                        </Flex>
+                        <Flex className={styles.chartCard} >
+                            <CustomChart chartDataArr={callsQuality} title='Качество проработки звонка' labels={['Все' +
+                            ' звонки' , 'Звонки']}/>
+                        </Flex>
+                        <Flex className={`${styles.chartCard} ${styles.chartCardMax}`} >
+                            <ProblemCallsChart chartDataArr={problemCallsPriorityLastDays} title='Проблемный звонок' labels={['Все звонки' , 'Высокий приоритет',  'Средний приоритет', 'Низкий приоритет']}/>
+                        </Flex>
+                    </Flex>
 
-
+            }
 
             {contextHolder}
         </PageContainer>
