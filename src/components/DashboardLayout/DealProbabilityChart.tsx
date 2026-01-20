@@ -1,31 +1,36 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
+    Legend,
+    Filler,
     ChartOptions
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import {Flex} from "antd";
-import styles from './DashboardLayout.module.scss'
+import { Line } from 'react-chartjs-2';
+import { Flex } from "antd";
+import styles from './DashboardLayout.module.scss';
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
-    Tooltip
-
+    Tooltip,
+    Legend,
+    Filler
 );
 
 interface DailyStat {
     date: string;
     high_probability: number;
     low_probability: number;
-    medium_probability:number;
+    medium_probability: number;
     total_calls: number;
 }
 
@@ -33,7 +38,7 @@ interface CallsChartData {
     total_7_days: {
         high_probability: number;
         low_probability: number;
-        medium_probability:number;
+        medium_probability: number;
         total_calls: number;
     };
     daily_stats: DailyStat[];
@@ -45,14 +50,13 @@ interface CallsChartProps {
     labels: string[];
 }
 
-
-const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps) => {
-    const chartRef = useRef<ChartJS<'bar'>>(null);
+const DealProbabilityLineChart = ({ chartDataArr, title, labels }: CallsChartProps) => {
+    const chartRef = useRef<ChartJS<'line'>>(null);
     const [data, setData] = useState<CallsChartData | null>(null);
 
     useEffect(() => {
         if (chartDataArr) {
-            setData(chartDataArr)
+            setData(chartDataArr);
         }
     }, [chartDataArr]);
 
@@ -67,55 +71,73 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
         labels: data?.daily_stats.map(item => formatDate(item.date)).reverse(),
         datasets: [
             {
-                label:labels[0],
+                label: labels[0],
                 data: data?.daily_stats.map(item => item.total_calls).reverse(),
-                backgroundColor: '#007AFF',
                 borderColor: '#007AFF',
-                borderWidth: 1,
-                borderRadius: 10,
-                // barThickness: 40,
+                backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#007AFF',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
             },
             {
                 label: labels[1],
                 data: data?.daily_stats.map(item => item.high_probability).reverse(),
-                backgroundColor: '#bff864',
                 borderColor: '#bff864',
-                borderWidth: 1,
-                borderRadius: 10,
-                // barThickness: 40,
+                backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#bff864',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
             },
             {
-                label:labels[2],
+                label: labels[2],
                 data: data?.daily_stats.map(item => item.medium_probability).reverse(),
-                backgroundColor: '#ffb848',
                 borderColor: '#ffb848',
-                borderWidth: 1,
-                borderRadius: 10,
-                // barThickness: 40,
+                backgroundColor: 'rgba(255, 149, 0, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#ffb848',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
             },
             {
-                label:labels[3],
+                label: labels[3],
                 data: data?.daily_stats.map(item => item.low_probability).reverse(),
-                backgroundColor: '#fabeb4',
                 borderColor: '#fabeb4',
-                borderWidth: 1,
-                borderRadius: 10,
-                // barThickness: 40,
+                backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#fabeb4',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
             },
-
         ],
     };
 
-    const options: ChartOptions<'bar'> = {
+    const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-
             legend: {
                 display: false,
             },
             tooltip: {
-                mode: 'index' as const,
+                mode: 'index',
                 intersect: false,
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 padding: 12,
@@ -126,7 +148,7 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
                     size: 13,
                 },
                 callbacks: {
-                    label: function(context: any) {
+                    label: function (context: any) {
                         let label = context.dataset.label || '';
                         if (label) {
                             label += ': ';
@@ -142,69 +164,68 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
                 grid: {
                     display: false,
                 },
+                border: {
+                    display: false,
+                },
                 ticks: {
                     font: {
                         size: 11,
                     },
+                    color: '#8E8E93',
                 },
             },
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: 'rgba(0, 0, 0, 0.05)',
-                    // drawBorder: false,
+                    color: 'rgba(142, 142, 147, 0.1)',
+                },
+                border: {
+                    display: false,
                 },
                 ticks: {
                     font: {
                         size: 11,
                     },
+                    color: '#8E8E93',
                     precision: 0,
+                    padding: 10,
                 },
-                border: {
-                    display: false,
-                }
             },
         },
         interaction: {
-            mode: 'nearest' as const,
-            axis: 'x' as const,
+            mode: 'nearest',
+            axis: 'x',
             intersect: false,
         },
-
-        bar: {
-            datasets: {
-
+        elements: {
+            line: {
+                tension: 0.4,
             }
         }
     };
+
+    // Обновленные цвета для легенды
+    const legendColors = ['#007AFF', '#bff864', '#ffb848', '#fabeb4'];
 
     return (
         <Flex className={styles.callsChartContainer}>
             <p className={styles.callsChartContainerTitle}>{title}</p>
             <Flex className={styles.callsChartContainerTotal}>
-                <p className={styles.callsChartContainerTotalTitle}>Всего звонков за 7 дней: {data?.total_7_days?.total_calls}</p>
+                <p className={styles.callsChartContainerTotalTitle}>
+                    Всего звонков за 7 дней: {data?.total_7_days?.total_calls}
+                </p>
                 <Flex className={styles.callsChartLegend}>
-                    <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#007AFF'}}></span>
-                        <p>{labels[0]}</p>
-                    </Flex>
-                    <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#bff864'}}></span>
-                        <p>{labels[1]}</p>
-                    </Flex>
-                    <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#ffb848'}}></span>
-                        <p>{labels[2]}</p>
-                    </Flex>
-                    <Flex className={styles.callsChartLegendItem}>
-                        <span style={{background:'#fabeb4'}}></span>
-                        <p>{labels[3]}</p>
-                    </Flex>
+                    {labels.map((label, index) => (
+                        <Flex key={index} className={styles.callsChartLegendItem}>
+                            <span style={{ background: legendColors[index] }}></span>
+                            <p>{label}</p>
+                        </Flex>
+                    ))}
                 </Flex>
             </Flex>
 
-            <Flex className={styles.callsChartBarContainer}>
-                <Bar
+            <Flex className={styles.callsChartLineContainer}>
+                <Line
                     ref={chartRef}
                     data={chartData}
                     options={options}
@@ -214,4 +235,4 @@ const DealProbabilityChart = ({chartDataArr , title , labels} : CallsChartProps)
     );
 };
 
-export default DealProbabilityChart;
+export default DealProbabilityLineChart;
