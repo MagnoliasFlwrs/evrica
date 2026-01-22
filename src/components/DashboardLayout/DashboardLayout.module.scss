@@ -38,6 +38,14 @@
   flex-wrap: wrap;
   margin-top: 30px;
 }
+.chartCardContainerVertical {
+  width: calc(40% - 20px);
+  flex-direction: column;
+  gap: 20px;
+  .chartCard {
+    width: 100%;
+  }
+}
 .chartCard {
   border-radius: 30px;
   border: 1px solid rgba(0, 0, 0, 0.10);
@@ -45,8 +53,15 @@
   padding: 20px;
   width: fit-content;
   &.chartCardMax {
-
+    max-width: 60%;
   }
+
+  &.chartCardMin {
+    .callsChartBarContainer {
+      height: 210px !important;
+    }
+  }
+
   .callsChartContainer {
     display: flex;
     flex-direction: column;

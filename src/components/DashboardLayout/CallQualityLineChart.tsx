@@ -1,40 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import styles from "./DashboardLayout.module.scss";
+import {Flex} from "antd";
+import {Line} from "react-chartjs-2";
 import {
-    Chart as ChartJS,
     CategoryScale,
+    Chart as ChartJS,
+    ChartOptions, Filler, Legend,
     LinearScale,
-    BarElement,
+    LineElement,
+    PointElement,
     Title,
-    Tooltip,
-    Legend,
-    ChartOptions
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { Flex } from "antd";
-import styles from './DashboardLayout.module.scss';
+    Tooltip
+} from "chart.js";
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
+    LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler
 );
 
 interface DailyStat {
     date: string;
-    high_probability: number;
-    low_probability: number;
-    medium_probability: number;
+    high_quality: number;
+    low_quality: number;
+    medium_quality: number;
     total_calls: number;
 }
 
 interface CallsChartData {
     total_7_days: {
-        high_probability: number;
-        low_probability: number;
-        medium_probability: number;
+        high_quality: number;
+        low_quality: number;
+        medium_quality: number;
         total_calls: number;
     };
     daily_stats: DailyStat[];
@@ -46,8 +48,8 @@ interface CallsChartProps {
     labels: string[];
 }
 
-const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProps) => {
-    const chartRef = useRef<ChartJS<'bar'>>(null);
+const CallQualityLineChart = ({ chartDataArr, title, labels }: CallsChartProps) => {
+    const chartRef = useRef<ChartJS<'line'>>(null);
     const [data, setData] = useState<CallsChartData | null>(null);
 
     useEffect(() => {
@@ -63,53 +65,69 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
         return `${day}.${month}`;
     };
 
-    // Подготовка данных для stacked bar chart
     const chartData = {
         labels: data?.daily_stats.map(item => formatDate(item.date)).reverse(),
         datasets: [
             {
-                label: labels[3], // Low probability (низкая вероятность)
-                data: data?.daily_stats.map(item => item.low_probability).reverse(),
-                backgroundColor: '#fabeb4',
-                borderColor: '#fabeb4',
-                borderWidth: 0,
-                borderRadius: 4,
-                stack: 'stack1',
-                barPercentage: 0.6,
-            },
-            {
-                label: labels[2], // Medium probability (средняя вероятность)
-                data: data?.daily_stats.map(item => item.medium_probability).reverse(),
-                backgroundColor: '#ffb848',
-                borderColor: '#ffb848',
-                borderWidth: 0,
-                borderRadius: 4,
-                stack: 'stack1',
-                barPercentage: 0.6,
-            },
-            {
-                label: labels[1], // High probability (высокая вероятность)
-                data: data?.daily_stats.map(item => item.high_probability).reverse(),
-                backgroundColor: '#bff864',
-                borderColor: '#bff864',
-                borderWidth: 0,
-                borderRadius: 4,
-                stack: 'stack1',
-                barPercentage: 0.6,
-            },
-            {
-                label: labels[0], // Total calls (все звонки) - отдельный столбец
+                label: labels[0],
                 data: data?.daily_stats.map(item => item.total_calls).reverse(),
-                backgroundColor: '#007AFF',
                 borderColor: '#007AFF',
-                borderWidth: 0,
-                borderRadius: 4,
-                barPercentage: 0.6,
-            }
+                backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#007AFF',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+            },
+            {
+                label: labels[1],
+                data: data?.daily_stats.map(item => item.high_quality).reverse(),
+                borderColor: '#bff864',
+                backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#bff864',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+            },
+            {
+                label: labels[2],
+                data: data?.daily_stats.map(item => item.medium_quality).reverse(),
+                borderColor: '#ffb848',
+                backgroundColor: 'rgba(255, 149, 0, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#ffb848',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+            },
+            {
+                label: labels[3],
+                data: data?.daily_stats.map(item => item.low_quality).reverse(),
+                borderColor: '#fabeb4',
+                backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: false,
+                pointBackgroundColor: '#fabeb4',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+            },
         ],
     };
 
-    const options: ChartOptions<'bar'> = {
+    const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -153,7 +171,6 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
                     },
                     color: '#8E8E93',
                 },
-                stacked: true,
             },
             y: {
                 beginAtZero: true,
@@ -171,20 +188,22 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
                     precision: 0,
                     padding: 10,
                 },
-                stacked: true,
             },
         },
         interaction: {
-            mode: 'index',
+            mode: 'nearest',
+            axis: 'x',
             intersect: false,
         },
+        elements: {
+            line: {
+                tension: 0.4,
+            }
+        }
     };
 
-    // Цвета для легенды (в том же порядке, что и в легенде)
+    // Обновленные цвета для легенды
     const legendColors = ['#007AFF', '#bff864', '#ffb848', '#fabeb4'];
-    // Порядок меток для легенды
-    const legendLabels = [labels[0], labels[1], labels[2], labels[3]];
-
     return (
         <Flex className={styles.callsChartContainer}>
             <p className={styles.callsChartContainerTitle}>{title}</p>
@@ -193,7 +212,7 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
                     Всего звонков за 7 дней: {data?.total_7_days?.total_calls}
                 </p>
                 <Flex className={styles.callsChartLegend}>
-                    {legendLabels.map((label, index) => (
+                    {labels.map((label, index) => (
                         <Flex key={index} className={styles.callsChartLegendItem}>
                             <span style={{ background: legendColors[index] }}></span>
                             <p>{label}</p>
@@ -202,8 +221,8 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
                 </Flex>
             </Flex>
 
-            <Flex className={styles.callsChartLineContainer}>
-                <Bar
+            <Flex className={styles.callsChartLineContainer} >
+                <Line
                     ref={chartRef}
                     data={chartData}
                     options={options}
@@ -213,4 +232,4 @@ const DealProbabilityBarChart = ({ chartDataArr, title, labels }: CallsChartProp
     );
 };
 
-export default DealProbabilityBarChart;
+export default CallQualityLineChart;

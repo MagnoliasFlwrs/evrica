@@ -19,7 +19,7 @@ export interface Filters {
 
 export interface CategoryCallsListObj {
     filters?: Filters;
-    categories:  number[] | null;
+    category_id: string | number | null;
     page: number;
     per_page: number;
     date_start: null | number;
@@ -424,10 +424,10 @@ export interface CallsState {
     setError: (value: boolean) => void;
     getPendingCalls: () => Promise<any>;
     getCallsCategories: () => Promise<any>;
-    getCallsByCategoryId?: () => Promise<any>;
+    getCallsByCategoryId: () => Promise<any>;
     getChecklistsByCategoryId: () => Promise<any>;
     getDictionariesByCategoryId: () => Promise<any>;
-    setCategoryId: (id: number | string) => void;
+    setCategoryId: (id: number | string | null) => void;
     setCategoryCallsListObjPerPage: (count: number) => void;
     setCategoryCallsListObjPage: (page: number) => void;
     setCurrentCallId: (id: string | null | number) => void;
@@ -443,7 +443,7 @@ export interface CallsState {
     getCategoriesDictionaries:() => Promise<any>;
     callsByCategories:any,
     categoriesIds:number[] | null;
-    getCallsByCategories:() => Promise<any[]>;
+    getCallsByCategories?:() => Promise<any[]>;
     setCategoriesIds: (arr: number[]) => void;
 
 }

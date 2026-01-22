@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Input, Tree, TreeDataNode, TreeProps } from "antd";
 import styles from './CategoriesFilter.module.scss'
-import {DownOutlined, SearchOutlined} from "@ant-design/icons";
+import {DownOutlined,  SearchOutlined} from "@ant-design/icons";
 import {CategoriesFilterProps} from "../types";
 import {useCallsStore} from "../../../stores/callsStore";
 import { findCategoryIdsInTree} from "./helpers";
@@ -16,10 +16,8 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
     const callsCategories = useCallsStore((state) => state.callsCategories);
     const setCategoryId = useCallsStore((state)=> state.setCategoryId);
-    const setCategoriesIds = useCallsStore((state)=>state.setCategoriesIds);
 
     const selectedCount = selectedCategoryIds.length;
-
     const convertToTreeData = (categories: CategoryLocation[]): TreeDataNode[] => {
         return categories?.map((location: CategoryLocation) => ({
             title: location.name,
@@ -34,54 +32,6 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
                 })) || [],
             })) || [],
         }));
-    };
-
-    // Функция для рекурсивного получения всех дочерних ключей узла
-    const getAllChildKeys = (node: TreeDataNode): React.Key[] => {
-        let keys: React.Key[] = [node.key as React.Key];
-
-        if (node.children && node.children.length > 0) {
-            node.children.forEach(child => {
-                keys = keys.concat(getAllChildKeys(child));
-            });
-        }
-
-        return keys;
-    };
-
-    // Функция для получения всех ключей, которые нужно развернуть при выборе узла
-    const getExpandedKeysForNode = (nodeKey: React.Key, treeData: TreeDataNode[]): React.Key[] => {
-        const keysToExpand: React.Key[] = [nodeKey];
-
-        // Находим узел в дереве
-        const findNode = (nodes: TreeDataNode[], targetKey: React.Key): TreeDataNode | null => {
-            for (const node of nodes) {
-                if (node.key === targetKey) {
-                    return node;
-                }
-                if (node.children) {
-                    const found = findNode(node.children, targetKey);
-                    if (found) return found;
-                }
-            }
-            return null;
-        };
-
-        const node = findNode(treeData, nodeKey);
-
-        // Если у узла есть дети, добавляем все дочерние ключи для разворачивания
-        if (node && node.children && node.children.length > 0) {
-            node.children.forEach(child => {
-                keysToExpand.push(child.key as React.Key);
-                // Рекурсивно добавляем детей детей
-                if (child.children && child.children.length > 0) {
-                    const childKeys = getAllChildKeys(child).slice(1); // Исключаем сам child.key, так как он уже добавлен
-                    keysToExpand.push(...childKeys);
-                }
-            });
-        }
-
-        return keysToExpand;
     };
 
     const highlightMatches = (data: TreeDataNode[], searchText: string): TreeDataNode[] => {
@@ -126,9 +76,18 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         const categoryIds = findCategoryIdsInTree(selectedKeys as React.Key[], treeData);
         setSelectedCategoryIds(categoryIds);
 
-        console.log('categoryIds' , categoryIds)
-        setCategoriesIds(categoryIds);
-        console.log('Set categories IDs in store:', categoryIds);
+        // Берем первую выбранную категорию (так как можно выбрать только одну)
+        if (categoryIds.length > 0) {
+            const firstCategoryId = categoryIds[0];
+            setCategoryId(firstCategoryId);
+            console.log('Set category ID in store:', firstCategoryId);
+        } else {
+            // Если ничего не выбрано, сбрасываем category_id
+            setCategoryId('');
+            console.log('Reset category ID in store');
+        }
+
+        console.log('Selected category IDs:', categoryIds);
     };
 
     const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
@@ -138,26 +97,14 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         const categoryIds = findCategoryIdsInTree(checkedKeys as React.Key[], treeData);
         setSelectedCategoryIds(categoryIds);
 
-        // Устанавливаем массив ID категорий в store
-        setCategoriesIds(categoryIds);
-        console.log('Set categories IDs in store (checkbox):', categoryIds);
-
-        // НОВАЯ ЛОГИКА: Разворачиваем дочерние узлы при выборе чекбокса
-        if (info.checked && info.node) {
-            const keysToExpand = getExpandedKeysForNode(info.node.key as React.Key, treeData);
-
-            // Добавляем новые ключи к уже развернутым, исключая дубликаты
-            setExpandedKeys(prev => {
-                const newExpandedKeys = [...prev];
-                keysToExpand.forEach(key => {
-                    if (!newExpandedKeys.includes(key)) {
-                        newExpandedKeys.push(key);
-                    }
-                });
-                return newExpandedKeys;
-            });
-
-            setAutoExpandParent(false);
+        // Также обновляем category_id в store при выборе чекбоксами
+        if (categoryIds.length > 0) {
+            const firstCategoryId = categoryIds[0];
+            setCategoryId(firstCategoryId);
+            console.log('Set category ID in store (checkbox):', firstCategoryId);
+        } else {
+            setCategoryId('');
+            console.log('Reset category ID in store (checkbox)');
         }
 
         console.log('Checked category IDs:', categoryIds);
@@ -187,10 +134,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
 
     useEffect(() => {
         setIsSelected(selectedCount);
-        // Также вызываем setCategoriesIds при изменении selectedCategoryIds
-        // на случай, если категории были изменены другим способом
-        setCategoriesIds(selectedCategoryIds);
-    }, [selectedCount, selectedCategoryIds]);
+    }, [selectedCount]);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
@@ -250,7 +194,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     return (
         <Flex className={styles.CategoriesTree}>
             <Flex className={styles.CategoriesTreeHead}>
-                <p>Выберите категории</p>
+                <p>Выберите категорию</p>
                 <Input
                     prefix={<SearchOutlined />}
                     placeholder="Поиск по названию"
@@ -261,7 +205,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
                 />
             </Flex>
             <Flex className={styles.CategoriesTreeTotal}>
-                <Flex className={selectedCount > 0 ? styles.CategoriesTreeTotalInnerActive : styles.CategoriesTreeTotalInner}>
+                <Flex className={styles.CategoriesTreeTotalInner}>
                     <span>{selectedCount}</span>
                 </Flex>
                 <p>Выбрано</p>

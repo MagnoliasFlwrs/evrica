@@ -9,16 +9,28 @@ const CallsLayout = () => {
     const [isSelected, setIsSelected] = useState(0);
     const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
     const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
-    const getCallsByCategories = useCallsStore((state)=>state.getCallsByCategories)
+    const getCallsByCategories = useCallsStore((state)=>state.getCallsByCategories);
+    const getCallsByCategoryId = useCallsStore((state)=>state.getCallsByCategoryId);
+    const getChecklistsByCategoryId = useCallsStore((state)=>state.getChecklistsByCategoryId);
+    const getDictionariesByCategoryId = useCallsStore((state)=>state.getDictionariesByCategoryId);
+
 
     useEffect(() => {
         getCallsCategories();
     }, []);
+    // useEffect(() => {
+    //     if(categoryCallsListObj.categories && categoryCallsListObj?.categories?.length > 0) {
+    //         getCallsByCategories()
+    //     }
+    // }, [categoryCallsListObj.categories]);
+
     useEffect(() => {
-        if(categoryCallsListObj.categories && categoryCallsListObj?.categories?.length > 0) {
-            getCallsByCategories()
+        if(categoryCallsListObj?.category_id) {
+            getCallsByCategoryId();
+            getChecklistsByCategoryId();
+            getDictionariesByCategoryId();
         }
-    }, [categoryCallsListObj.categories]);
+    }, [categoryCallsListObj]);
 
     return (
         <PageContainer>

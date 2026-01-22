@@ -1,6 +1,6 @@
 import {create} from "zustand/index";
 import {persist} from "zustand/middleware";
-import {axiosInstanceAll, baseAuthUrl} from "../store";
+import {axiosInstanceAll, axiosInstanceAuth, baseAuthUrl} from "../store";
 import qs from 'qs';
 import {CallsState} from "./types/callsStoreTypes";
 
@@ -13,26 +13,26 @@ export const useCallsStore = create(
             loading: false,
             pendingCalls: [],
             categoryCallsListObj: {
-                // filters: {
-                //     call_types: [],
-                //     employees: [],
-                //     clients: [],
-                //     call_is_checked_statuses: [],
-                //     checklist_statuses: [],
-                //     call_time: {
-                //         to: null,
-                //         from: null
-                //     },
-                //     call_time_outs: {
-                //         to: null,
-                //         from: null
-                //     },
-                //     checklist_score_vector: null,
-                //     checklist_score_vector_value: null,
-                //     client_phone: null,
-                //     worked_dictionaries: [],
-                // },
-                categories: null,
+                filters: {
+                    call_types: [],
+                    employees: [],
+                    clients: [],
+                    call_is_checked_statuses: [],
+                    checklist_statuses: [],
+                    call_time: {
+                        to: null,
+                        from: null
+                    },
+                    call_time_outs: {
+                        to: null,
+                        from: null
+                    },
+                    checklist_score_vector: null,
+                    checklist_score_vector_value: null,
+                    client_phone: null,
+                    worked_dictionaries: [],
+                },
+                category_id: null,
                 page: 1,
                 per_page: 10,
                 date_start: null,
@@ -126,27 +126,27 @@ export const useCallsStore = create(
                     });
                 }
             },
-            getCallsByCategories: async () => {
+            getCallsByCategoryId: async () => {
                 set({ loading: true, error: false });
                 try {
-                    const { categoriesIds } = get();
                     const { categoryCallsListObj } = get();
 
                     const queryParams = {
-                        // filters: JSON.stringify(categoryCallsListObj.filters),
-                        categories: categoryCallsListObj?.categories?.join(','),
+                        filters: JSON.stringify(categoryCallsListObj.filters),
+                        category_id: categoryCallsListObj.category_id,
                         page: categoryCallsListObj.page,
                         'per-page': categoryCallsListObj.per_page,
                         date_start: categoryCallsListObj.date_start,
                         date_end: categoryCallsListObj.date_end,
                     };
+
                     const queryString = qs.stringify(queryParams, {
                         arrayFormat: 'indices',
                         encode: false
                     });
 
-                    const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/category/get-categories-with-calls-and-discts-and-checklists?${queryString}`,
+                    const res = await axiosInstanceAuth.get(
+                        `${baseAuthUrl}/category/get-category-calls?${queryString}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ export const useCallsStore = create(
                         set({
                             loading: false,
                             error: false,
-                            callsByCategories: res.data
+                            callsByCategory: res.data
                         });
 
                         return res.data;
@@ -172,6 +172,52 @@ export const useCallsStore = create(
                     });
                 }
             },
+            // getCallsByCategories: async () => {
+            //     set({ loading: true, error: false });
+            //     try {
+            //         const { categoriesIds } = get();
+            //         const { categoryCallsListObj } = get();
+            //
+            //         const queryParams = {
+            //             // filters: JSON.stringify(categoryCallsListObj.filters),
+            //             categories: categoryCallsListObj?.categories?.join(','),
+            //             page: categoryCallsListObj.page,
+            //             'per-page': categoryCallsListObj.per_page,
+            //             date_start: categoryCallsListObj.date_start,
+            //             date_end: categoryCallsListObj.date_end,
+            //         };
+            //         const queryString = qs.stringify(queryParams, {
+            //             arrayFormat: 'indices',
+            //             encode: false
+            //         });
+            //
+            //         const res = await axiosInstanceAll.get(
+            //             `${baseAuthUrl}/category/get-categories-with-calls-and-discts-and-checklists?${queryString}`,
+            //             {
+            //                 headers: {
+            //                     'Content-Type': 'application/json',
+            //                     accept: '*/*',
+            //                     authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            //                 },
+            //             },
+            //         );
+            //
+            //         if (res.status === 200) {
+            //             set({
+            //                 loading: false,
+            //                 error: false,
+            //                 callsByCategories: res.data
+            //             });
+            //
+            //             return res.data;
+            //         }
+            //     } catch (error) {
+            //         set({
+            //             error: true,
+            //             loading: false,
+            //         });
+            //     }
+            // },
             setCategoriesIds: (arr: number[]) =>
                 set((state) => ({
                     categoryCallsListObj: {
@@ -180,7 +226,7 @@ export const useCallsStore = create(
                     },
                 })),
             setCurrentCallId: (id: number | string | null) => set({currentCallId: id}),
-            setCategoryId: (id: number | string) =>
+            setCategoryId: (id: number | string | null) =>
                 set((state) => ({
                     checkListsByIdObj: {
                         ...state.checkListsByIdObj,
@@ -193,6 +239,10 @@ export const useCallsStore = create(
                     categoriesDictionariesObj: {
                         ...state.categoriesDictionariesObj,
                         category_id: id
+                    },
+                    categoryCallsListObj: {
+                        ...state.categoryCallsListObj,
+                        category_id: id
                     }
                 })),
             setCategoryCallsListObjPage: (page: number ) => {
@@ -202,7 +252,7 @@ export const useCallsStore = create(
                         page: page
                     },
                 }));
-                get().getCallsByCategories();
+                // get().getCallsByCategories();
             },
             setCategoryCallsListObjPerPage: (count: number ) => {
                 set((state) => ({
@@ -211,7 +261,7 @@ export const useCallsStore = create(
                         per_page: count
                     },
                 }));
-                get().getCallsByCategories();
+                // get().getCallsByCategories();
             },
             getChecklistsByCategoryId: async () => {
                 set({ loading: true, error: false });
@@ -459,8 +509,8 @@ export const useCallsStore = create(
                     },
 
                 }))
-                get().getCallsByCategories()
-            }
+                // get().getCallsByCategories()
+            },
 
         }),
         {
