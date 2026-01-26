@@ -7,15 +7,15 @@ import {useCallsStore} from "../../../../stores/callsStore";
 import {ChecklistsSearch} from "../../../../stores/types/callsStoreTypes";
 
 const CallsOptionsCheckLists = () => {
-    const categoriesChecklistsList = useCallsStore((state)=> state.categoriesChecklistsList);
+    const checkListsByIdList = useCallsStore((state)=> state.checkListsByIdList);
     const [checkListData, setCheckListData] = useState<ChecklistsSearch[]>([]);
 
     useEffect(() => {
-        if (categoriesChecklistsList) {
-            setCheckListData(categoriesChecklistsList)
-            console.log("CategoriesCheckLists", categoriesChecklistsList)
+        if (checkListsByIdList) {
+            setCheckListData(checkListsByIdList)
+            console.log("CategoriesCheckLists", checkListsByIdList)
         }
-    }, [categoriesChecklistsList])
+    }, [checkListsByIdList])
 
     return (
         <>

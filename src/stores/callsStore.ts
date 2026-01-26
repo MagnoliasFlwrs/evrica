@@ -55,7 +55,7 @@ export const useCallsStore = create(
                 date_start: 1762117201,
                 date_end: 1762203600
             },
-            categoriesDictionariesList:null,
+            categoriesDictionariesList:{},
             categoriesChecklistsList:[],
             checkListsByIdList:[],
             dictionariesByIdList:[],

@@ -8,17 +8,18 @@ import {CategoriesDictionariesList} from "../../../../stores/types/callsStoreTyp
 
 
 const CallsOptionsMarkers = () => {
-    const categoriesDictionariesList = useCallsStore((state)=> state.categoriesDictionariesList);
+    const dictionariesByIdList = useCallsStore((state)=> state.dictionariesByIdList);
     const [dictionariesList, setDictionariesList] = useState<CategoriesDictionariesList>({
         system: [],
         client: []
     });
 
     useEffect(() => {
-        if(categoriesDictionariesList) {
-            setDictionariesList(categoriesDictionariesList);
+        if (dictionariesByIdList && 'system' in dictionariesByIdList && 'client' in dictionariesByIdList) {
+            setDictionariesList(dictionariesByIdList as CategoriesDictionariesList);
         }
-    }, [categoriesDictionariesList]);
+    }, [dictionariesByIdList]);
+
 
     const data = [
         {

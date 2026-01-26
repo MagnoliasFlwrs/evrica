@@ -439,7 +439,7 @@ export interface CallsState {
     getCategoriesCheckLists:() => Promise<any>;
     categoriesCheckListsObj:CheckListsByIdObj;
     categoriesDictionariesObj:CheckListsByIdObj;
-    categoriesDictionariesList:CategoriesDictionariesList | null;
+    categoriesDictionariesList:CategoriesDictionariesList | {};
     getCategoriesDictionaries:() => Promise<any>;
     callsByCategories:any,
     categoriesIds:number[] | null;

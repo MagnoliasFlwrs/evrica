@@ -14,7 +14,9 @@ const CallsFilteredLayout = () => {
     const date_start = useCallsStore((state) => state.categoryCallsListObj.date_start);
     const date_end = useCallsStore((state) => state.categoryCallsListObj.date_end);
     const categoryCallsListObj = useCallsStore((state)=>state.categoryCallsListObj);
-    const getCallsByCategoryId = useCallsStore((state)=> state.getCallsByCategoryId)
+    const getCallsByCategoryId = useCallsStore((state)=> state.getCallsByCategoryId);
+    const getChecklistsByCategoryId = useCallsStore((state)=> state.getChecklistsByCategoryId);
+    const getDictionariesByCategoryId = useCallsStore((state)=> state.getDictionariesByCategoryId);
 
     const [selectedDate, setSelectedDate] = useState<Value>(() => {
         if (date_start && date_end) {
@@ -32,7 +34,9 @@ const CallsFilteredLayout = () => {
     }, [date_start, date_end]);
     useEffect(() => {
         if (categoryCallsListObj.category_id) {
-            getCallsByCategoryId()
+            getCallsByCategoryId();
+            getChecklistsByCategoryId();
+            getDictionariesByCategoryId()
         }
     }, [categoryCallsListObj]);
 
