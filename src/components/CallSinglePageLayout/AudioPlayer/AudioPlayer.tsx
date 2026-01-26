@@ -6,6 +6,7 @@ import WaveSurfer from 'wavesurfer.js';
 import {controlsOptions, getFormattedTime} from "../utils";
 import cn from "classnames";
 import {useCallsStore} from "../../../stores/callsStore";
+import {PauseOutlined, PlayCircleOutlined} from "@ant-design/icons";
 
 interface AudioPlayerProps {
     showChannels: boolean;
@@ -118,7 +119,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
                         isOutlined={true}
                     />
                     <button className={styles.PlayBtn} onClick={togglePlay}>
-                        <PlayIcon/>
+                        {
+                            isPlaying ?  <PauseOutlined/> : <PlayIcon/>
+                        }
+
+
                     </button>
                 </div>
                 <div
