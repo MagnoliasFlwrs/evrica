@@ -17,6 +17,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     const callsCategories = useCallsStore((state) => state.callsCategories);
     const setCategoryId = useCallsStore((state)=> state.setCategoryId);
 
+
     const selectedCount = selectedCategoryIds.length;
     const convertToTreeData = (categories: CategoryLocation[]): TreeDataNode[] => {
         return categories?.map((location: CategoryLocation) => ({

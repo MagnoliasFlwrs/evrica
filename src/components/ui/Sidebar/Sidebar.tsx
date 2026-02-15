@@ -73,6 +73,18 @@ const Sidebar = () => {
                 </Link>
 
                 <Link
+                    to='/analytics2'
+                    className={cn(styles.SidebarLink, {
+                        [styles.active]: isActiveLink('/analytics2')
+                    })}
+                >
+                    <Flex className={styles.SidebarIconWrapper}>
+                        <Analytic/>
+                    </Flex>
+                    {sidebarOpen && <span>Аналитика2</span>}
+                </Link>
+
+                <Link
                     to='/calls'
                     className={cn(styles.SidebarLink, {
                         [styles.active]: isActiveLink('/calls')

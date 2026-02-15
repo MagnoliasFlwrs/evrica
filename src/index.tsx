@@ -9,7 +9,7 @@ import {
     AnalyticsLayout,
     LoginLayout,
     AnalyticsReportLayout,
-    DashboardLayout
+    DashboardLayout, AnalyticsLayout2
 } from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
@@ -64,6 +64,10 @@ const App = () => {
                 {
                     path: '/analytics',
                     element: <AnalyticsLayout />,
+                },
+                {
+                    path: '/analytics2',
+                    element: <AnalyticsLayout2 />,
                 },
                 {
                     path: '/analytics-report',

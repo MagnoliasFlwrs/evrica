@@ -55,6 +55,9 @@ const ProblemCallsChart = ({chartDataArr , title , labels} : CallsChartProps) =>
         }
     }, [chartDataArr]);
 
+
+    console.log(chartDataArr)
+
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
         const day = date.getDate().toString().padStart(2, '0');

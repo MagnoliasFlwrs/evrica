@@ -1,0 +1,68 @@
+{
+  "number_of_appointments_and_calls": {
+    "targeted_communications": 4265,
+    "next_contact_assigned": 3001,
+    "percentage_of_appointments_made": 70
+  },
+  "distribution_by_directions": {
+    "targeted_communications": 4265,
+    "meeting": 106,
+    "call_or_messenger": 2246,
+    "not_defined": 1859
+  },
+  "employee_report": [
+    {
+      "name": "Иоскевич Артем",
+      "total_calls": 107,
+      "next_contact_assigned": 92,
+      "not_next_contact_assigned": 15,
+      "percentage_of_appointments_made": 6,
+      "meeting": 7,
+      "call_or_messenger": 57,
+      "not_defined": 43,
+      "call_share": 0.025,
+      "quality": 0.065,
+      "kpi": 0.073
+    },
+    {
+      "name": "Гарновская Юлия",
+      "total_calls": 148,
+      "next_contact_assigned": 104,
+      "not_next_contact_assigned": 44,
+      "percentage_of_appointments_made": 4,
+      "meeting": 6,
+      "call_or_messenger": 68,
+      "not_defined": 73,
+      "call_share": 0.035,
+      "quality": 0.041,
+      "kpi": 0.051
+    },
+
+    {
+      "name": "Шейко Евгения",
+      "total_calls": 9,
+      "next_contact_assigned": 2,
+      "not_next_contact_assigned": 7,
+      "percentage_of_appointments_made": 0,
+      "meeting": 0,
+      "call_or_messenger": 2,
+      "not_defined": 7,
+      "call_share": 0.002,
+      "quality": 0,
+      "kpi": 0.001
+    },
+    {
+      "name": "Зайцева Татьяна",
+      "total_calls": 3,
+      "next_contact_assigned": 3,
+      "not_next_contact_assigned": 0,
+      "percentage_of_appointments_made": 0,
+      "meeting": 0,
+      "call_or_messenger": 1,
+      "not_defined": 2,
+      "call_share": 0.001,
+      "quality": 0,
+      "kpi": 0
+    }
+  ]
+}

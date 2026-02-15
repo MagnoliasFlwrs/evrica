@@ -43,32 +43,32 @@ const CustomerInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Имя клиента</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.имя}</span>
+                        <span>{baseSystemData?.данные_о_клиенте?.имя ? baseSystemData?.данные_о_клиенте?.имя : '-' }</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Телефон клиента</p>
-                        <span>{currentCallInfo?.call?.phone_number}</span>
+                        <span>{currentCallInfo?.call?.phone_number ? currentCallInfo?.call?.phone_number : '-'}</span>
                     </Flex>
                 </Flex>
 
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Пол</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.пол}</span>
+                        <span>{baseSystemData?.данные_о_клиенте?.пол ? baseSystemData?.данные_о_клиенте?.пол : '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Место жительства</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.где_живет_клиент}</span>
+                        <span>{baseSystemData?.данные_о_клиенте?.где_живет_клиент ? baseSystemData?.данные_о_клиенте?.где_живет_клиент : '-'}</span>
                     </Flex>
                 </Flex>
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Семейное положение</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.семейное_положение}</span>
+                        <span>{baseSystemData?.данные_о_клиенте?.семейное_положение ? baseSystemData?.данные_о_клиенте?.семейное_положение : '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Наличие детей</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.наличие_детей}</span>
+                        <span>{baseSystemData?.данные_о_клиенте?.наличие_детей ? baseSystemData?.данные_о_клиенте?.наличие_детей : '-'}</span>
                     </Flex>
                 </Flex>
             </Flex>

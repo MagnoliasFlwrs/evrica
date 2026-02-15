@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import styles from '../components/DashboardLayout/DashboardLayout.module.scss'
-import {Flex, Modal, Spin} from "antd";
+import {DatePicker, Flex, Modal, Spin} from "antd";
 import {useAuth} from "../store";
 import Profile from "../icons/Profile";
 import LogoutIcon from "../components/icons/LogoutIcon";

@@ -18,7 +18,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-risk-of-losing-a-client?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-risk-of-losing-a-client-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-who-is-in-control-of-the-conversation?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-who-is-in-control-of-the-conversation-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-call-quality-last-days?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-call-quality-last-days-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-employee-didnt-handle-objection?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-employee-didnt-handle-objection-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-deal-probability-last-days?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-deal-probability-last-days-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ export const useDashboardStore = create(
                 set({ loading: true, error: false });
                 try {
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy-charts/get-problem-calls-priority-last-days?org_id=${orgId}&days=${days}`,
+                        `${baseAuthUrl}/proxy-dashboard/get-problem-calls-priority-last-days-where-is-the-client-category-target?org_id=${orgId}&days=${days}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
