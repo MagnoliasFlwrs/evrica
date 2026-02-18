@@ -1,40 +1,41 @@
 .AnalyticsControls {
   width: 100%;
   display: flex;
-  gap: 300px;
+  flex-direction: column;
+  gap: 30px;
   align-items: flex-start;
   margin-top: 20px;
-  .AnalyticsControlsInner {
+
+}
+.AnalyticsControlsInner {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 20px;
+  position: relative;
+  p {
+    white-space: nowrap;
+  }
+  .CategoriesTreeHeadInput {
     display: flex;
+    height: 32px;
+    //padding: 10px 14px;
     align-items: center;
-    width: max-content;
-    gap: 20px;
-    position: relative;
-    p {
-      white-space: nowrap;
-    }
-    .CategoriesTreeHeadInput {
-      display: flex;
-      height: 32px;
-      //padding: 10px 14px;
-      align-items: center;
-      gap: 10px;
-      //border-radius: 40px;
-      //border: 1px solid rgba(0, 0, 0, 0.10);
-      input {
-        &::placeholder {
-          color: rgba(0, 0, 0, 0.50);
-          font-family: Mulish;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 500;
-          line-height: normal;
-        }
+    gap: 10px;
+    //border-radius: 40px;
+    //border: 1px solid rgba(0, 0, 0, 0.10);
+    input {
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.50);
+        font-family: Mulish;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
       }
     }
   }
 }
-
 .CircledChart {
   width: 100%;
   height: 100%;
@@ -144,5 +145,47 @@
     .ant-flex {
       gap: 8px;
     }
+  }
+}
+
+.managerCard {
+  position: relative;
+  padding: 10px;
+  width: calc((100% - 20px * 2) / 3);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  .progress {
+    position: absolute;
+    top:100px;
+    right: 30px;
+    padding: 10px;
+    border-radius: 50px;
+    background: #fff;
+    border: 1px solid #f0f0f0;
+  }
+  .userName {
+    position: absolute;
+    top:0;
+    left: 50%;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transform: translate(-50%,-50%);
+    background: #fff;
+    border: 1px solid #f0f0f0;
+  }
+  .userGeneralInfo {
+    background: #dbedff;
+    padding: 20px ;
+    border-radius: 6px;
+    width: 100%;
+    span{
+      font-weight: bold;
+    }
+    ul {
+      padding-top: 20px;
+    }
+  }
+  .userOtherInfo {
+    padding: 0 30px;
   }
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState, useCallback} from 'react';
-import {Flex, Input, DatePicker, ConfigProvider, Cascader, notification, Button} from "antd";
+import {Flex, Input, DatePicker, ConfigProvider, Cascader, notification, Button, Radio} from "antd";
 import type {CascaderProps} from 'antd';
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import PageTitle from "../components/ui/PageTitle/PageTitle";
@@ -12,6 +12,47 @@ import type {Dayjs} from 'dayjs';
 import {useAuth} from "../store";
 import CircledChart from "../components/AnalyticsLayout2/CircledChart";
 import EmployeeLineCharts from "../components/AnalyticsLayout2/EmployeeLineCharts";
+import {useAnalyticsStore2} from "../stores/analyticsStore2";
+import ManagerCard from "../components/AnalyticsLayout2/ManagerCard";
+
+// Определяем интерфейсы для данных
+interface AppointmentsData {
+    targeted_communications: number;
+    next_contact_assigned: number;
+    percentage_of_appointments_made: number;
+}
+
+interface DirectionsData {
+    targeted_communications: number;
+    meeting: number;
+    call_or_messenger: number;
+    not_defined: number;
+}
+
+interface EmployeeReportItem {
+    name: string;
+    total_calls: number;
+    next_contact_assigned: number;
+    not_next_contact_assigned: number;
+    percentage_of_appointments_made: number;
+    meeting: number;
+    call_or_messenger: number;
+    not_defined: number;
+    call_share: number;
+    quality: number;
+    kpi: number;
+}
+
+interface ReportData {
+    number_of_appointments_and_calls: AppointmentsData;
+    distribution_by_directions: DirectionsData;
+    // employee_report: EmployeeReportItem[];
+}
+interface ManagersReportData {
+    items: EmployeeReportItem[];
+    total: number;
+    total_pages:1;
+}
 
 const { RangePicker } = DatePicker;
 
@@ -62,82 +103,37 @@ const AnalyticLayout2 = () => {
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const user = useAuth((state)=> state.user);
-    // const [appointmentsData , setAppointmentsData] = [];
-    // const [directionsData , setDirectionsData] = [];
+    const getReportTotalData = useAnalyticsStore2((state)=> state.getReportTotalData);
+    const reportLoading = useAnalyticsStore2((state)=> state.loading);
+    const clearReportTotalData = useAnalyticsStore2((state)=> state.clearReportTotalData);
+    const setGeneralManagerReportsObj = useAnalyticsStore2((state)=> state.setGeneralManagerReportsObj);
+    const getManagersReport = useAnalyticsStore2((state)=> state.getManagersReport);
+    const getManagersList = useAnalyticsStore2((state)=> state.getManagersList);
+    const reportTotalData = useAnalyticsStore2((state)=> state.reportTotalData) as ReportData | null;
+    const managersReportData = useAnalyticsStore2((state)=> state.managersReportData) as ManagersReportData | null;
 
-    const appointmentsData = {
-        "targeted_communications": 4265,
-        "next_contact_assigned": 3001,
-        "percentage_of_appointments_made": 70
-    };
+    // Состояния с правильной типизацией
+    const [appointmentsData, setAppointmentData] = useState<AppointmentsData | null>(null);
+    const [directionsData, setDirectionsData] = useState<DirectionsData | null>(null);
+    const [employeeReportData, setEmployeeReportData] = useState<EmployeeReportItem[]>([]);
 
-    const directionsData = {
-        "targeted_communications": 4265,
-        "meeting": 106,
-        "call_or_messenger": 2246,
-        "not_defined": 1859
-    };
-    const employee_report = [
-        {
-            "name": "Иоскевич Артем",
-            "total_calls": 107,
-            "next_contact_assigned": 92,
-            "not_next_contact_assigned": 15,
-            "percentage_of_appointments_made": 6,
-            "meeting": 7,
-            "call_or_messenger": 57,
-            "not_defined": 43,
-            "call_share": 0.025,
-            "quality": 0.065,
-            "kpi": 0.073
-        },
-        {
-            "name": "Гарновская Юлия",
-            "total_calls": 148,
-            "next_contact_assigned": 104,
-            "not_next_contact_assigned": 44,
-            "percentage_of_appointments_made": 4,
-            "meeting": 6,
-            "call_or_messenger": 68,
-            "not_defined": 73,
-            "call_share": 0.035,
-            "quality": 0.041,
-            "kpi": 0.051
-        },
+    useEffect(() => {
+        clearReportTotalData()
+    }, []);
 
-        {
-            "name": "Шейко Евгения",
-            "total_calls": 9,
-            "next_contact_assigned": 2,
-            "not_next_contact_assigned": 7,
-            "percentage_of_appointments_made": 0,
-            "meeting": 0,
-            "call_or_messenger": 2,
-            "not_defined": 7,
-            "call_share": 0.002,
-            "quality": 0,
-            "kpi": 0.001
-        },
-        {
-            "name": "Зайцева Татьяна",
-            "total_calls": 3,
-            "next_contact_assigned": 3,
-            "not_next_contact_assigned": 0,
-            "percentage_of_appointments_made": 0,
-            "meeting": 0,
-            "call_or_messenger": 1,
-            "not_defined": 2,
-            "call_share": 0.001,
-            "quality": 0,
-            "kpi": 0
-        }
-    ]
+    const isButtonDisabled = useMemo(() => {
+        return !dateRange ||
+            !dateRange[0] ||
+            !dateRange[1] ||
+            !selectedCategoryId ||
+            !user?.organization_id;
+    }, [dateRange, selectedCategoryId, user]);
 
     const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
-        getCallsCategories()
-    }, []);
+        getCallsCategories();
+    }, [getCallsCategories]);
 
     useEffect(()=> {
         if (callsCategories && Array.isArray(callsCategories)) {
@@ -175,8 +171,6 @@ const AnalyticLayout2 = () => {
                 return;
             }
             setDateRange(dates);
-            const startDate = dates[0].format('YYYY-MM-DD');
-            const endDate = dates[1].format('YYYY-MM-DD');
         } else {
             setDateRange(dates);
         }
@@ -191,6 +185,32 @@ const AnalyticLayout2 = () => {
         }
     }, []);
 
+    const handleGetReport = useCallback(() => {
+        if (isButtonDisabled) return;
+
+        const dateFrom = dateRange![0]!.format('YYYY-MM-DD');
+        const dateTo = dateRange![1]!.format('YYYY-MM-DD');
+
+        getReportTotalData(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
+        getManagersList(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
+        setGeneralManagerReportsObj(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
+        getManagersReport();
+    }, [dateRange, selectedCategoryId, user, getReportTotalData, isButtonDisabled]);
+
+    useEffect(() => {
+        if (reportTotalData) {
+            setAppointmentData(reportTotalData.number_of_appointments_and_calls);
+            setDirectionsData(reportTotalData.distribution_by_directions);
+            // setEmployeeReportData(reportData.employee_report);
+        }
+    }, [reportTotalData]);
+    useEffect(() => {
+        if (managersReportData) {
+            setEmployeeReportData(managersReportData.items);
+        }
+    }, [managersReportData]);
+
+
     return (
         <ConfigProvider
             getPopupContainer={() => document.body}
@@ -203,7 +223,20 @@ const AnalyticLayout2 = () => {
                     <h3>Назначение встречи</h3>
                 </Flex>
                 <Flex className={styles.AnalyticsControls}>
-                    <Flex vertical gap={20}>
+                    <Flex  gap={20} style={{width:'100%'}}>
+                        <Flex className={styles.AnalyticsControlsInner} gap={20}>
+                            <p>Выберите категорию</p>
+                            <Cascader
+                                placeholder="Выберите категорию"
+                                options={cascaderOptions}
+                                onChange={handleCategoryChange}
+                                loading={loading}
+                                allowClear
+                                style={{ width: '300px' }}
+                                expandTrigger="hover"
+                                displayRender={(label) => label.join(' / ')}
+                            />
+                        </Flex>
                         <Flex className={styles.AnalyticsControlsInner} gap={20}>
                             <p>Диапазон дат</p>
                             <RangePicker
@@ -220,46 +253,67 @@ const AnalyticLayout2 = () => {
                                 }}
                             />
                         </Flex>
-                        <Flex className={styles.AnalyticsControlsInner} gap={20}>
-                            <p>Выберите категорию</p>
-                            <Cascader
-                                placeholder="Выберите категорию"
-                                options={cascaderOptions}
-                                onChange={handleCategoryChange}
-                                loading={loading}
-                                allowClear
-                                style={{ width: '300px' }}
-                                expandTrigger="hover"
-                                displayRender={(label) => label.join(' / ')}
-                            />
+
+                        <Button
+                            onClick={handleGetReport}
+                            loading={reportLoading}
+                            type="primary"
+                            disabled={isButtonDisabled}
+                            style={{
+                                opacity: isButtonDisabled ? 0.5 : 1,
+                                cursor: isButtonDisabled ? 'not-allowed' : 'pointer'
+                            }}
+                        >
+                            Построить отчет
+                        </Button>
+                    </Flex>
+
+                </Flex>
+
+                {reportTotalData ? (
+                    <Flex vertical gap={20}>
+                        <Flex gap={20} style={{marginTop:'30px'}}>
+                            <CircledChart data={appointmentsData} type="appointments" />
+                            <CircledChart data={directionsData} type="directions" />
                         </Flex>
-                        <Button>Построить отчет</Button>
+                        {
+                            employeeReportData?.length > 0 &&
+                            <Flex vertical gap={20}>
+                                <Flex gap={30} style={{marginTop:'50px'}} align={'center'}>
+                                    <h3>Отчет по сотрудникам</h3>
+                                    <Flex className={styles.AnalyticsControlsInner}>
+                                        <p>Поиск по сотруднику</p>
+                                        <Input
+                                            prefix={<SearchOutlined style={{ color: '#8C8C8C' }}/>}
+                                            className={styles.CategoriesTreeHeadInput}
+                                            style={{width: '259px'}}
+                                            value={searchValue}
+                                            onChange={(e) => setSearchValue(e.target.value)}
+                                        />
+                                    </Flex>
+                                    <Radio.Group defaultValue="kpi" buttonStyle="solid" style={{marginLeft:'auto'}}>
+                                        <Radio.Button value="kpi">KPI</Radio.Button>
+                                        <Radio.Button value="quality">Качество</Radio.Button>
+                                        <Radio.Button value="call_share">Доля звонков</Radio.Button>
+                                    </Radio.Group>
+                                </Flex>
+
+                                <Flex style={{marginTop:'30px', flexWrap:'wrap', rowGap:'40px' , columnGap:'20px' }}>
+                                    {employeeReportData
+                                        .map((item, index) => (
+                                            <ManagerCard key={index} userData={item} />
+                                        ))
+                                    }
+                                </Flex>
+                            </Flex>
+                        }
+                    </Flex>
+                ) :
+                    <Flex align={'center'} justify={'center'} flex={1}>
+                        <p>Для получения данных выберите категорию и даты</p>
                     </Flex>
 
-                    <Flex className={styles.AnalyticsControlsInner}>
-                        <p>Поиск по сотруднику</p>
-                        <Input
-                            prefix={<SearchOutlined style={{ color: '#8C8C8C' }}/>}
-                            className={styles.CategoriesTreeHeadInput}
-                            style={{width: '259px'}}
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                    </Flex>
-                </Flex>
-
-                <Flex gap={20} style={{marginTop:'30px'}}>
-                    <CircledChart data={appointmentsData} type="appointments" />
-                    <CircledChart data={directionsData} type="directions" />
-                </Flex>
-                <h3 style={{marginTop:'50px'}}>Отчет по сотрудникам</h3>
-                <Flex gap={20} style={{marginTop:'30px', flexWrap:'wrap' }}>
-
-                    {
-                        employee_report.map((item, index) => (<EmployeeLineCharts key={index} userData={item} />))
-                    }
-                </Flex>
-
+                }
             </PageContainer>
         </ConfigProvider>
     );
