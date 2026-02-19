@@ -3,7 +3,6 @@ import {Avatar, Flex, Progress, Steps} from "antd";
 import styles from "./AnalyticsLayout2.module.scss";
 
 import {getGenderIcon} from "./helper";
-import Profile from "../../icons/Profile";
 
 interface UserData {
     name: string;
@@ -40,7 +39,7 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
 
     const baseItems = [
         {
-            title: `Встреча: ${meeting}`,
+            title: `Встреч: ${meeting}`,
             status: 'finish' as const,
         },
         {
@@ -83,7 +82,7 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
                 </Flex>
             </Flex>
             <Flex className={styles.userOtherInfo} vertical gap={30}>
-                <p>{call_share_percent} %</p>
+                <p>Итоги договоренностей: </p>
                 <Steps
                     direction="vertical"
                     current={items.length}

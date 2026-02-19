@@ -42,6 +42,7 @@ interface AnalyticsState2 {
     reportTotalData: ReportData | null;
     setError: (value: boolean) => void;
     clearReportTotalData: () => void;
+    clearManagerReportsObj: () => void;
     setPage: (page:number) => void;
     setPageLimit: (newLimit:number) => void;
     setManagers: (arr:string []) => void;
@@ -59,6 +60,7 @@ interface AnalyticsState2 {
         org_id : number|string|null,
         page: number,
         limit: number,
+        sort:string,
         managers: string []
     }
 }
@@ -77,8 +79,8 @@ export const useAnalyticsStore2 = create<AnalyticsState2>()(
                 category_id: null,
                 org_id: null,
                 page:1,
-                limit:20,
-                sort:'kpi',
+                limit:10,
+                sort:'call_share',
                 managers:[]
             },
             getManagersReport: async () => {
@@ -113,8 +115,25 @@ export const useAnalyticsStore2 = create<AnalyticsState2>()(
                 }
             },
             setError: (value: boolean) => set({ error: value }),
-            clearReportTotalData: () => set({ reportTotalData: null }),
-            getReportTotalData: async (dateFrom: string, dateTo: string, categoryId: number | string, orgId: number | string) => {
+            clearReportTotalData: () => set(
+                {reportTotalData: null,}
+            ),
+            clearManagerReportsObj: () => set(
+                {managerReportsObj: {
+                        date_from: '',
+                        date_to: '',
+                        category_id: null,
+                        org_id: null,
+                        page:1,
+                        limit:10,
+                        sort:'call_share',
+                        managers:[]
+                    },}
+            ),
+            getReportTotalData: async (dateFrom: string,
+                                       dateTo: string,
+                                       categoryId: number | string,
+                                       orgId: number | string) => {
                 set({ loading: true, error: false });
                 try {
                     const body = {
@@ -151,7 +170,10 @@ export const useAnalyticsStore2 = create<AnalyticsState2>()(
                     console.error('Ошибка при получении отчета:', error);
                 }
             },
-            getManagersList: async (dateFrom: string, dateTo: string, categoryId: number | string, orgId: number | string) => {
+            getManagersList: async (dateFrom: string,
+                                    dateTo: string,
+                                    categoryId: number | string,
+                                    orgId: number | string) => {
                 set({ loading: true, error: false });
                 try {
                     const body = {
@@ -172,7 +194,6 @@ export const useAnalyticsStore2 = create<AnalyticsState2>()(
                             },
                         },
                     );
-
                     if (res.status === 200) {
                         set({
                             loading: false,
@@ -198,7 +219,7 @@ export const useAnalyticsStore2 = create<AnalyticsState2>()(
                 })),
             setManagers: (arr) =>
                 set((state) => ({
-                    managerReportsObj: { ...state.managerReportsObj, managers: arr },
+                    managerReportsObj: { ...state.managerReportsObj, managers: [...arr] },
                 })),
             setSort: (value) =>
                 set((state) => ({

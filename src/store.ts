@@ -87,10 +87,12 @@ axiosInstanceAll.interceptors.response.use(
             } catch (refreshError) {
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('accessToken');
-                localStorage.removeItem('employee');
-                localStorage.removeItem('maintenance');
                 localStorage.removeItem('auth');
                 localStorage.removeItem('conversationLog');
+                localStorage.removeItem('analytics2');
+                localStorage.removeItem('analytics');
+                localStorage.removeItem('calls');
+                localStorage.removeItem('dashboard');
                 window.location.href = '/auth';
                 return Promise.reject(refreshError);
             } finally {
@@ -209,6 +211,11 @@ export const useAuth = create(
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('auth');
+                localStorage.removeItem('conversationLog');
+                localStorage.removeItem('analytics2');
+                localStorage.removeItem('analytics');
+                localStorage.removeItem('calls');
+                localStorage.removeItem('dashboard');
                 set({
                     isAuth: false,
                     accessToken: null,

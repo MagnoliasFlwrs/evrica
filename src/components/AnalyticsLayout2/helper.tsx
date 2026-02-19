@@ -1,13 +1,5 @@
-import queen from './managerIcons/queen-svgrepo-com.svg';
-import spy from './managerIcons/spy-svgrepo-com.svg';
-import waiter from './managerIcons/waiter-svgrepo-com.svg';
-import woman from './managerIcons/woman-svgrepo-com.svg';
-import superheroe from './managerIcons/superheroe-svgrepo-com.svg';
-import girl from './managerIcons/girl-svgrepo-com.svg';
-import woman2 from './managerIcons/woman-svgrepo-com2.svg';
-import businesman from './managerIcons/businessman-svgrepo-com.svg';
-import man from './managerIcons/man-svgrepo-com.svg';
-import man2 from './managerIcons/man-svgrepo-com2.svg';
+import man from './managerIcons/Man.png'
+import woman from './managerIcons/Girl.png'
 
 
 export const getGenderIcon = (fullName: string): string => {
@@ -33,13 +25,11 @@ export const getGenderIcon = (fullName: string): string => {
 
     if (isMale) {
 
-        // const maleIcons = [spy, waiter, businesman, man, man2];
         const maleIcons = [ man];
         const randomIndex = Math.floor(Math.random() * maleIcons.length);
         return maleIcons[randomIndex];
     } else {
 
-        // const femaleIcons = [queen, woman , superheroe, woman2, girl];
         const femaleIcons = [ woman ];
         const randomIndex = Math.floor(Math.random() * femaleIcons.length);
         return femaleIcons[randomIndex];
