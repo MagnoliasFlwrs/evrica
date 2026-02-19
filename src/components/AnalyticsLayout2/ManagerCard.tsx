@@ -68,15 +68,19 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
             <Flex className={styles.userName}>
                 <span>{userName}</span>
             </Flex>
-            <Flex className={styles.progress}>
-                <Progress type="circle" percent={call_share_percent} size={80} />
-            </Flex>
-            <Flex className={styles.userGeneralInfo} gap={50}>
-                <Avatar size={100} src={userIcon} alt={`${userName} avatar`} />
+
+            <Flex className={styles.userGeneralInfo} gap={20}>
+                <Avatar size={90} src={userIcon} alt={`${userName} avatar`} />
                 <ul>
-                    <li>Встреча назначена: <span>{next_contact_assigned}</span></li>
-                    <li>Встреча не назначена: <span>{not_next_contact_assigned}</span></li>
+                    <li>Всего за период: <span>{total_calls}</span></li>
+                    <li>Доля звонков: <span>{(userData.call_share * 100).toFixed(1)}%</span></li>
+                    <li>Качество: <span>{(userData.quality * 100).toFixed(1)}%</span></li>
+                    <li>KPI: <span>{(userData.kpi * 100).toFixed(1)}%</span></li>
+
                 </ul>
+                <Flex className={styles.progress}>
+                    <Progress type="circle" percent={call_share_percent} size={70} />
+                </Flex>
             </Flex>
             <Flex className={styles.userOtherInfo} vertical gap={30}>
                 <p>{call_share_percent} %</p>

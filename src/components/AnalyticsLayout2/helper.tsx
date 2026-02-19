@@ -33,12 +33,14 @@ export const getGenderIcon = (fullName: string): string => {
 
     if (isMale) {
 
-        const maleIcons = [spy, waiter, businesman, man, man2];
+        // const maleIcons = [spy, waiter, businesman, man, man2];
+        const maleIcons = [ man];
         const randomIndex = Math.floor(Math.random() * maleIcons.length);
         return maleIcons[randomIndex];
     } else {
 
-        const femaleIcons = [queen, woman , superheroe, woman2, girl];
+        // const femaleIcons = [queen, woman , superheroe, woman2, girl];
+        const femaleIcons = [ woman ];
         const randomIndex = Math.floor(Math.random() * femaleIcons.length);
         return femaleIcons[randomIndex];
     }
