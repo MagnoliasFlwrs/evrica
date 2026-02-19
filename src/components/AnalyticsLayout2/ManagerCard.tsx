@@ -81,7 +81,7 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
             <Flex className={styles.userOtherInfo} vertical gap={30}>
                 <p>{call_share_percent} %</p>
                 <Steps
-                    orientation="vertical"
+                    direction="vertical"
                     current={items.length}
                     items={items}
                 />
