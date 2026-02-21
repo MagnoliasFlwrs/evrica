@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Avatar, Flex, Progress, Steps} from "antd";
 import styles from "./AnalyticsLayout2.module.scss";
 
 import {getGenderIcon} from "./helper";
+import {useAnalyticsStore2} from "../../stores/analyticsStore2";
 
 interface UserData {
     name: string;
@@ -23,6 +24,10 @@ interface EmployeeLineChartsProps {
 }
 
 const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
+    const managerReportsObj = useAnalyticsStore2((state) => state.managerReportsObj);
+    const [selectedSort, setSelectedSort] = useState<string>('call_share');
+    const [selectedPercentage, setSelectedPercentage] = useState<string>('');
+
     const next_contact_assigned = userData.next_contact_assigned || 0;
     const not_next_contact_assigned = userData.not_next_contact_assigned || 0;
     const total_calls = userData.total_calls || 0;
@@ -36,6 +41,29 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
     const userName = userData.name;
 
     const userIcon = getGenderIcon(userName);
+
+    useEffect(() => {
+        setSelectedSort(managerReportsObj.sort)
+    }, [managerReportsObj.sort]);
+
+    useEffect(() => {
+        switch (selectedSort) {
+            case 'call_share':
+                setSelectedPercentage((userData.call_share * 100).toFixed(1));
+                break;
+                case 'quality':
+                    setSelectedPercentage((userData.quality * 100).toFixed(1));
+                    break;
+                    case 'kpi':
+                        setSelectedPercentage((userData.kpi * 100).toFixed(1));
+                        break;
+                        default:
+                            setSelectedPercentage((userData.call_share * 100).toFixed(1));
+                            break;
+        }
+    }, [selectedSort]);
+
+
 
     const baseItems = [
         {
@@ -78,7 +106,12 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
 
                 </ul>
                 <Flex className={styles.progress}>
-                    <Progress type="circle" percent={call_share_percent} size={70} />
+                    <Progress
+                        type="circle"
+                        percent={Number(selectedPercentage)}
+                        size={70}
+                        format={(percent) => `${percent}%`}
+                    />
                 </Flex>
             </Flex>
             <Flex className={styles.userOtherInfo} vertical gap={30}>
