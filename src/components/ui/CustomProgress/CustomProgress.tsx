@@ -3,7 +3,7 @@ import { Flex, Progress } from "antd";
 import styles from './CustomProgress.module.scss'
 
 interface CustomProgressProps {
-    title: string,
+    title?: string,
     percent: number
 }
 
@@ -52,7 +52,9 @@ const CustomProgress: React.FC<CustomProgressProps> = ({ title, percent }) => {
                     {percent === 100 ? '100%' : `${percent}%`}
                 </div>
             </div>
-            <p className={styles.CustomProgressContainerTitle}>{title}</p>
+            {
+                title && <p className={styles.CustomProgressContainerTitle}>{title}</p>
+            }
         </Flex>
     );
 };

@@ -109,8 +109,13 @@ const ManagerCard = ({userData}:EmployeeLineChartsProps) => {
                     <Progress
                         type="circle"
                         percent={Number(selectedPercentage)}
-                        size={70}
                         format={(percent) => `${percent}%`}
+                        className={styles.CustomProgress}
+                        strokeColor='#007AFF'
+                        trailColor='rgba(0, 122, 255, 0.15)'
+                        strokeWidth={12}
+                        size={65}
+                        // showInfo={false}
                     />
                 </Flex>
             </Flex>
