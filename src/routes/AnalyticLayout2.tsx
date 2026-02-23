@@ -58,6 +58,10 @@ const AnalyticLayout2 = () => {
     const [isOpenFilterModal, setIsOpenFilterModal] = useState<boolean>(false);
     const [isActiveFilter, setIsActiveFilter] = useState<boolean>(false);
 
+    // Состояние для задержки отрисовки карточек
+    const [isDelayedLoading, setIsDelayedLoading] = useState<boolean>(false);
+    const [delayedEmployeeData, setDelayedEmployeeData] = useState<EmployeeReportItem[]>([]);
+
     // useEffect(() => {
     //     clearReportTotalData();
     //     clearManagerReportsObj()
@@ -112,11 +116,21 @@ const AnalyticLayout2 = () => {
     }, [reportTotalData]);
     useEffect(() => {
         if (managersReportData) {
-            setEmployeeReportData(managersReportData.items);
             setTotalItemsCount(managersReportData.total);
+
+            setIsDelayedLoading(true);
+
+            const timer = setTimeout(() => {
+                setDelayedEmployeeData(managersReportData.items);
+                setIsDelayedLoading(false);
+            }, 1000);
+
+            return () => clearTimeout(timer);
         }
     }, [managersReportData]);
 
+
+    const showLoader = loading || isDelayedLoading;
 
     return (
         <ConfigProvider
@@ -134,59 +148,59 @@ const AnalyticLayout2 = () => {
                 </Flex>
 
                 {reportTotalData ? (
-                    <Flex vertical gap={20}>
-                        <Flex gap={20} style={{marginTop:'30px'}}>
-                            <CircledChart data={appointmentsData} type="appointments" />
-                            <CircledChart data={directionsData} type="directions" />
-                        </Flex>
-                        {
-                            loading ? (<Spin/> ):
-                                <Flex vertical gap={20}>
-                                    <EmployeeReportHead
-                                        setIsOpenFilterModal={setIsOpenFilterModal}
-                                        isActiveFilter={isActiveFilter}
-                                    />
+                        <Flex vertical gap={20}>
+                            <Flex gap={20} style={{marginTop:'30px'}}>
+                                <CircledChart data={appointmentsData} type="appointments" />
+                                <CircledChart data={directionsData} type="directions" />
+                            </Flex>
 
-                                    <Flex vertical gap={20}>
-                                        {loading ? (
-                                            <Spin/>
+                            <Flex vertical gap={20}>
+                                <EmployeeReportHead
+                                    setIsOpenFilterModal={setIsOpenFilterModal}
+                                    isActiveFilter={isActiveFilter}
+                                />
+
+                                <Flex vertical gap={20}>
+                                    {showLoader ? (
+                                        <Flex justify="center" align="center" style={{minHeight: '300px'}}>
+                                            <Spin size="large"/>
+                                        </Flex>
+                                    ) : (
+                                        delayedEmployeeData.length > 0 ? (
+                                            <Flex vertical gap={20}>
+                                                <Flex style={{marginTop:'30px', flexWrap:'wrap', rowGap:'40px', columnGap:'20px'}}>
+                                                    {delayedEmployeeData.map((item, index) => (
+                                                        <ManagerCard key={index} userData={item} />
+                                                    ))}
+                                                </Flex>
+                                                <Flex justify="flex-end">
+                                                    <Pagination
+                                                        showSizeChanger
+                                                        onShowSizeChange={(current, size) => {
+                                                            setCurrentLimit(size);
+                                                        }}
+                                                        onChange={(page, pageSize) => {
+                                                            setCurrentPage(page);
+                                                            setCurrentLimit(pageSize);
+                                                        }}
+                                                        current={currentPage || 1}
+                                                        total={totalItemsCount || 0}
+                                                        pageSize={currentLimit || 10}
+                                                        pageSizeOptions={['10', '20', '50']}
+                                                        showTotal={(total) => `Всего: ${total}`}
+                                                    />
+                                                </Flex>
+                                            </Flex>
                                         ) : (
-                                            employeeReportData.length > 0 ? (
-                                                <Flex vertical gap={20}>
-                                                    <Flex style={{marginTop:'30px', flexWrap:'wrap', rowGap:'40px', columnGap:'20px'}}>
-                                                        {employeeReportData.map((item, index) => (
-                                                            <ManagerCard key={index} userData={item} />
-                                                        ))}
-                                                    </Flex>
-                                                    <Flex justify="flex-end">
-                                                        <Pagination
-                                                            showSizeChanger
-                                                            onShowSizeChange={(current, size) => {
-                                                                setCurrentLimit(size);
-                                                            }}
-                                                            onChange={(page, pageSize) => {
-                                                                setCurrentPage(page);
-                                                                setCurrentLimit(pageSize);
-                                                            }}
-                                                            current={currentPage || 1}
-                                                            total={totalItemsCount || 0}
-                                                            pageSize={currentLimit || 10}
-                                                            pageSizeOptions={['10', '20', '50']}
-                                                            showTotal={(total) => `Всего: ${total}`}
-                                                        />
-                                                    </Flex>
-                                                </Flex>
-                                            ) : (
-                                                <Flex flex={1} justify={'center'} align={'center'}>
-                                                    <Empty/>
-                                                </Flex>
-                                            )
-                                        )}
-                                    </Flex>
+                                            <Flex flex={1} justify={'center'} align={'center'} style={{minHeight: '300px'}}>
+                                                <Empty/>
+                                            </Flex>
+                                        )
+                                    )}
                                 </Flex>
-                        }
-                    </Flex>
-                ) :
+                            </Flex>
+                        </Flex>
+                    ) :
                     <Flex align={'center'} justify={'center'} flex={1}>
                         <p>Для получения данных выберите категорию и даты</p>
                     </Flex>

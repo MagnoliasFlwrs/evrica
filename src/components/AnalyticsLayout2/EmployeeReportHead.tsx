@@ -5,6 +5,7 @@ import styles from "./AnalyticsLayout2.module.scss";
 import { SearchOutlined } from "@ant-design/icons";
 import { useAnalyticsStore2 } from "../../stores/analyticsStore2";
 import Filter from "../../icons/Filter";
+import filterIcon from './9477627.svg'
 
 interface EmployeeReportHeadProps {
     setIsOpenFilterModal: (isOpen: boolean) => void;
@@ -43,7 +44,7 @@ const EmployeeReportHead= ({
     const filterIconClass = `${styles.FilterIcon} ${isActiveFilter  ? styles.active : ''}`;
 
     return (
-        <Flex gap={30} style={{marginTop:'50px'}} align={'center'}>
+        <Flex gap={30} style={{marginTop:'50px'}} align={'center'} justify={'space-between'}>
             <h3>Отчет по сотрудникам</h3>
             <Flex className={styles.SortContainer}>
                 <p>Сортировка по:</p>

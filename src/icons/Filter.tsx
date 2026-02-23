@@ -2,7 +2,17 @@ import React from 'react';
 
 const Filter = () => {
     return (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 12L5 4" stroke="#ffffff" stroke-linecap="round"></path> <path d="M19 20L19 17" stroke="#ffffff" stroke-linecap="round"></path> <path d="M5 20L5 16" stroke="#ffffff" stroke-linecap="round"></path> <path d="M19 13L19 4" stroke="#ffffff" stroke-linecap="round"></path> <path d="M12 7L12 4" stroke="#ffffff" stroke-linecap="round"></path> <path d="M12 20L12 11" stroke="#ffffff" stroke-linecap="round"></path> <circle cx="5" cy="14" r="2" stroke="#ffffff" stroke-linecap="round"></circle> <circle cx="12" cy="9" r="2" stroke="#ffffff" stroke-linecap="round"></circle> <circle cx="19" cy="15" r="2" stroke="#ffffff" stroke-linecap="round"></circle> </g></svg>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="15" x2="20" y2="30" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <line x1="20" y1="48" x2="20" y2="85" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <line x1="52" y1="15" x2="52" y2="55" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <line x1="52" y1="73" x2="52" y2="85" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <line x1="80" y1="15" x2="80" y2="25" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <line x1="80" y1="43" x2="80" y2="85" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+            <rect x="7" y="30" width="26" height="18" fill="none" stroke="#fff" stroke-width="3"/>
+            <rect x="39" y="55" width="26" height="18" fill="none" stroke="#fff" stroke-width="3"/>
+            <rect x="68" y="25" width="26" height="18" fill="none" stroke="#fff" stroke-width="3"/>
+        </svg>
     );
 };
 
