@@ -233,10 +233,31 @@
   height: 30px;
   padding: 5px;
   border-radius: 8px;
-  background: #1D1D1F;
+  border:1px solid #1D1D1F;
   cursor: pointer;
+  transition: .3s ease;
+  //svg {
+  //  stroke: #1D1D1F;
+  //}
+  &:hover {
+    background: #007AFF;
+    border:1px solid #007AFF;
+    svg line{
+      stroke: #fff;
+    }
+    svg rect{
+      stroke: #fff;
+    }
+  }
   &.active {
     background: #007AFF;
+    border:1px solid #007AFF;
+    svg line{
+      stroke: #fff;
+    }
+    svg rect{
+      stroke: #fff;
+    }
   }
   img{
     width: 100%;
