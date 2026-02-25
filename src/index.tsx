@@ -9,12 +9,13 @@ import {
     AnalyticsLayout,
     LoginLayout,
     AnalyticsReportLayout,
-    DashboardLayout, AnalyticsLayout2
+    DashboardLayout, MakeAnAppointmentLayout,AnalyticReportCards
 } from "./routes/routesConfig/lazyComponents";
 import {Spin} from "antd";
 import CallsFilteredLayout from "./routes/CallsFilteredLayout";
 import CallSinglePageLayout from "./routes/CallSinglePageLayout";
 import {useAuth} from "./store";
+
 
 const App = () => {
     const isAuth = useAuth((state)=> state.isAuth);
@@ -66,8 +67,12 @@ const App = () => {
                     element: <AnalyticsLayout />,
                 },
                 {
-                    path: '/analytics2',
-                    element: <AnalyticsLayout2 />,
+                    path: '/make-an-appointment',
+                    element: <MakeAnAppointmentLayout />,
+                },
+                {
+                    path: '/reports',
+                    element: <AnalyticReportCards />,
                 },
                 {
                     path: '/analytics-report',

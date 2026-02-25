@@ -8,25 +8,25 @@ import {
 
 import PageContainer from "../components/ui/PageContainer/PageContainer";
 import PageTitle from "../components/ui/PageTitle/PageTitle";
-import styles from "../components/AnalyticsLayout2/AnalyticsLayout2.module.scss";
+import styles from "../components/MakeAnAppointmentLayout/AnalyticsLayout2.module.scss";
 import ruRU from "antd/locale/ru_RU";
 import {useCallsStore} from "../stores/callsStore";
-import CircledChart from "../components/AnalyticsLayout2/CircledChart";
+import CircledChart from "../components/MakeAnAppointmentLayout/CircledChart";
 import {useAnalyticsStore2} from "../stores/analyticsStore2";
-import ManagerCard from "../components/AnalyticsLayout2/ManagerCard";
-import GetReportFilter from "../components/AnalyticsLayout2/GetReportFilter";
+import ManagerCard from "../components/MakeAnAppointmentLayout/ManagerCard";
+import GetReportFilter from "../components/MakeAnAppointmentLayout/GetReportFilter";
 import {
     AppointmentsData,
     DirectionsData,
     EmployeeReportItem,
     ManagersReportData,
     ReportData, Location
-} from "../components/AnalyticsLayout2/types";
-import EmployeeReportHead from "../components/AnalyticsLayout2/EmployeeReportHead";
-import FilterModal from "../components/AnalyticsLayout2/FilterModal";
+} from "../components/MakeAnAppointmentLayout/types";
+import EmployeeReportHead from "../components/MakeAnAppointmentLayout/EmployeeReportHead";
+import FilterModal from "../components/MakeAnAppointmentLayout/FilterModal";
 
 
-const AnalyticLayout2 = () => {
+const MakeAnAppointmentLayout = () => {
     const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
     const loading = useCallsStore((state)=>state.loading);
     const callsCategories = useCallsStore((state) => state.callsCategories);
@@ -140,8 +140,7 @@ const AnalyticLayout2 = () => {
             {contextHolder}
             <PageContainer style={{marginRight:'20px'}}>
                 <Flex vertical gap={20}>
-                    <PageTitle text='Аналитика-2'/>
-                    <h3>Назначение встречи</h3>
+                    <PageTitle text='Назначение встречи'/>
                 </Flex>
                 <Flex className={styles.AnalyticsControls}>
                     <GetReportFilter categories={categories}/>
@@ -214,4 +213,4 @@ const AnalyticLayout2 = () => {
     );
 };
 
-export default AnalyticLayout2;
+export default MakeAnAppointmentLayout;

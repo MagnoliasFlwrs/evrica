@@ -1,0 +1,74 @@
+.AnalyticReportCardList {
+  display: flex;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.AnalyticReportCard {
+  width: 450px;
+  display: flex;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 30px;
+  background: #FFF;
+  transition: .5s ease;
+  box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
+  &:hover {
+    box-shadow: 1px 1px 7px 1px rgba(0,0,0,0.3);
+  }
+  .AnalyticReportCardAvatar {
+    padding: 7px;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.20);
+    border-radius: 500px;
+    margin-bottom: 20px;
+  }
+  .AnalyticReportCardTitle {
+    color: #000;
+    font-family: Mulish;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 15px;
+  }
+  .AnalyticReportCardText {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    p {
+      color: rgba(0, 0, 0, 0.50);
+      font-family: Mulish;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      span {
+        font-weight: 700;
+        color: #000;
+      }
+    }
+  }
+  .AnalyticReportCardDivider {
+    width: 100%;
+    height: 1px;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.20);
+  }
+  .AnalyticReportCardLink {
+    margin-left: auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: #000;
+    color: #fff;
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+}
