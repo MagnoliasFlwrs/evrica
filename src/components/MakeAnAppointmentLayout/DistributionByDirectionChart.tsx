@@ -46,7 +46,7 @@ const DistributionByDirectionChart = ({data}: CircledChartProps) => {
                 borderWidth: 1,
                 barPercentage: 0.7,
                 categoryPercentage: 0.8,
-                borderRadius: 10, // Закругление столбцов на 10px
+                borderRadius: 10,
             },
             {
                 label: 'Звонок/Мессенджер',
@@ -56,7 +56,7 @@ const DistributionByDirectionChart = ({data}: CircledChartProps) => {
                 borderWidth: 1,
                 barPercentage: 0.7,
                 categoryPercentage: 0.8,
-                borderRadius: 10, // Закругление столбцов на 10px
+                borderRadius: 10,
             },
             {
                 label: 'Не определено',
@@ -66,7 +66,7 @@ const DistributionByDirectionChart = ({data}: CircledChartProps) => {
                 borderWidth: 1,
                 barPercentage: 0.7,
                 categoryPercentage: 0.8,
-                borderRadius: 10, // Закругление столбцов на 10px
+                borderRadius: 10,
             }
         ],
     };
@@ -114,7 +114,7 @@ const DistributionByDirectionChart = ({data}: CircledChartProps) => {
 
     return (
         <Flex className={styles.ProgressChart}>
-            <div className={styles.chartContainer} style={{ width: '300px', height: '100px' }}>
+            <div className={styles.chartContainer} style={{ width: '300px', height: '140px' }}>
                 {data && <Bar data={chartData} options={options} />}
             </div>
 

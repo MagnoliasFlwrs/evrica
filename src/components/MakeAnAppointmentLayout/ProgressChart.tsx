@@ -25,7 +25,7 @@ const ProgressChart = ({data}:ChartProps) => {
                 strokeColor='#007AFF'
                 trailColor='rgba(0, 122, 255, 0.15)'
                 strokeWidth={12}
-                size={100}
+                size={120}
                 // showInfo={false}
             />
             <Flex className={styles.infoBlock}>
