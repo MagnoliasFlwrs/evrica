@@ -9,14 +9,13 @@ import {Category, CategoryLocation, SubLocation} from "./types";
 
 const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     const [searchValue, setSearchValue] = useState('');
-    const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
+    const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]); // Для чекбоксов (теперь только один)
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
     const [autoExpandParent, setAutoExpandParent] = useState(true);
     const [highlightedKeys, setHighlightedKeys] = useState<React.Key[]>([]);
     const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
     const callsCategories = useCallsStore((state) => state.callsCategories);
     const setCategoryId = useCallsStore((state)=> state.setCategoryId);
-
 
     const selectedCount = selectedCategoryIds.length;
     const convertToTreeData = (categories: CategoryLocation[]): TreeDataNode[] => {
@@ -30,6 +29,7 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
                     title: category.name,
                     key: `category-${category.id}`,
                     id: category.id,
+                    isLeaf: true, // Помечаем конечные узлы
                 })) || [],
             })) || [],
         }));
@@ -70,45 +70,58 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         return convertToTreeData(callsCategories);
     }, [callsCategories]);
 
-    const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
+    // Обработчик для чекбоксов (теперь с单选 логикой)
+    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
+        // Проверяем, что выбрана именно категория (конечный узел)
+        const node = info.node;
 
-        // Получаем ID категорий из выбранных ключей
-        const categoryIds = findCategoryIdsInTree(selectedKeys as React.Key[], treeData);
-        setSelectedCategoryIds(categoryIds);
-
-        // Берем первую выбранную категорию (так как можно выбрать только одну)
-        if (categoryIds.length > 0) {
-            const firstCategoryId = categoryIds[0];
-            setCategoryId(firstCategoryId);
-            console.log('Set category ID in store:', firstCategoryId);
-        } else {
-            // Если ничего не выбрано, сбрасываем category_id
-            setCategoryId('');
-            console.log('Reset category ID in store');
+        // Разрешаем выбирать только конечные узлы (категории)
+        if (!node.isLeaf) {
+            return; // Игнорируем выбор промежуточных узлов
         }
 
-        console.log('Selected category IDs:', categoryIds);
+        // Получаем новый массив выбранных ключей
+        const newCheckedKeys = checkedKeys as React.Key[];
+
+        // Оставляем только последний выбранный элемент (для单选)
+        // Если что-то уже выбрано и выбрали новый элемент
+        if (newCheckedKeys.length > 1) {
+            // Берем последний выбранный элемент (который только что выбрали)
+            const lastChecked = newCheckedKeys[newCheckedKeys.length - 1];
+            setCheckedKeys([lastChecked]);
+
+            // Обновляем ID категорий
+            const categoryIds = findCategoryIdsInTree([lastChecked], treeData);
+            setSelectedCategoryIds(categoryIds);
+
+            // Обновляем store
+            if (categoryIds.length > 0) {
+                setCategoryId(categoryIds[0]);
+                console.log('Set category ID in store (checkbox):', categoryIds[0]);
+            }
+        } else {
+            // Если ничего не выбрано или выбран один элемент
+            setCheckedKeys(newCheckedKeys);
+
+            const categoryIds = findCategoryIdsInTree(newCheckedKeys, treeData);
+            setSelectedCategoryIds(categoryIds);
+
+            if (categoryIds.length > 0) {
+                setCategoryId(categoryIds[0]);
+                console.log('Set category ID in store (checkbox):', categoryIds[0]);
+            } else {
+                setCategoryId('');
+                console.log('Reset category ID in store (checkbox)');
+            }
+        }
+
+        console.log('Checked category IDs:', selectedCategoryIds);
     };
 
-    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-        setCheckedKeys(checkedKeys as React.Key[]);
-        console.log('onCheck', checkedKeys, info);
-
-        const categoryIds = findCategoryIdsInTree(checkedKeys as React.Key[], treeData);
-        setSelectedCategoryIds(categoryIds);
-
-        // Также обновляем category_id в store при выборе чекбоксами
-        if (categoryIds.length > 0) {
-            const firstCategoryId = categoryIds[0];
-            setCategoryId(firstCategoryId);
-            console.log('Set category ID in store (checkbox):', firstCategoryId);
-        } else {
-            setCategoryId('');
-            console.log('Reset category ID in store (checkbox)');
-        }
-
-        console.log('Checked category IDs:', categoryIds);
+    // Обработчик для выделения (используем только для дополнительной информации)
+    const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
+        console.log('selected', selectedKeys, info);
+        // Не меняем состояние чекбоксов при выделении
     };
 
     const onExpand = (expandedKeys: React.Key[]) => {
@@ -144,7 +157,6 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
     // Функция для получения фактического title
     const getActualTitle = (node: TreeDataNode): React.ReactNode => {
         if (typeof node.title === 'function') {
-            // Если title - функция, вызываем её с node как DataNode
             return node.title(node as TreeDataNode);
         }
         return node.title;
