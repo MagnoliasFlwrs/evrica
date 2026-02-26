@@ -64,10 +64,10 @@ const MakeAnAppointmentLayout = () => {
     const [isDelayedLoading, setIsDelayedLoading] = useState<boolean>(false);
     const [delayedEmployeeData, setDelayedEmployeeData] = useState<EmployeeReportItem[]>([]);
 
-    // useEffect(() => {
-    //     clearReportTotalData();
-    //     clearManagerReportsObj()
-    // }, []);
+    useEffect(() => {
+        clearReportTotalData();
+        clearManagerReportsObj()
+    }, []);
 
     useEffect(() => {
         if (currentLimit) {
