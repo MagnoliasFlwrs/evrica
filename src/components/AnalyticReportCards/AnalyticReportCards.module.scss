@@ -5,7 +5,7 @@
 }
 
 .AnalyticReportCard {
-  width: 450px;
+  width: 400px;
   display: flex;
   padding: 20px 30px;
   flex-direction: column;
@@ -25,11 +25,19 @@
     border: 1px solid rgba(0, 0, 0, 0.20);
     border-radius: 500px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
   }
   .AnalyticReportCardTitle {
     color: #000;
     font-family: Mulish;
-    font-size: 20px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -42,7 +50,7 @@
     p {
       color: rgba(0, 0, 0, 0.50);
       font-family: Mulish;
-      font-size: 16px;
+      font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
@@ -66,7 +74,7 @@
     background: #000;
     color: #fff;
     font-family: Mulish;
-    font-size: 14px;
+    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;

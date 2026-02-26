@@ -3,7 +3,7 @@ import { Flex} from "antd";
 import styles from './AnalyticReportCards.module.scss'
 import description from './description.png';
 import edit from './edit.png'
-import folder from './folder.png'
+import hands from './hands.png'
 
 
 interface AnalyticReportCardProps {
@@ -18,10 +18,13 @@ interface AnalyticReportCardProps {
 const AnalyticReportCard = ({item}:AnalyticReportCardProps) => {
     return (
         <Flex  className={styles.AnalyticReportCard}>
-            <Flex className={styles.AnalyticReportCardAvatar}>
-                <img src={folder} alt="avatar"/>
+            <Flex gap={20} align='center'>
+                <Flex className={styles.AnalyticReportCardAvatar}>
+                    <img src={hands} alt="avatar"/>
+                </Flex>
+                <p className={styles.AnalyticReportCardTitle}>{item.title}</p>
             </Flex>
-            <p className={styles.AnalyticReportCardTitle}>{item.title}</p>
+
             <Flex className={styles.AnalyticReportCardText}>
                 <img src={description} alt="icon" width={30}/>
                 <p><span>Описание:</span> {item.description}</p>

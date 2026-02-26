@@ -66,6 +66,9 @@
   background: #f5f5f5;
   border-radius: 20px;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .infoRow {
@@ -208,14 +211,17 @@
       flex-direction: column;
       gap: 5px;
       li{
-        font-size: 15px;
+        font-size: 14px;
       }
     }
   }
   .userOtherInfo {
     padding: 0 20px;
+    p{
+      font-size: 14px
+    }
     :global(.ant-steps-item-title) {
-      font-size: 14px !important;
+      font-size: 13px !important;
     }
   }
 }
@@ -324,6 +330,30 @@
       white-space: nowrap;
       text-align: center;
       cursor: pointer;
+
+    }
+  }
+}
+
+.ProgressChart {
+  padding: 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  .infoBlock {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+    height: 140px;
+    .infoRow {
+      display: flex;
+      margin: 0;
 
     }
   }

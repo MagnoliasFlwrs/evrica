@@ -3,7 +3,7 @@ import {
     Flex,
     ConfigProvider,
     notification,
-    Spin, Empty, Pagination
+    Spin, Empty, Pagination, Breadcrumb
 } from "antd";
 
 import PageContainer from "../components/ui/PageContainer/PageContainer";
@@ -24,6 +24,8 @@ import {
 } from "../components/MakeAnAppointmentLayout/types";
 import EmployeeReportHead from "../components/MakeAnAppointmentLayout/EmployeeReportHead";
 import FilterModal from "../components/MakeAnAppointmentLayout/FilterModal";
+import ProgressChart from "../components/MakeAnAppointmentLayout/ProgressChart";
+import DistributionByDirectionChart from "../components/MakeAnAppointmentLayout/DistributionByDirectionChart";
 
 
 const MakeAnAppointmentLayout = () => {
@@ -62,10 +64,10 @@ const MakeAnAppointmentLayout = () => {
     const [isDelayedLoading, setIsDelayedLoading] = useState<boolean>(false);
     const [delayedEmployeeData, setDelayedEmployeeData] = useState<EmployeeReportItem[]>([]);
 
-    useEffect(() => {
-        clearReportTotalData();
-        clearManagerReportsObj()
-    }, []);
+    // useEffect(() => {
+    //     clearReportTotalData();
+    //     clearManagerReportsObj()
+    // }, []);
 
     useEffect(() => {
         if (currentLimit) {
@@ -139,6 +141,17 @@ const MakeAnAppointmentLayout = () => {
         >
             {contextHolder}
             <PageContainer style={{marginRight:'20px'}}>
+                <Breadcrumb
+                    style={{marginBottom:'20px'}}
+                    items={[
+                        {
+                            title: <a href="/reports">Отчеты</a>,
+                        },
+                        {
+                            title: 'Назначение встречи',
+                        },
+                    ]}
+                />
                 <Flex vertical gap={20}>
                     <PageTitle text='Назначение встречи'/>
                 </Flex>
@@ -149,8 +162,8 @@ const MakeAnAppointmentLayout = () => {
                 {reportTotalData ? (
                         <Flex vertical gap={20}>
                             <Flex gap={20} style={{marginTop:'30px'}}>
-                                <CircledChart data={appointmentsData} type="appointments" />
-                                <CircledChart data={directionsData} type="directions" />
+                                <ProgressChart data={appointmentsData}/>
+                                <DistributionByDirectionChart data={directionsData}/>
                             </Flex>
 
                             <Flex vertical gap={20}>
