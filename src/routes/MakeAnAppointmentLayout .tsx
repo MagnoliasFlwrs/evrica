@@ -26,6 +26,7 @@ import EmployeeReportHead from "../components/MakeAnAppointmentLayout/EmployeeRe
 import FilterModal from "../components/MakeAnAppointmentLayout/FilterModal";
 import ProgressChart from "../components/MakeAnAppointmentLayout/ProgressChart";
 import DistributionByDirectionChart from "../components/MakeAnAppointmentLayout/DistributionByDirectionChart";
+import Legend from "../components/MakeAnAppointmentLayout/Legend";
 
 
 const MakeAnAppointmentLayout = () => {
@@ -164,6 +165,7 @@ const MakeAnAppointmentLayout = () => {
                             <Flex gap={20} style={{marginTop:'30px'}}>
                                 <ProgressChart data={appointmentsData}/>
                                 <DistributionByDirectionChart data={directionsData}/>
+                                <Legend/>
                             </Flex>
 
                             <Flex vertical gap={20}>
