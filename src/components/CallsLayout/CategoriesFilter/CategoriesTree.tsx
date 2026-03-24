@@ -4,7 +4,7 @@ import styles from './CategoriesFilter.module.scss'
 import {DownOutlined,  SearchOutlined} from "@ant-design/icons";
 import {CategoriesFilterProps} from "../types";
 import {useCallsStore} from "../../../stores/callsStore";
-import { findCategoryIdsInTree} from "./helpers";
+import { extractCategoryIdFromKey } from "./helpers";
 import {Category, CategoryLocation, SubLocation} from "./types";
 
 const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
@@ -70,52 +70,41 @@ const CategoriesTree = ({setIsSelected}: CategoriesFilterProps) => {
         return convertToTreeData(callsCategories);
     }, [callsCategories]);
 
-    // Обработчик для чекбоксов (теперь с单选 логикой)
-    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-        // Проверяем, что выбрана именно категория (конечный узел)
-        const node = info.node;
 
-        // Разрешаем выбирать только конечные узлы (категории)
+    // Обработчик для чекбоксов (single-select только для leaf категорий)
+    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
+        const node = info.node;
         if (!node.isLeaf) {
-            return; // Игнорируем выбор промежуточных узлов
+            return;
         }
 
-        // Получаем новый массив выбранных ключей
-        const newCheckedKeys = checkedKeys as React.Key[];
+        // В antd checkedKeys может содержать родительские узлы (location/sublocation),
+        // поэтому для single-select берём ключ только из текущего leaf-узла.
+        if (info.checked) {
+            const checkedLeafKey = node.key as React.Key;
+            const categoryId = extractCategoryIdFromKey(checkedLeafKey);
 
-        // Оставляем только последний выбранный элемент (для单选)
-        // Если что-то уже выбрано и выбрали новый элемент
-        if (newCheckedKeys.length > 1) {
-            // Берем последний выбранный элемент (который только что выбрали)
-            const lastChecked = newCheckedKeys[newCheckedKeys.length - 1];
-            setCheckedKeys([lastChecked]);
+            setCheckedKeys([checkedLeafKey]);
 
-            // Обновляем ID категорий
-            const categoryIds = findCategoryIdsInTree([lastChecked], treeData);
-            setSelectedCategoryIds(categoryIds);
-
-            // Обновляем store
-            if (categoryIds.length > 0) {
-                setCategoryId(categoryIds[0]);
-                console.log('Set category ID in store (checkbox):', categoryIds[0]);
-            }
-        } else {
-            // Если ничего не выбрано или выбран один элемент
-            setCheckedKeys(newCheckedKeys);
-
-            const categoryIds = findCategoryIdsInTree(newCheckedKeys, treeData);
-            setSelectedCategoryIds(categoryIds);
-
-            if (categoryIds.length > 0) {
-                setCategoryId(categoryIds[0]);
-                console.log('Set category ID in store (checkbox):', categoryIds[0]);
+            if (categoryId !== null) {
+                const nextCategoryIds = [categoryId];
+                setSelectedCategoryIds(nextCategoryIds);
+                setCategoryId(categoryId);
+                console.log('Set category ID in store (checkbox):', categoryId);
+                console.log('Checked category IDs:', nextCategoryIds);
             } else {
+                setSelectedCategoryIds([]);
                 setCategoryId('');
                 console.log('Reset category ID in store (checkbox)');
+                console.log('Checked category IDs:', []);
             }
+        } else {
+            setCheckedKeys([]);
+            setSelectedCategoryIds([]);
+            setCategoryId('');
+            console.log('Reset category ID in store (checkbox)');
+            console.log('Checked category IDs:', []);
         }
-
-        console.log('Checked category IDs:', selectedCategoryIds);
     };
 
     // Обработчик для выделения (используем только для дополнительной информации)

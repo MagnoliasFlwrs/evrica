@@ -13,7 +13,7 @@ interface ChartProps {
 
 const ProgressChart = ({data}:ChartProps) => {
 
-    console.log(data)
+
 
     return (
         <Flex className={styles.ProgressChart}>

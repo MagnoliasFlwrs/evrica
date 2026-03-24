@@ -54,7 +54,6 @@ const LoginForm = () => {
 
     const handleCheckboxChange = (e: CheckboxChangeEvent) => {
         const checked = e.target.checked;
-        console.log(`checked = ${checked}`);
         setFormData(prev => ({
             ...prev,
             remember: checked
@@ -100,7 +99,6 @@ const LoginForm = () => {
         e.preventDefault();
 
         if (validateForm()) {
-            console.log('Данные формы:', formData);
             authUser(formData)
         }
     };

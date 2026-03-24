@@ -189,9 +189,9 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
 
     useEffect(() => {
         if (allAgents && allAgents.length > 0) {
-            console.log(allAgents)
+
             const transformedData = transformAgentsToTreeData(allAgents);
-            console.log(transformedData)
+
             setTreeData(transformedData);
 
             const firstLevelKeys = transformedData.map(item => item.key);
@@ -206,7 +206,7 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
         } else {
             setSelectedAgentNames([]);
         }
-        console.log(treeData)
+
     }, [checkedKeys, treeData]);
 
     useEffect(() => {
@@ -254,7 +254,7 @@ const AnalyticsTree = ({setIsSelected}: CategoriesFilterProps) => {
         if (treeData.length > 0) {
             const names = getAgentNamesByKeys(treeData, checkedKeys as React.Key[]);
             setSelectedAgentNames(names);
-            console.log('Selected agent names:', names);
+            // console.log('Selected agent names:', names);
         }
 
         if (info.checked && info.node) {

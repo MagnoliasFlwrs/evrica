@@ -48,7 +48,7 @@ const DashboardLayout = () => {
 
     }, [user])
 
-    console.log(callsQuality)
+
 
 
 

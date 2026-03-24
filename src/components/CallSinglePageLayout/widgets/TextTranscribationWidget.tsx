@@ -126,7 +126,7 @@ const TextTranscribationWidget: React.FC<TextTranscribationWidgetProps> = () => 
     const handleCopy = async () => {
         try {
             await copyTranscribationToClipboard(originalTranscribationData);
-            console.log('Текст скопирован в буфер обмена');
+            // console.log('Текст скопирован в буфер обмена');
         } catch (err) {
             console.error('Ошибка копирования: ', err);
         }

@@ -13,7 +13,7 @@ const CallsOptionsCheckLists = () => {
     useEffect(() => {
         if (checkListsByIdList) {
             setCheckListData(checkListsByIdList)
-            console.log("CategoriesCheckLists", checkListsByIdList)
+            // console.log("CategoriesCheckLists", checkListsByIdList)
         }
     }, [checkListsByIdList])
 
