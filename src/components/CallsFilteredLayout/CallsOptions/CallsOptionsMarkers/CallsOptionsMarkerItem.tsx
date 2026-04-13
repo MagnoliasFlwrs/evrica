@@ -1,41 +1,28 @@
 import React from 'react';
 import { Flex } from "antd";
 import styles from "../CallsOptions.module.scss";
-import { callsOptionsMarkersColors } from '../utils'
+import { hexToRgba } from '../utils';
 
 interface CallsOptionsMarkerItemProps {
     item: {
         type: string;
         count: number;
+        colorSuccess?: string;
     };
-    key: number;
 }
 
-const CallsOptionsMarkerItem = ({ item, key }: CallsOptionsMarkerItemProps) => {
-    const getColorByMarkerType = () => {
-        switch(item?.type.toLowerCase()) {
-            case 'возражение "дорого"':
-                return callsOptionsMarkersColors.blue;
-            case 'не хочу':
-                return callsOptionsMarkersColors.aqua;
-            case 'oбещали перезвонить':
-                return callsOptionsMarkersColors.green;
-            case 'не помогли':
-                return callsOptionsMarkersColors.purple;
-            default:
-                return callsOptionsMarkersColors.blue; // цвет по умолчанию
-        }
-    };
-
-    const colorConfig = getColorByMarkerType();
+const CallsOptionsMarkerItem = ({ item }: CallsOptionsMarkerItemProps) => {
+    const accentColor = item?.colorSuccess ?? '#3B82F6';
+    const bgColor = hexToRgba(accentColor, 0.18) ?? accentColor;
+    const textColor = accentColor;
 
     return (
-        <Flex className={styles.CallsOptionsMarkerItem} key={key}>
+        <Flex className={styles.CallsOptionsMarkerItem}>
             <Flex
                 className={styles.CallsOptionsMark}
                 style={{
-                    backgroundColor: colorConfig.bgColor,
-                    color: colorConfig.color
+                    backgroundColor: bgColor,
+                    color: textColor
                 }}
             >
                 {item?.type}

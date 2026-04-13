@@ -1,11 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex, Spin} from "antd";
 import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import {useCallsStore} from "../../../stores/callsStore";
-import {useAuth} from "../../../store";
-import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
+import {
+    getBaseSystemResult,
+    getCallInfoBlock,
+    getManagerInfoBlock,
+    getSatisfactionView,
+} from "../aiJsonBaseSystem";
 
 const SummaryOfCallInformationWidget = () => {
     const [customerCallInfoList, setCustomerCallInfoList] = useState<string>('');
@@ -16,22 +20,11 @@ const SummaryOfCallInformationWidget = () => {
     const promptList = useCallsStore((state) => state.promptList);
     const aiJsonList = useCallsStore((state) => state.aiJsonList);
     const loading = useCallsStore((state) => state.loading);
-    const [totalScore, setTotalScore] = useState(0);
 
-    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
-
-    useEffect(() => {
-        if (aiJsonList && aiJsonList.length > 0) {
-            const firstAiJson = aiJsonList[0];
-            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
-                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
-            );
-            setSystemJsonList(filteredSystem);
-        }
-    }, [aiJsonList]);
-
-    const baseSystemData = systemJsonList[0]?.result;
-
+    const baseResult = useMemo(() => getBaseSystemResult(aiJsonList), [aiJsonList]);
+    const callInfo = useMemo(() => getCallInfoBlock(baseResult), [baseResult]);
+    const managerInfo = useMemo(() => getManagerInfoBlock(baseResult), [baseResult]);
+    const satisfaction = useMemo(() => getSatisfactionView(baseResult), [baseResult]);
 
     const summaryOfCallInformationOptions = Array.isArray(promptList)
         ? promptList.map(item => ({
@@ -39,18 +32,6 @@ const SummaryOfCallInformationWidget = () => {
             label: item.question_label || 'Без названия'
         }))
         : [];
-
-    const handleToggleSatisfactionModal = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setCustomerSatisfactionModal(!customerSatisfactionModal);
-        setTasksModal(false);
-    }
-
-    const handleToggleTasksModal = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setTasksModal(!tasksModal);
-        setCustomerSatisfactionModal(false);
-    }
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -81,6 +62,8 @@ const SummaryOfCallInformationWidget = () => {
         );
     }
 
+    const hasAiData = Array.isArray(aiJsonList) ? aiJsonList.length > 0 : aiJsonList != null;
+
     return (
         <Flex className={styles.SummaryOfCallInformationWidgetContainer}>
             <Flex className={styles.GeneralCallInfoWidgetHead}>
@@ -106,13 +89,13 @@ const SummaryOfCallInformationWidget = () => {
                 )}
             </Flex>
 
-            {aiJsonList && aiJsonList.length > 0 ? (
+            {hasAiData && baseResult ? (
                 <Flex className={styles.InformationListContainer}>
                     <Flex className={styles.InformationListContainerRow}>
                         <p className={styles.InformationListContainerRowTitle}>Удовлетворенность клиента</p>
                         <Flex className={styles.InformationListContainerModalWrapper} ref={customerSatisfactionRef}>
                             <span className={styles.InformationListContainerRowDescrtiption}>
-                                {baseSystemData?.удовлетворенность_клиента?.окончательная_оценка?.балл || 'Н/Д'}
+                                {satisfaction?.finalBall || 'Н/Д'}
                             </span>
                             <button onMouseEnter={() => setCustomerSatisfactionModal(true)}
                                     onMouseLeave={() => setCustomerSatisfactionModal(false)}>
@@ -124,19 +107,19 @@ const SummaryOfCallInformationWidget = () => {
                                           strokeLinejoin="round"/>
                                 </svg>
                             </button>
-                            {customerSatisfactionModal && baseSystemData?.удовлетворенность_клиента && (
+                            {customerSatisfactionModal && satisfaction && (
                                 <CustomTextModal
                                     top={true}
                                     right={true}
                                     content={
                                         <ul className={styles.customerSatisfactionList}>
                                             <li>
-                                                <p>{baseSystemData?.удовлетворенность_клиента.начальная_оценка?.причина || 'Нет данных'}</p>
-                                                <span>{baseSystemData?.удовлетворенность_клиента.начальная_оценка?.балл || 'Н/Д'}</span>
+                                                <p>{satisfaction.initialReason || 'Нет данных'}</p>
+                                                <span>{satisfaction.initialBall || 'Н/Д'}</span>
                                             </li>
                                             <li>
-                                                <p>{baseSystemData?.удовлетворенность_клиента.окончательная_оценка?.причина || 'Нет данных'}</p>
-                                                <span>{baseSystemData?.удовлетворенность_клиента.окончательная_оценка?.балл || 'Н/Д'}</span>
+                                                <p>{satisfaction.finalReason || 'Нет данных'}</p>
+                                                <span>{satisfaction.finalBall || 'Н/Д'}</span>
                                             </li>
                                         </ul>
                                     }
@@ -148,36 +131,36 @@ const SummaryOfCallInformationWidget = () => {
                     <ul className={styles.InformationList}>
                         <li className={styles.InformationListContainerRow}>
                             <p>Чем интересовался клиент</p>
-                            <span>{baseSystemData?.информация_по_звонку?.чем_интересовался_клиент || 'Нет данных'}</span>
+                            <span>{(callInfo?.['чем_интересовался_клиент'] as string) || 'Нет данных'}</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Суть звонка</p>
-                            <span>{baseSystemData?.информация_по_звонку?.суть_звонка || 'Нет данных'}</span>
+                            <span>{(callInfo?.['суть_звонка'] as string) || 'Нет данных'}</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Итоги коммуникации</p>
-                            <span>{baseSystemData?.информация_по_звонку?.объяснение_ответа_даты_следующего_контакта || 'Нет данных'}</span>
+                            <span>{(callInfo?.['объяснение_ответа_даты_следующего_контакта'] as string) || 'Нет данных'}</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Удовлетворенность</p>
-                            <span>{(baseSystemData?.удовлетворенность_клиента?.окончательная_оценка?.балл || 0)} / 10</span>
+                            <span>{(satisfaction?.finalBall || 0)} / 10</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Подробности удовлетворенности</p>
-                            <span>{baseSystemData?.удовлетворенность_клиента?.сравнение_удовлетворенности || 'Нет данных'}</span>
+                            <span>{satisfaction?.comparison || 'Нет данных'}</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Возможные сложности</p>
-                            <span>{baseSystemData?.информация_по_звонку?.выявленная_проблема || 'Нет данных'}</span>
+                            <span>{(callInfo?.['выявленная_проблема'] as string) || 'Нет данных'}</span>
                         </li>
                         <li className={styles.InformationListContainerRow}>
                             <p>Рекомендации</p>
                             <span>
-                                {baseSystemData?.удовлетворенность_клиента?.рекомендации ?
-                                    baseSystemData.удовлетворенность_клиента.рекомендации.map((item, index) =>
+                                {satisfaction?.recommendations?.length
+                                    ? satisfaction.recommendations.map((item, index) =>
                                         <span key={index}>{item}</span>
-                                    ) :
-                                    'Нет рекомендаций'
+                                    )
+                                    : 'Нет рекомендаций'
                                 }
                             </span>
                         </li>
@@ -190,14 +173,14 @@ const SummaryOfCallInformationWidget = () => {
                                     onMouseLeave={() => setTasksModal(false)}>
                                 1
                             </button>
-                            {tasksModal && baseSystemData?.информация_по_менеджеру && (
+                            {tasksModal && managerInfo && (
                                 <CustomTextModal
                                     top={true}
                                     left={true}
                                     content={
                                         <ul className={styles.TasksContainerList}>
                                             <li>
-                                                <p>{baseSystemData?.информация_по_менеджеру.что_должен_сделать_менеджер || 'Нет задач'}</p>
+                                                <p>{(managerInfo['что_должен_сделать_менеджер'] as string) || 'Нет задач'}</p>
                                             </li>
                                         </ul>
                                     }

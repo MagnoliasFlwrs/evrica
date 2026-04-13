@@ -31,6 +31,15 @@ export interface CheckListsByIdObj {
     date_end: number | null;
 }
 
+/** Параметры GET `/category/get-category-dictionary-full-data` */
+export interface CategoryDictionaryFullDataObj {
+    category_id: string | number | null;
+    dictionary_id: number | string | null;
+    dictionary_type: 'system' | 'client';
+    date_start: number | null;
+    date_end: number | null;
+}
+
 export interface ChecklistsSearch {
     id: number;
     category_id: number;
@@ -65,7 +74,8 @@ export interface ChecklistsSearch {
     relevant: boolean;
     successfully: any[];
     unsuccessfully: any[];
-    average: any[];
+    /** API может вернуть `{ percentage: number }` для среднего процента по чек-листу */
+    average: { percentage?: number } | null | any[];
 }
 
 export interface DictionariesSearch {
@@ -254,26 +264,18 @@ export type PromptList = PromptItem[];
 
 export interface AiJsonList {
     id: number;
+    call_id?: string | number;
+    org_id?: number;
     answers: {
-        custom: any[];
+        custom: unknown[];
         system: AiSystemAnswer[];
     };
 }
 
+/** Один элемент answers.system; result — вложенный JSON от промпта (ключи со временем меняются). */
 export interface AiSystemAnswer {
     name: string;
-    result: {
-        рекомендации: {
-            маркетинг: Recommendation;
-            операционный_бизнес: Recommendation;
-            качество_обслуживания: Recommendation;
-        };
-        данные_о_клиенте: ClientData;
-        информация_по_звонку: CallInfo;
-        информация_по_менеджеру: ManagerInfo;
-        удовлетворенность_клиента: CustomerSatisfaction;
-        классификация_инсайтов_клиента: CustomerInsights;
-    };
+    result: Record<string, unknown>;
 }
 
 export interface Recommendation {
@@ -441,6 +443,14 @@ export interface CallsState {
     categoriesDictionariesObj:CheckListsByIdObj;
     categoriesDictionariesList:CategoriesDictionariesList | {};
     getCategoriesDictionaries:() => Promise<any>;
+    categoryDictionaryFullDataObj: CategoryDictionaryFullDataObj;
+    categoryDictionaryFullData: unknown | null;
+    setCategoryDictionaryFullDataObj: (patch: Partial<CategoryDictionaryFullDataObj>) => void;
+    getCategoryDictionaryFullData: () => Promise<any>;
+    /** Один запрос full-data без глобального loading (для параллельных вызовов, напр. маркеры) */
+    fetchCategoryDictionaryFullData: (
+        params: CategoryDictionaryFullDataObj,
+    ) => Promise<any | null>;
     callsByCategories:any,
     categoriesIds:number[] | null;
     getCallsByCategories?:() => Promise<any[]>;

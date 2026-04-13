@@ -1,46 +1,32 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Flex} from "antd";
 import styles from '../CallSinglePageLayout.module.scss'
 import BaseSelect from "../../ui/BaseSelect/BaseSelect";
-import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
 import {useCallsStore} from "../../../stores/callsStore";
-
-// Добавляем типы для рекомендаций
-interface Recommendation {
-    действие: string;
-    приоритет: string;
-}
-
-interface Recommendations {
-    маркетинг: Recommendation;
-    операционный_бизнес: Recommendation;
-    качество_обслуживания: Recommendation;
-}
+import {getBaseSystemResult, getRecommendationsForSelect} from "../aiJsonBaseSystem";
 
 const RecomendationWidget = () => {
     const aiJsonList = useCallsStore((state) => state.aiJsonList);
-    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
+
+    const baseResult = useMemo(() => getBaseSystemResult(aiJsonList), [aiJsonList]);
+    const categories = useMemo(() => getRecommendationsForSelect(baseResult), [baseResult]);
+
+    const selectData = categories
+        ? Object.keys(categories).map((key) => ({
+              value: key,
+              label: key.replace(/_/g, ' '),
+          }))
+        : [];
+
+    const [selectedCategory, setSelectedCategory] = useState<string>('маркетинг');
 
     useEffect(() => {
-        if (aiJsonList && aiJsonList.length > 0) {
-            const firstAiJson = aiJsonList[0];
-            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
-                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
-            );
-            setSystemJsonList(filteredSystem);
+        if (!categories) return;
+        const keys = Object.keys(categories);
+        if (keys.length && !keys.includes(selectedCategory)) {
+            setSelectedCategory(keys[0]);
         }
-    }, [aiJsonList]);
-
-    const categories = systemJsonList[0]?.result?.рекомендации as Recommendations | undefined;
-
-    // Создаем selectData на основе categories
-    const selectData = categories ? Object.keys(categories).map(key => ({
-        value: key,
-        label: key.replace('_', ' ') // Заменяем нижние подчеркивания на пробелы
-    })) : [];
-
-    // Устанавливаем "маркетинг" по умолчанию
-    const [selectedCategory, setSelectedCategory] = useState<string>('маркетинг');
+    }, [categories, selectedCategory]);
 
     const handleChange = (value: string | string[]) => {
         if (Array.isArray(value)) {
@@ -50,10 +36,10 @@ const RecomendationWidget = () => {
         }
     };
 
-    // Получаем текущую рекомендацию на основе выбранной категории
-    const currentRecommendation = categories && selectedCategory
-        ? categories[selectedCategory as keyof Recommendations]
-        : undefined;
+    const currentRecommendation =
+        categories && selectedCategory
+            ? categories[selectedCategory]
+            : undefined;
 
     return (
         <Flex className={styles.RecomendationWidget}>

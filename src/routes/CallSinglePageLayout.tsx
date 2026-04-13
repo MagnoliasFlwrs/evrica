@@ -25,9 +25,10 @@ const CallSinglePageLayout = () => {
         getCurrentCallInfo(currentCallId)
     }, [currentCallId]);
 
+
     useEffect(() => {
-        getPromptList(user?.id)
-        getAiJsonList(user?.id , currentCallInfo?.id)
+        getPromptList(user?.organization_id)
+        getAiJsonList(user?.organization_id , currentCallInfo?.id)
     }, [currentCallInfo]);
 
     return (

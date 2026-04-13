@@ -1,27 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Flex} from "antd";
 import styles from '../CallSinglePageLayout.module.scss'
 import ClientInfoModal from "../ClientInfoModal/ClientInfoModal";
 import {useCallsStore} from "../../../stores/callsStore";
-import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
+import {flattenClientData, getBaseSystemResult} from "../aiJsonBaseSystem";
 
 const CustomerInfoWidget = () => {
     const [openClientInfomodal , setOpenClientInfoModal] = useState(false);
     const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
     const aiJsonList = useCallsStore((state) => state.aiJsonList);
 
-    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
-
-    useEffect(() => {
-        if (aiJsonList && aiJsonList.length > 0) {
-            const firstAiJson = aiJsonList[0];
-            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
-                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
-            );
-            setSystemJsonList(filteredSystem);
-        }
+    const client = useMemo(() => {
+        const base = getBaseSystemResult(aiJsonList);
+        return flattenClientData(base);
     }, [aiJsonList]);
-    const baseSystemData = systemJsonList[0]?.result;
+
     return (
         <Flex className={styles.CustomerInfo}>
             <Flex className={styles.GeneralCallInfoWidgetHead}>
@@ -43,7 +36,7 @@ const CustomerInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Имя клиента</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.имя ? baseSystemData?.данные_о_клиенте?.имя : '-' }</span>
+                        <span>{client.имя ?? '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Телефон клиента</p>
@@ -54,21 +47,21 @@ const CustomerInfoWidget = () => {
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Пол</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.пол ? baseSystemData?.данные_о_клиенте?.пол : '-'}</span>
+                        <span>{client.пол ?? '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Место жительства</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.где_живет_клиент ? baseSystemData?.данные_о_клиенте?.где_живет_клиент : '-'}</span>
+                        <span>{client.где_живет_клиент ?? '-'}</span>
                     </Flex>
                 </Flex>
                 <Flex className={styles.GeneralCallInfoColumn}>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Семейное положение</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.семейное_положение ? baseSystemData?.данные_о_клиенте?.семейное_положение : '-'}</span>
+                        <span>{client.семейное_положение ?? '-'}</span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Наличие детей</p>
-                        <span>{baseSystemData?.данные_о_клиенте?.наличие_детей ? baseSystemData?.данные_о_клиенте?.наличие_детей : '-'}</span>
+                        <span>{client.наличие_детей ?? '-'}</span>
                     </Flex>
                 </Flex>
             </Flex>

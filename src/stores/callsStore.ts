@@ -2,7 +2,7 @@ import {create} from "zustand/index";
 import {persist} from "zustand/middleware";
 import {axiosInstanceAll, axiosInstanceAuth, baseAuthUrl} from "../store";
 import qs from 'qs';
-import {CallsState} from "./types/callsStoreTypes";
+import {CallsState, CategoryDictionaryFullDataObj} from "./types/callsStoreTypes";
 
 
 
@@ -56,6 +56,14 @@ export const useCallsStore = create(
                 date_end: 1762203600
             },
             categoriesDictionariesList:{},
+            categoryDictionaryFullDataObj: {
+                category_id: '',
+                dictionary_id: null,
+                dictionary_type: 'system',
+                date_start: 1762117201,
+                date_end: 1762203600,
+            } satisfies CategoryDictionaryFullDataObj,
+            categoryDictionaryFullData: null,
             categoriesChecklistsList:[],
             checkListsByIdList:[],
             dictionariesByIdList:[],
@@ -240,6 +248,10 @@ export const useCallsStore = create(
                         ...state.categoriesDictionariesObj,
                         category_id: id
                     },
+                    categoryDictionaryFullDataObj: {
+                        ...state.categoryDictionaryFullDataObj,
+                        category_id: id,
+                    },
                     categoryCallsListObj: {
                         ...state.categoryCallsListObj,
                         category_id: id
@@ -273,7 +285,7 @@ export const useCallsStore = create(
                         encode: false
                     });
                     const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/category/get-category-checklists?${queryString}`,
+                        `${baseAuthUrl}/category/get-category-checklist-analytics?${queryString}`,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -403,6 +415,59 @@ export const useCallsStore = create(
                     });
                 }
             },
+            setCategoryDictionaryFullDataObj: (patch) =>
+                set((state) => ({
+                    categoryDictionaryFullDataObj: {
+                        ...state.categoryDictionaryFullDataObj,
+                        ...patch,
+                    },
+                })),
+            fetchCategoryDictionaryFullData: async (params: CategoryDictionaryFullDataObj) => {
+                try {
+                    const queryString = qs.stringify(params, {
+                        arrayFormat: 'indices',
+                        encode: false,
+                    });
+                    const res = await axiosInstanceAll.get(
+                        `${baseAuthUrl}/category/get-category-dictionary-full-data?${queryString}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+                    if (res.status === 200) {
+                        return res.data?.data ?? res.data;
+                    }
+                } catch {
+                    /* параллельные запросы маркеров — без глобального error */
+                }
+                return null;
+            },
+            getCategoryDictionaryFullData: async () => {
+                set({ loading: true, error: false });
+                try {
+                    const { categoryDictionaryFullDataObj } = get();
+                    const payload =
+                        await get().fetchCategoryDictionaryFullData(categoryDictionaryFullDataObj);
+                    if (payload != null) {
+                        set({
+                            loading: false,
+                            error: false,
+                            categoryDictionaryFullData: payload,
+                        });
+                        return { data: payload };
+                    }
+                    set({ loading: false, error: false });
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
             getCurrentCallInfo: async (id : string | null | number) => {
                 set({ loading: true, error: false });
                 try {
@@ -464,8 +529,12 @@ export const useCallsStore = create(
             getAiJsonList: async (orgId : string | null | number , callInfoId :number | undefined ) => {
                 set({ loading: true, error: false });
                 try {
-                    const res = await axiosInstanceAll.get(
-                        `${baseAuthUrl}/proxy/get-prompt-result-by-call-info-id?org_id=${orgId}&call_info_id=${callInfoId}`,
+                    const res = await axiosInstanceAll.post(
+                        `${baseAuthUrl}/tasks/get-tasks-answers-by-call-info-id`,
+                        {
+                            org_id:orgId,
+                            call_id:String(callInfoId)
+                        },
                         {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -504,6 +573,11 @@ export const useCallsStore = create(
                     },
                     categoriesDictionariesObj: {
                         ...state.categoriesDictionariesObj,
+                        date_start: startDate,
+                        date_end: endDate,
+                    },
+                    categoryDictionaryFullDataObj: {
+                        ...state.categoryDictionaryFullDataObj,
                         date_start: startDate,
                         date_end: endDate,
                     },

@@ -1,50 +1,30 @@
-import React, {JSX, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import styles from '../CallSinglePageLayout.module.scss'
 import {Flex} from "antd";
 import CustomTextModal from "../../ui/CustomTextModal/CustomTextModal";
 import BlueArrow from "../../icons/BlueArrow";
 import {useCallsStore} from "../../../stores/callsStore";
 import {formatDateTime, formatSecondsToTimeWithHours} from "../utils";
-import {AiSystemAnswer} from "../../../stores/types/callsStoreTypes";
+import {getBaseSystemResult, getCallInfoBlock, getProblematicCallInfo} from "../aiJsonBaseSystem";
 
 const GeneralCallInfoWidget = () => {
     const [attentionModal, setAttentionModal] = React.useState(false);
     const [categoryModal, setCategoryModal] = React.useState(false);
     const attentionModalRef = useRef<HTMLDivElement>(null);
     const categoryModalRef = useRef<HTMLDivElement>(null);
-    const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
+    const currentCallInfo = useCallsStore((state) => state.currentCallInfo);
     const [callType, setCallType] = useState<string | undefined>(undefined);
     const aiJsonList = useCallsStore((state) => state.aiJsonList);
 
-    const [systemJsonList, setSystemJsonList] = useState<AiSystemAnswer[]>([]);
-
-    useEffect(() => {
-        if (aiJsonList && aiJsonList.length > 0) {
-            // Обрабатываем первый элемент массива (или все, если нужно)
-            const firstAiJson = aiJsonList[0];
-            const filteredSystem = firstAiJson.answers.system.filter((item: AiSystemAnswer) =>
-                item.name === 'БАЗОВЫЙ СИСТЕМНЫЙ'
-            );
-            setSystemJsonList(filteredSystem);
-        }
-    }, [aiJsonList]);
+    const baseResult = useMemo(() => getBaseSystemResult(aiJsonList), [aiJsonList]);
+    const callInfo = useMemo(() => getCallInfoBlock(baseResult), [baseResult]);
+    const problemInfo = useMemo(() => getProblematicCallInfo(baseResult), [baseResult]);
 
     useEffect(() => {
         if(currentCallInfo) {
             setCallType(currentCallInfo.call.call_type)
         }
     }, [currentCallInfo]);
-
-    const handleToggleAttentionModal = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setAttentionModal(!attentionModal);
-        setCategoryModal(false);
-    }
-    const handleToggleCategoryModal = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setCategoryModal(!categoryModal);
-        setAttentionModal(false);
-    }
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -60,7 +40,8 @@ const GeneralCallInfoWidget = () => {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    const baseSystemData = systemJsonList[0]?.result;
+    const requiresAttentionYes =
+        problemInfo.да_или_нет?.toLowerCase() === 'да';
 
     return (
         <Flex className={styles.GeneralCallInfoWidget}>
@@ -73,7 +54,7 @@ const GeneralCallInfoWidget = () => {
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Статус решения проблемы</p>
                         <span>
-                            {baseSystemData?.информация_по_звонку?.статус_решения_проблемы || 'Не решен'}
+                            {(callInfo?.['статус_решения_проблемы'] as string) || 'Не решен'}
                         </span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
@@ -94,7 +75,7 @@ const GeneralCallInfoWidget = () => {
                     <Flex className={styles.GeneralCallInfoColumnItem}>
                         <p>Качество проработки звонка</p>
                         <span>
-                            {baseSystemData?.информация_по_звонку?.качество_проработки_звонка || 'Высокое'}
+                            {(callInfo?.['качество_проработки_звонка'] as string) || 'Высокое'}
                         </span>
                     </Flex>
                     <Flex className={styles.GeneralCallInfoColumnItem}>
@@ -116,7 +97,7 @@ const GeneralCallInfoWidget = () => {
                         <p>Требует внимания</p>
                         <Flex className={styles.IconRow} ref={attentionModalRef}>
                             <span>
-                                {baseSystemData?.информация_по_звонку?.["требует_звонок_незамедлительного_внимания (проблемный звонок)"].да_или_нет === 'да' ? 'Да' : 'Нет'}
+                                {requiresAttentionYes ? 'Да' : 'Нет'}
                             </span>
                             <button
                                 onMouseEnter={() => setAttentionModal(true)}
@@ -127,7 +108,7 @@ const GeneralCallInfoWidget = () => {
                             {
                                 attentionModal &&
                                 <CustomTextModal
-                                    text={baseSystemData?.информация_по_звонку?.["требует_звонок_незамедлительного_внимания (проблемный звонок)"]?.объяснение}
+                                    text={problemInfo.объяснение}
                                     top={true}
                                     left={true}
                                 />

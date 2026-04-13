@@ -69,7 +69,7 @@ const CallsTable = () => {
             key: 'id',
             width: 161,
             render: (text: string, record: Call) => {
-                return <span className={styles.tableText}>{text}</span>;
+                return <span className={styles.tableText}>{record.call_infos[0].id}</span>;
             }
         },
         {
@@ -217,7 +217,7 @@ const CallsTable = () => {
                 }}
                 onRow={(record: Call) => ({
                     onClick: () => {
-                        onRowClick(record.id);
+                        onRowClick(record.call_infos[0].id);
                     },
                     style: {
                         cursor: 'pointer',
