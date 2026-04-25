@@ -1,37 +1,47 @@
 @font-face {
-  font-family: "Mulish";
-  src: url("/public/fonts/Mulish-Light.ttf") format("truetype");
+  font-family: 'Mulish';
+  src: url('/public/fonts/Mulish-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Mulish";
-  src: url("/public/fonts/Mulish-Regular.ttf") format("truetype");
+  font-family: 'Mulish';
+  src: url('/public/fonts/Mulish-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Mulish";
-  src: url("/public/fonts/Mulish-Medium.ttf") format("truetype");
+  font-family: 'Mulish';
+  src: url('/public/fonts/Mulish-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Mulish";
-  src: url("/public/fonts/Mulish-SemiBold.ttf") format("truetype");
+  font-family: 'Mulish';
+  src: url('/public/fonts/Mulish-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Mulish";
-  src: url("/public/fonts/Mulish-Bold.ttf") format("truetype");
+  font-family: 'Mulish';
+  src: url('/public/fonts/Mulish-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
+:root {
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.5);
+  --text-tertiary: #1d1d1f;
+  --brand-blue: #007aff;
+  --brand-blue-strong: rgb(16, 54, 239);
+  --brand-blue-dark: #153093;
+  --light-blue: rgba(0, 122, 255, 0.15);
+  --light-grey: #f3f3f3;
 }
 * {
   margin: 0;
@@ -42,17 +52,18 @@
 a {
   text-decoration: none;
 }
-ul , li {
+ul,
+li {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 html {
   scroll-behavior: smooth;
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 body {
-  font-family: "Mulish", sans-serif;
+  font-family: 'Mulish', sans-serif;
   margin: 0;
   padding: 0;
   font-size: 16px;
@@ -91,7 +102,6 @@ body {
   border-radius: 16px !important;
 }
 
-
 .checklist-modal-portal {
   position: fixed;
   top: 0;
@@ -111,7 +121,7 @@ body {
 
 .ant-checkbox-label {
   overflow: hidden;
-  color: #1D1D1F;
+  color: #1d1d1f;
   text-overflow: ellipsis;
   font-family: Mulish;
   font-size: 14px;
@@ -121,5 +131,5 @@ body {
 }
 
 .swiper {
-    width: 100%;
+  width: 100%;
 }

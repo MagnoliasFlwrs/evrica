@@ -42,7 +42,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "PORT=8085 react-scripts start"
+    "start": "cross-env PORT=8085 react-scripts start",
+    "format": "prettier --write \"src/**/*.{ts,tsx,scss,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,scss,css}\""
   },
   "eslintConfig": {
     "extends": [
@@ -64,6 +66,8 @@
   },
   "devDependencies": {
     "@types/pdfmake": "^0.2.12",
-    "@types/react-date-range": "^1.4.10"
+    "@types/react-date-range": "^1.4.10",
+    "cross-env": "^10.1.0",
+    "prettier": "^3.8.3"
   }
 }

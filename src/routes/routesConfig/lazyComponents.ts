@@ -9,3 +9,4 @@ export const MakeAnAppointmentLayout = lazy(() => import('../MakeAnAppointmentLa
 export const AnalyticReportCards = lazy(() => import('../AnalyticReportCards'));
 export const AnalyticsReportLayout = lazy(() => import('../AnalyticsReportLayout'));
 export const DashboardLayout = lazy(() => import('../DashboardLayout'));
+export const ClientsLayout = lazy(() => import('../ClientsLayout'));

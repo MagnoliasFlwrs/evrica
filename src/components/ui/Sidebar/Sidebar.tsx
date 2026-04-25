@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './sidebar.module.scss';
 import {Link, useLocation} from "react-router-dom";
 import Logo from "../../../icons/Logo";
@@ -94,6 +94,18 @@ const Sidebar = () => {
                         <Calls/>
                     </Flex>
                     {sidebarOpen && <span>Звонки</span>}
+                </Link>
+
+                <Link
+                    to='/clients'
+                    className={cn(styles.SidebarLink, {
+                        [styles.active]: isActiveLink('/clients')
+                    })}
+                >
+                    <Flex className={styles.SidebarIconWrapper}>
+                        <Profile/>
+                    </Flex>
+                    {sidebarOpen && <span>Клиенты</span>}
                 </Link>
 
                 <Link
