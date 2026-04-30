@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { LeftOutlined, SearchOutlined } from '@ant-design/icons';
 import { Flex, Input, Spin } from 'antd';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +12,6 @@ import { useAuth } from '../store';
 import { useClientsStore } from '../stores/clientsStore';
 import { ClientLastCall } from '../stores/types/clientsStoreTypes';
 import { formatCallDate, formatTimelineDate, toFirstUpperCase } from '../utils';
-import { log } from 'node:console';
 
 type ClientField = {
   label: string;
@@ -151,7 +150,7 @@ const getRecordsWord = (count: number) => {
 const mapSatisfactionMeta = (
   satisfactionRaw: string,
 ): { icon: string; label: string; colorClass: string } => {
-  if (satisfactionRaw === 'не определено') {
+  if (satisfactionRaw === NOT_DEFINED || !satisfactionRaw) {
     return {
       icon: '/images/weather-neutral.png',
       label: 'Не определено',
@@ -186,10 +185,10 @@ const mapSatisfactionMeta = (
 
 const mapProbabilityToScore = (value: string) => {
   const normalized = value.toLowerCase();
-  if (normalized.includes('высок')) return 82;
-  if (normalized.includes('сред')) return 58;
-  if (normalized.includes('низ')) return 32;
-  return 50;
+  if (normalized.includes('высок')) return 90;
+  if (normalized.includes('сред')) return 50;
+  if (normalized.includes('низ')) return 25;
+  return 0;
 };
 
 const ClientsLayout = () => {
@@ -216,7 +215,7 @@ const ClientsLayout = () => {
   const [activeSatisfactionIndex, setActiveSatisfactionIndex] = useState(0);
   const satisfactionRowRef = useRef<HTMLDivElement | null>(null);
   const satisfactionItemRefs = useRef<(HTMLElement | null)[]>([]);
-  const [activeFrame, setActiveFrame] = useState({ left: 0, width: 0, height: 0 });
+  const [activeFrame, setActiveFrame] = useState({ left: 0, width: 0, height: 0, isReady: false });
 
   const decodedClientNumber = clientId ? decodeURIComponent(clientId) : '';
   const isDetailMode = Boolean(clientId);
@@ -265,6 +264,7 @@ const ClientsLayout = () => {
     () => formatClientName(clientCardBase?.names),
     [clientCardBase?.names],
   );
+
   const resolvedMaritalStatus = useMemo(
     () => resolveMostFrequent(clientCardBase?.marital_status),
     [clientCardBase?.marital_status],
@@ -384,35 +384,56 @@ const ClientsLayout = () => {
   }, [clearClientCard, decodedClientNumber, loadClientCard, orgId]);
 
   useEffect(() => {
+    satisfactionItemRefs.current.length = satisfactionItems.length;
+    setActiveFrame({ left: 0, width: 0, height: 0, isReady: false });
+
     if (!satisfactionItems.length) {
       setActiveSatisfactionIndex(0);
       return;
     }
 
     setActiveSatisfactionIndex(satisfactionItems.length - 1);
-  }, [satisfactionItems]);
+  }, [satisfactionItems.length, clientId]);
 
   const updateActiveFrame = useCallback(() => {
     const rowElement = satisfactionRowRef.current;
-    const activeElement = satisfactionItemRefs.current[activeSatisfactionIndex];
 
-    if (!rowElement || !activeElement) {
+    if (!rowElement || !satisfactionItems.length) {
+      setActiveFrame({ left: 0, width: 0, height: 0, isReady: false });
+      return;
+    }
+
+    const safeIndex = Math.min(activeSatisfactionIndex, satisfactionItems.length - 1);
+    const activeElement = satisfactionItemRefs.current[safeIndex];
+
+    if (!activeElement || !rowElement.contains(activeElement)) {
+      setActiveFrame({ left: 0, width: 0, height: 0, isReady: false });
       return;
     }
 
     const rowRect = rowElement.getBoundingClientRect();
     const itemRect = activeElement.getBoundingClientRect();
 
+    if (itemRect.width <= 0 || itemRect.height <= 0) {
+      setActiveFrame({ left: 0, width: 0, height: 0, isReady: false });
+      return;
+    }
+
     setActiveFrame({
       left: itemRect.left - rowRect.left,
       width: itemRect.width,
       height: itemRect.height,
+      isReady: true,
     });
-  }, [activeSatisfactionIndex]);
+  }, [activeSatisfactionIndex, satisfactionItems.length]);
 
-  useEffect(() => {
-    updateActiveFrame();
-  }, [updateActiveFrame]);
+  useLayoutEffect(() => {
+    const rafId = window.requestAnimationFrame(updateActiveFrame);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [updateActiveFrame, decodedClientNumber]);
 
   useEffect(() => {
     window.addEventListener('resize', updateActiveFrame);
@@ -442,12 +463,23 @@ const ClientsLayout = () => {
                   <Flex vertical className={styles.profileMeta}>
                     <p className={styles.profileName}>
                       {resolvedName}{' '}
-                      <span className={styles.profileGender}>({resolvedGender})</span>
+                      {resolvedGender !== NOT_DEFINED && (
+                        <span className={styles.profileGender}>({resolvedGender})</span>
+                      )}
                     </p>
-                    <p className={styles.profileSecondary}>
-                      {formatArrayField(clientCardBase?.age)}
-                    </p>
-                    <p className={styles.profileSecondary}>{resolvedMaritalStatus}</p>
+
+                    {!(
+                      clientCardBase?.age?.length === 0 ||
+                      (clientCardBase?.age?.length === 1 && clientCardBase?.age[0] === NOT_DEFINED)
+                    ) && (
+                      <p className={styles.profileSecondary}>
+                        {formatArrayField(clientCardBase?.age)}
+                      </p>
+                    )}
+
+                    {resolvedMaritalStatus !== NOT_DEFINED && (
+                      <p className={styles.profileSecondary}>{resolvedMaritalStatus}</p>
+                    )}
                   </Flex>
                 </Flex>
 
@@ -507,9 +539,9 @@ const ClientsLayout = () => {
                 </Flex>
 
                 <Flex vertical className={styles.cardSmall}>
-                  <p className={styles.cardHeading}>Вероятность Заключения Сделки</p>
+                  <p className={styles.cardHeading}>Вероятность Сделки в последней коммуникации</p>
                   <Flex vertical className={styles.probabilityWrap}>
-                    <Flex className={styles.probabilityLegend}>
+                    {/* <Flex className={styles.probabilityLegend}>
                       <span className={styles.legendItem}>
                         <i className={`${styles.legendDot} ${styles.legendLast}`} />
                         Последнее
@@ -518,12 +550,14 @@ const ClientsLayout = () => {
                         <i className={`${styles.legendDot} ${styles.legendTotal}`} />
                         Всего
                       </span>
-                    </Flex>
+                    </Flex> */}
                     <ProbabilityArc
                       last={lastProbability}
                       avg={0}
                       total={100}
-                      label={toFirstUpperCase(clientCardBase?.probability_of_making_deal)}
+                      label={toFirstUpperCase(
+                        clientCardBase?.last_probability_of_making_deal || NOT_DEFINED,
+                      )}
                     />
                   </Flex>
                 </Flex>
@@ -536,7 +570,7 @@ const ClientsLayout = () => {
               <p className={styles.satisfactionTitle}>Удовлетворенность клиента</p>
 
               <div className={styles.satisfactionRow} ref={satisfactionRowRef}>
-                {satisfactionItems.length > 0 && (
+                {satisfactionItems.length > 0 && activeFrame.isReady && (
                   <div
                     className={styles.satisfactionActiveFrame}
                     style={{
@@ -595,7 +629,7 @@ const ClientsLayout = () => {
                   <span className={styles.headLabel}>Сотрудник:</span>{' '}
                   {activeCall?.manager || 'не определено'}
                 </p>
-                <Link to={`/call/${activeCall?.id || ''}`}>перейти в звонок</Link>
+                <Link to={`/call/${activeCall?.call_id || ''}`}>перейти в звонок</Link>
               </Flex>
 
               <Flex vertical className={styles.communicationBody}>
@@ -669,10 +703,7 @@ const ClientsLayout = () => {
                     }
                   }}
                 >
-                  {/* <p className={styles.clientNameBadge}>{clientNumber}</p> */}
-
                   <Flex className={styles.clientCardBody}>
-                    {/* <img src={girl} alt={clientNumber} className={styles.clientAvatar} /> */}
                     <p className={styles.clientMetric}>{clientNumber}</p>
                   </Flex>
                 </Flex>

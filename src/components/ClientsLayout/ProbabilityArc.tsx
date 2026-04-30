@@ -14,7 +14,7 @@ const ProbabilityArc = ({
   avg,
   total,
   label,
-  totalIsOverall = false,
+  totalIsOverall = true,
 }: ProbabilityArcProps) => {
   const safeLast = Math.max(0, last);
   const safeAvg = Math.max(0, avg);
