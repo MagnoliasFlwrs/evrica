@@ -392,13 +392,20 @@
   padding: 8px 4px 6px;
   cursor: pointer;
   z-index: 25;
-}
 
-.current {
-  position: relative;
+  & .satisfactionIcon,
+  .satisfactionBar {
+    filter: opacity(0.35);
+    transition: 0.2s;
+  }
 
-  & .satisfactionIcon {
-    filter: opacity(1);
+  &.current {
+    position: relative;
+
+    & .satisfactionIcon,
+    .satisfactionBar {
+      filter: opacity(1);
+    }
   }
 }
 
@@ -425,7 +432,6 @@
   width: 66px;
   height: 66px;
   object-fit: contain;
-  filter: opacity(0.35);
 }
 
 .satisfactionName {
@@ -447,19 +453,19 @@
 }
 
 .good {
-  background: #c3dbf1;
+  background: #0f83db;
 }
 
 .bad {
-  background: #ffe5c6;
+  background: #f7a645;
 }
 
 .terrible {
-  background: #ffc1ce;
+  background: #ea2460;
 }
 
 .normal {
-  background: #bbc4de;
+  background: #053b97;
 }
 
 .excellent {

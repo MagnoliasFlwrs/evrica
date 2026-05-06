@@ -1,4 +1,4 @@
-import React, {useEffect, useState, ChangeEvent} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Flex,
     ConfigProvider,
@@ -20,7 +20,7 @@ import {
     DirectionsData,
     EmployeeReportItem,
     ManagersReportData,
-    ReportData, Location
+    ReportData
 } from "../components/MakeAnAppointmentLayout/types";
 import EmployeeReportHead from "../components/MakeAnAppointmentLayout/EmployeeReportHead";
 import FilterModal from "../components/MakeAnAppointmentLayout/FilterModal";
@@ -32,8 +32,6 @@ import Legend from "../components/MakeAnAppointmentLayout/Legend";
 const MakeAnAppointmentLayout = () => {
     const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
     const loading = useCallsStore((state)=>state.loading);
-    const callsCategories = useCallsStore((state) => state.callsCategories);
-    const [categories, setCategories] = useState<Location[]>([]);
 
     const [api, contextHolder] = notification.useNotification();
 
@@ -103,13 +101,6 @@ const MakeAnAppointmentLayout = () => {
         getCallsCategories();
     }, [getCallsCategories]);
 
-    useEffect(()=> {
-        if (callsCategories && Array.isArray(callsCategories)) {
-            setCategories(callsCategories as Location[]);
-        }
-    }, [callsCategories]);
-
-
     useEffect(() => {
         if (reportTotalData) {
             setAppointmentData(reportTotalData.number_of_appointments_and_calls);
@@ -157,7 +148,7 @@ const MakeAnAppointmentLayout = () => {
                     <PageTitle text='Назначение встречи'/>
                 </Flex>
                 <Flex className={styles.AnalyticsControls}>
-                    <GetReportFilter categories={categories}/>
+                    <GetReportFilter/>
                 </Flex>
 
                 {reportTotalData ? (
@@ -214,10 +205,7 @@ const MakeAnAppointmentLayout = () => {
                                 </Flex>
                             </Flex>
                         </Flex>
-                    ) :
-                    <Flex align={'center'} justify={'center'} flex={1}>
-                        <p>Для получения данных выберите категорию и даты</p>
-                    </Flex>
+                    ) : null
                 }
                 {
                     isOpenFilterModal && <FilterModal setIsOpenFilterModal={setIsOpenFilterModal} setIsActiveFilter={setIsActiveFilter}/>

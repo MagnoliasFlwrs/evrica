@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import './index.css';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   ErrorPage,
   MainLayout,
@@ -13,6 +13,7 @@ import {
   MakeAnAppointmentLayout,
   AnalyticReportCards,
   ClientsLayout,
+  SettingsLayout,
 } from './routes/routesConfig/lazyComponents';
 import { Spin } from 'antd';
 import CallsFilteredLayout from './routes/CallsFilteredLayout';
@@ -86,6 +87,26 @@ const App = () => {
         {
           path: '/analytics-report',
           element: <AnalyticsReportLayout />,
+        },
+        {
+          path: '/settings',
+          element: <Navigate to="/settings/checklists" replace />,
+        },
+        {
+          path: '/settings/markers/:markerId/edit',
+          element: <SettingsLayout />,
+        },
+        {
+          path: '/settings/checklists',
+          element: <SettingsLayout />,
+        },
+        {
+          path: '/settings/checklists/:checklistId/edit',
+          element: <SettingsLayout />,
+        },
+        {
+          path: '/settings/checklists/:checklistId/edit/markers',
+          element: <SettingsLayout />,
         },
       ],
     },

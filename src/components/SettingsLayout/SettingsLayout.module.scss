@@ -1,0 +1,794 @@
+.page {
+  width: 100%;
+  padding-right: 20px;
+  padding-bottom: 30px;
+}
+
+.headerRow {
+  margin-bottom: 18px;
+}
+
+.topTabs {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: #efefed;
+  gap: 4px;
+}
+
+.topTab {
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  height: 42px;
+  padding: 0 24px;
+  color: var(--text-primary);
+  font-family: Mulish;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.activeTab {
+  background: #000;
+  color: #fff;
+}
+
+.sectionTitle {
+  color: var(--text-tertiary);
+  font-family: Mulish;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+.actionsRow {
+  margin-top: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filtersRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.searchRow {
+  margin-top: 12px;
+}
+
+.searchInput {
+  width: 320px;
+  height: 42px;
+  border-radius: 999px;
+}
+
+.cardsGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.markerCard {
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 220px;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.editButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #007aff;
+  color: #007aff;
+  background: #eef6ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cardDescription {
+  color: var(--text-tertiary);
+  font-family: Mulish;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 120%;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.cardMeta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  span {
+    color: var(--text-secondary);
+    font-family: Mulish;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  b {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+.colorTag {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 10px;
+  width: fit-content;
+  color: #1d1d1f;
+  font-family: Mulish;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #f3f3f3;
+}
+
+.purple {
+  color: #8d1697;
+  background: #f9e7fe;
+}
+
+.green {
+  color: #486a12;
+  background: #edfbcc;
+}
+
+.mint {
+  color: #126d69;
+  background: #ccfbf0;
+}
+
+.red {
+  color: #c93030;
+  background: #fee5e5;
+}
+
+.orange {
+  color: #a66000;
+  background: #ffefdc;
+}
+
+.teal {
+  color: #007a8a;
+  background: #d8f8fd;
+}
+
+.blue {
+  color: #00598f;
+  background: #ecf8fe;
+}
+
+.sky {
+  color: #1f6fe5;
+  background: #deedff;
+}
+
+.violet {
+  color: #8212bf;
+  background: #efdfff;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  a,
+  span {
+    color: var(--text-secondary);
+    font-family: Mulish;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.currentCrumb {
+  color: var(--text-tertiary) !important;
+}
+
+.editGrid {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) minmax(420px, 1fr);
+  gap: 20px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blockTitle {
+  margin-top: 8px;
+  color: var(--text-tertiary);
+  font-family: Mulish;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+.fieldLabel {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-family: Mulish;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.input {
+  border-radius: 10px;
+}
+
+.counterField {
+  position: relative;
+
+  span {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    color: var(--text-secondary);
+    font-family: Mulish;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.selectRow {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 12px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.switchRow {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+
+  span {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 24px;
+    font-weight: 500;
+  }
+}
+
+.colorGrid {
+  margin-top: 4px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.activeColor {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.15);
+}
+
+.deleteBlock {
+  margin-top: 16px;
+
+  p {
+    color: var(--text-secondary);
+    font-family: Mulish;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 130%;
+  }
+}
+
+.deleteButton {
+  margin-top: 14px;
+  border-radius: 999px;
+  height: 42px;
+}
+
+.deleteModal :global(.ant-modal-content) {
+  border-radius: 20px;
+}
+
+.deleteModalContent {
+  padding: 18px 0 10px;
+
+  h3 {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-family: Mulish;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 130%;
+    text-align: center;
+  }
+}
+
+.cancelDelete {
+  margin-top: 10px;
+  border: none;
+  background: transparent;
+  color: #007aff;
+  font-family: Mulish;
+  font-size: 20px;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.checklistDateFilter {
+  min-width: 190px;
+  height: 32px;
+  border-radius: 999px;
+}
+
+.checklistCardsGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.checklistCard {
+  position: relative;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklistCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h4 {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+.checklistMetaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  b {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 14px;
+    font-weight: 700;
+  }
+}
+
+.counterBadge {
+  border: 1px solid #007aff;
+  border-radius: 4px;
+  background: rgba(0, 122, 255, 0.15);
+  color: #007aff;
+  font-family: Mulish;
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.markerDropdown {
+  position: absolute;
+  right: 10px;
+  top: 78px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 4;
+}
+
+.checklistScores {
+  margin-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scoreRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: Mulish;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.scorePositive,
+.scoreNegative {
+  border-radius: 4px;
+  min-width: 34px;
+  height: 22px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Mulish;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.scorePositive {
+  color: #1c8f3a;
+  background: #b9f6c8;
+}
+
+.scoreNegative {
+  color: #b52727;
+  background: #ffd2d2;
+}
+
+.checklistEditGrid {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) minmax(460px, 1fr);
+  gap: 24px;
+}
+
+.checklistNameRow {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 12px;
+}
+
+.editBlockCard,
+.deleteBlockCard,
+.periodCard {
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 16px;
+}
+
+.editBlockHeader {
+  margin-bottom: 10px;
+
+  h4 {
+    color: var(--text-tertiary);
+    font-size: 32px;
+    font-family: Mulish;
+    font-weight: 700;
+  }
+}
+
+.markersInlineList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inlineMarkerRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span:first-child {
+    color: var(--text-tertiary);
+    font-size: 26px;
+    font-weight: 500;
+    font-family: Mulish;
+  }
+}
+
+.moreCounter {
+  color: var(--text-secondary);
+  font-size: 20px;
+  font-family: Mulish;
+  font-weight: 500;
+}
+
+.categoryListPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  span {
+    color: var(--text-tertiary);
+    font-size: 24px;
+    font-family: Mulish;
+    font-weight: 500;
+  }
+}
+
+.deleteBlockCard {
+  h4 {
+    color: var(--text-tertiary);
+    font-size: 34px;
+    font-family: Mulish;
+    font-weight: 700;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 20px;
+    font-family: Mulish;
+    font-weight: 500;
+  }
+}
+
+.periodPicker {
+  width: fit-content;
+  min-width: 220px;
+}
+
+.periodCard {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-family: Mulish;
+    font-weight: 500;
+  }
+}
+
+.periodPickerLarge {
+  width: 100%;
+}
+
+.categoriesModal :global(.ant-modal-content) {
+  border-radius: 24px;
+}
+
+.categoriesModal {
+  width: 900px !important;
+}
+
+.categoriesModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 72vh;
+}
+
+.categoriesModalHead h3 {
+  color: var(--text-tertiary);
+  font-size: 28px;
+  font-family: Mulish;
+  font-weight: 700;
+}
+
+.categoriesSearch {
+  max-width: 320px;
+  border-radius: 999px;
+}
+
+.categoriesSelectedInfo {
+  span,
+  button {
+    color: var(--text-tertiary);
+    font-size: 16px;
+    font-family: Mulish;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+  }
+
+  button {
+    color: #007aff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.categoriesTreeWrap {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 10px;
+  overflow-y: auto;
+}
+
+.linkBack {
+  border: none;
+  background: transparent;
+  color: #007aff;
+  text-decoration: underline;
+  font-size: 16px;
+  font-family: Mulish;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.markerAssignTable {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.markerAssignHeader,
+.markerAssignRow {
+  display: grid;
+  grid-template-columns: 44px minmax(260px, 1fr) 300px 150px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.markerAssignHeader {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  span {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-family: Mulish;
+    font-weight: 600;
+  }
+}
+
+.markerAssignRow {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.rowWeightControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    border: none;
+    background: transparent;
+    color: #007aff;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  span {
+    min-width: 62px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Mulish;
+    color: var(--text-tertiary);
+  }
+}
+
+.markerAssignFooter {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  width: min(900px, calc(100vw - 180px));
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 12;
+
+  span {
+    color: var(--text-tertiary);
+    font-size: 18px;
+    font-family: Mulish;
+    font-weight: 600;
+  }
+}
+
+.footerCancel {
+  border: none;
+  background: transparent;
+  color: #007aff;
+  text-decoration: underline;
+  font-size: 18px;
+  font-family: Mulish;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unsavedModal :global(.ant-modal-content) {
+  border-radius: 20px;
+}
+
+@media (max-width: 1600px) {
+  .cardsGrid,
+  .checklistCardsGrid {
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 1280px) {
+  .cardsGrid,
+  .checklistCardsGrid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+  .editGrid,
+  .checklistEditGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .markerAssignHeader,
+  .markerAssignRow {
+    grid-template-columns: 44px minmax(220px, 1fr) 220px 100px;
+  }
+}

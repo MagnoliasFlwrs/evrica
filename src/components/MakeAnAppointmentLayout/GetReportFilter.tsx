@@ -1,140 +1,85 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {Button, Cascader, DatePicker, Flex, notification} from "antd";
-import styles from "./AnalyticsLayout2.module.scss";
-import dayjs, {type Dayjs} from "dayjs";
-import {CascaderOption, Category, SubLocation , Location} from "./types";
+import React, { useEffect, useMemo, useState } from 'react';
+import { Flex } from 'antd';
+import dayjs from 'dayjs';
 import {useAnalyticsStore2} from "../../stores/analyticsStore2";
 import {useAuth} from "../../store";
 import {useCallsStore} from "../../stores/callsStore";
-const { RangePicker } = DatePicker;
+import CategoriesFilter from '../CallsLayout/CategoriesFilter/CategoriesFilter';
+import filteredCallsStyles from '../CallsLayout/FilteredCallsBlock/FilteredCallsBlock.module.scss';
 
-interface reportFilterProps  {
-    categories: Location[];
-}
-
-const GetReportFilter = ({categories}:reportFilterProps) => {
+const GetReportFilter = () => {
     const getReportTotalData = useAnalyticsStore2((state)=> state.getReportTotalData);
     const setGeneralManagerReportsObj = useAnalyticsStore2((state)=> state.setGeneralManagerReportsObj);
     const reportLoading = useAnalyticsStore2((state)=> state.loading);
     const getManagersList = useAnalyticsStore2((state)=> state.getManagersList);
-    const getManagersReport = useAnalyticsStore2((state)=> state.getManagersReport);
-    const loading = useCallsStore((state)=>state.loading);
-
-    const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+    const managersReportData = useAnalyticsStore2((state)=> state.managersReportData);
+    const categoryCallsListObj = useCallsStore((state) => state.categoryCallsListObj);
     const user = useAuth((state)=> state.user);
+    const [isSelected, setIsSelected] = useState(0);
 
-    const isButtonDisabled = useMemo(() => {
-        return !dateRange ||
-            !dateRange[0] ||
-            !dateRange[1] ||
+    const selectedCategoryId = categoryCallsListObj?.category_id;
+    const dateStart = categoryCallsListObj?.date_start;
+    const dateEnd = categoryCallsListObj?.date_end;
+
+    const isFiltersReady = useMemo(() => {
+        return !dateStart ||
+            !dateEnd ||
             !selectedCategoryId ||
             !user?.organization_id;
-    }, [dateRange, selectedCategoryId, user]);
+    }, [dateEnd, dateStart, selectedCategoryId, user]);
 
-    const [api, contextHolder] = notification.useNotification();
-
-    const cascaderOptions = useMemo((): CascaderOption[] => {
-        if (!categories || !Array.isArray(categories)) return [];
-
-        return categories.map((location: Location) => ({
-            value: location.id,
-            label: location.name,
-            children: location.sub_locations?.map((subLocation: SubLocation) => ({
-                value: subLocation.id,
-                label: subLocation.name,
-                children: subLocation.categories?.map((category: Category) => ({
-                    value: category.id,
-                    label: category.name
-                }))
-            }))
-        }));
-    }, [categories]);
-
-    const handleDateRangeChange = useCallback((dates: [Dayjs | null, Dayjs | null] | null) => {
-        if (dates && dates[0] && dates[1]) {
-            const daysDiff = dates[1].diff(dates[0], 'day');
-
-            if (daysDiff > 60) {
-                api.error({
-                    message: 'Ошибка выбора периода',
-                    description: 'Выбранный период не может превышать 60 дней',
-                    duration: 3,
-                });
-                return;
-            }
-            setDateRange(dates);
-        } else {
-            setDateRange(dates);
+    const foundCount = useMemo(() => {
+        if (!managersReportData || Array.isArray(managersReportData) || typeof managersReportData !== 'object') {
+            return 0;
         }
-    }, [api]);
 
-    const handleCategoryChange = useCallback((value: number[], selectedOptions: any) => {
-        if (value && value.length === 3) {
-            const categoryId = value[2];
-            setSelectedCategoryId(categoryId);
-        } else {
-            setSelectedCategoryId(null);
+        const total = (managersReportData as { total?: number }).total;
+        return typeof total === 'number' ? total : 0;
+    }, [managersReportData]);
+
+    useEffect(() => {
+        if (!isSelected || isFiltersReady) {
+            return;
         }
-    }, []);
 
-    const handleGetReport = useCallback(() => {
-        if (isButtonDisabled) return;
+        const dateFrom = dayjs.unix(Number(dateStart)).format('YYYY-MM-DD');
+        const dateTo = dayjs.unix(Number(dateEnd)).format('YYYY-MM-DD');
+        const normalizedCategoryId = Number(selectedCategoryId);
 
-        const dateFrom = dateRange![0]!.format('YYYY-MM-DD');
-        const dateTo = dateRange![1]!.format('YYYY-MM-DD');
+        if (!Number.isFinite(normalizedCategoryId) || !user?.organization_id) {
+            return;
+        }
 
-        getReportTotalData(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
-        getManagersList(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
-        setGeneralManagerReportsObj(dateFrom, dateTo, selectedCategoryId!, user!.organization_id);
-        getManagersReport();
-    }, [dateRange, selectedCategoryId, user, getReportTotalData, isButtonDisabled]);
+        getReportTotalData(dateFrom, dateTo, normalizedCategoryId, user.organization_id);
+        getManagersList(dateFrom, dateTo, normalizedCategoryId, user.organization_id);
+        setGeneralManagerReportsObj(dateFrom, dateTo, normalizedCategoryId, user.organization_id);
+    }, [
+        dateEnd,
+        dateStart,
+        getManagersList,
+        getReportTotalData,
+        isFiltersReady,
+        isSelected,
+        selectedCategoryId,
+        setGeneralManagerReportsObj,
+        user,
+    ]);
 
 
     return (
-        <Flex  gap={20} style={{width:'100%'}}>
-            <Flex className={styles.AnalyticsControlsInner} gap={20}>
-                <p>Выберите категорию</p>
-                <Cascader
-                    placeholder="Выберите категорию"
-                    options={cascaderOptions}
-                    onChange={handleCategoryChange}
-                    loading={loading}
-                    allowClear
-                    style={{ width: '300px' }}
-                    expandTrigger="hover"
-                    displayRender={(label) => label.join(' / ')}
-                />
+        <Flex vertical gap={20} style={{width:'100%'}}>
+            <CategoriesFilter setIsSelected={setIsSelected} />
+            <Flex className={filteredCallsStyles.FilteredCallsBlock}>
+                {
+                    isSelected > 0 ? (
+                        <Flex className={filteredCallsStyles.SelectedCalls}>
+                            <p>Найдено {reportLoading ? '...' : foundCount} сотрудников</p>
+                        </Flex>
+                    ) : (
+                        <p>Для просмотра отчета необходимо выбрать категорию</p>
+                    )
+                }
             </Flex>
-            <Flex className={styles.AnalyticsControlsInner} gap={20}>
-                <p>Диапазон дат</p>
-                <RangePicker
-                    onChange={handleDateRangeChange}
-                    value={dateRange}
-                    style={{ width: '300px' }}
-                    disabledDate={(current) => {
-                        return current && current > dayjs().endOf('day');
-                    }}
-                    ranges={{
-                        'Последние 7 дней': [dayjs().subtract(7, 'day'), dayjs()],
-                        'Последние 30 дней': [dayjs().subtract(30, 'day'), dayjs()],
-                        'Последние 60 дней': [dayjs().subtract(60, 'day'), dayjs()],
-                    }}
-                />
-            </Flex>
-
-            <Button
-                onClick={handleGetReport}
-                loading={reportLoading}
-                type="primary"
-                disabled={isButtonDisabled}
-                style={{
-                    opacity: isButtonDisabled ? 0.5 : 1,
-                    cursor: isButtonDisabled ? 'not-allowed' : 'pointer'
-                }}
-            >
-                Построить отчет
-            </Button>
         </Flex>
     );
 };
