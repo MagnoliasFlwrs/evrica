@@ -13,7 +13,7 @@ interface AudioPlayerProps {
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({showChannels}) => {
-    const [speed, setSpeed] = useState('0.75');
+    const [speed, setSpeed] = useState('1');
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);

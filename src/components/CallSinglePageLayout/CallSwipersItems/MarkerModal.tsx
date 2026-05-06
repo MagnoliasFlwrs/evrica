@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Flex } from "antd";
 import styles from '../CallSinglePageLayout.module.scss';
 import CloseIcon from "../../ui/CustomSelect/icons/CloseIcon";
-import GreenCheck from "./GreenCheck";
-import GrayCheck from "./GrayCheck";
-import {getColorByPercent} from "../utils";
 import {MarkerModalProps} from "../types";
 import {callsOptionsMarkersColors} from "../../CallsFilteredLayout/CallsOptions/utils";
 
@@ -60,7 +57,7 @@ const MarkerModal: React.FC<MarkerModalProps> = ({ position, onClose, item  }) =
     if (!item) return null;
 
     const getColorByMarkerType = () => {
-        switch(item?.type.toLowerCase()) {
+        switch(item?.name.toLowerCase()) {
             case 'возражение "дорого"':
                 return callsOptionsMarkersColors.blue;
             case 'не хочу':
@@ -88,35 +85,13 @@ const MarkerModal: React.FC<MarkerModalProps> = ({ position, onClose, item  }) =
                                 color: colorConfig.color
                             }}
                         >
-                            {item?.type}
+                            {item?.name}
                         </Flex>
                     </Flex>
                     <button onClick={onClose}>
                         <CloseIcon/>
                     </button>
                 </Flex>
-                <ul>
-                    <li>
-                        <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
-                    </li>
-                    <li>
-                        <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
-                    </li>
-                    <li>
-                        <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
-                    </li>
-                    <li>
-                        <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
-                    </li>
-                    <li>
-                        <p className={styles.CheckListModalMarkCountTitle}>параметр</p>
-                        <p className={styles.CheckListModalMarkCountTitle}>1</p>
-                    </li>
-                </ul>
             </Flex>
         </div>
     );

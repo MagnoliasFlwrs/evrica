@@ -20,6 +20,15 @@ export const controlsOptions = [
         value: '1',
         label: 'x1'
     },
+    {
+        value: '1.5',
+        label: 'x1.5'
+    },
+
+    {
+        value: '2',
+        label: 'x2'
+    }
 ];
 
 export const getColorByPercent = (percent: number) => {

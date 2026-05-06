@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import {Flex} from "antd";
 import styles from './CallSinglePageLayout.module.scss'
 import CustomSwiper from "../ui/CustomSwiper/CustomSwiper";
@@ -6,9 +6,8 @@ import CallMarkerItem from "./CallSwipersItems/CallMarkerItem";
 import CallCheckListsItem from "./CallSwipersItems/CallCheckListsItem";
 import CheckListModal from "./CallSwipersItems/CheckListModal";
 import Portal from "./Portal";
-import {checkListData, markersData} from "./mockData";
 import MarkerModal from "./CallSwipersItems/MarkerModal";
-import {CheckListModalState, MarkerModalState} from "./types";
+import {CheckListModalState, MarkerItem, MarkerModalState} from "./types";
 import {useCallsStore} from "../../stores/callsStore";
 import {ChecklistsSearch, DictionariesSearch} from "../../stores/types/callsStoreTypes";
 
@@ -28,6 +27,52 @@ const CallDetails = () => {
     const currentCallInfo = useCallsStore((state)=> state.currentCallInfo);
     const [markers, setMarkers] = useState<DictionariesSearch | null>(null);
     const [checklistsData, setChecklists] = useState<ChecklistsSearch[]>([]);
+
+    const triggeredDictionaries = useMemo<MarkerItem[]>(() => {
+        if (!currentCallInfo?.checklists_search) return [];
+
+        const map = new Map<number, MarkerItem>();
+
+        currentCallInfo.checklists_search.forEach((checklist) => {
+            const dictionaries = checklist?.checklist?.dictionaries as unknown as {
+                system?: any[];
+                client?: any[];
+            } | undefined;
+
+            const all = [...(dictionaries?.system ?? []), ...(dictionaries?.client ?? [])];
+
+            all.forEach((cd) => {
+                const dict = cd?.dictionary;
+                const found = dict?.found;
+                if (!dict?.id || !Array.isArray(found) || found.length === 0) return;
+
+                const blocks: string[][] = [];
+                found.forEach((f: any) => {
+                    const highlight = f?.search_text_highlight_full;
+                    if (Array.isArray(highlight)) {
+                        highlight.forEach((group: any) => {
+                            if (Array.isArray(group)) blocks.push(group.filter((x: any) => typeof x === 'string'));
+                        });
+                    }
+                });
+
+                if (blocks.length === 0) return;
+
+                const existing = map.get(dict.id);
+                if (existing) {
+                    existing.search_text_highlight_full.push(...blocks);
+                } else {
+                    map.set(dict.id, {
+                        id: dict.id,
+                        name: dict.name ?? cd?.name ?? 'Без названия',
+                        search_text_highlight_full: blocks
+                    });
+                }
+            });
+        });
+
+        return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+    }, [currentCallInfo]);
 
     useEffect(() => {
         if(currentCallInfo) {
@@ -89,7 +134,6 @@ const CallDetails = () => {
         }
         setMarkerModalState(state);
     };
-
     return (
         <Flex className={styles.CallDetailsContainer}>
             <p className={styles.CallDetailsContainerTile}>Детали разговора</p>
@@ -113,7 +157,7 @@ const CallDetails = () => {
 
             <p className={styles.CallDetailsContainerSubTile}>Маркеры</p>
             <CustomSwiper
-                data={markersData}
+                data={triggeredDictionaries}
                 renderItem={(item, index) => (
                     <CallMarkerItem
                         item={item}

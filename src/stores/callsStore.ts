@@ -71,6 +71,58 @@ export const useCallsStore = create(
       aiJsonList: [],
       callsByCategories: [],
       categoriesIds: null,
+        comments: [],
+        getCallComments: async (id: string | number) => {
+            set({ loading: true, error: false });
+            try {
+                const res = await axiosInstanceAll.get(`${baseAuthUrl}/comments/get-call-info-comments?call_info_id=${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        accept: '*/*',
+                        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                });
+
+                if (res.status === 200) {
+                    set({
+                        loading: false,
+                        error: false,
+                        comments: res.data.data,
+                    });
+
+                    return res.data;
+                }
+            } catch (error) {
+                set({
+                    error: true,
+                    loading: false,
+                });
+            }
+        },
+        saveComment: async (id: string | number, categoryId: string | number, comment: string) => {
+            set({ loading: true, error: false });
+            try {
+                const res = await axiosInstanceAll.post(`${baseAuthUrl}/comments/save-call-info-comment`,{
+                    call_info_id:id,
+                    category_id:categoryId,
+                    comment:comment
+                } ,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        accept: '*/*',
+                        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                });
+
+                console.log(res.data)
+                return res.data;
+            } catch (error) {
+                set({
+                    error: true,
+                    loading: false,
+                });
+            }
+        },
       setError: (value: boolean) => set({ error: value }),
       getPendingCalls: async () => {
         set({ loading: true, error: false });

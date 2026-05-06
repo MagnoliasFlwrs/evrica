@@ -525,6 +525,188 @@
     gap: 10px;
   }
 }
+
+.triggeredDictionaries {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+.triggeredDictionariesOpen {
+  max-height: 700px;
+  opacity: 1;
+  transform: translateY(0);
+  overflow: hidden;
+  transition: max-height 260ms ease, opacity 200ms ease, transform 200ms ease, padding 200ms ease;
+}
+
+.triggeredDictionariesClosed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  padding: 0 14px;
+  overflow: hidden;
+  transition: max-height 260ms ease, opacity 180ms ease, transform 180ms ease, padding 180ms ease;
+  pointer-events: none;
+}
+
+.triggeredProgressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  :global(.ant-progress) {
+    flex: 1;
+    margin: 0;
+  }
+}
+
+.triggeredDictionariesGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.triggeredDictionariesList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 345px;
+  overflow-y: auto;
+  padding-left: 16px;
+  padding-right: 6px;
+  margin: 0;
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000;
+    font-family: Mulish;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.triggeredDictionaryIcon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.triggeredDictionaryName {
+  flex: 1;
+  min-width: 0;
+}
+
+.triggeredFootnote {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  background: #F6F6F5;
+  padding: 18px 14px;
+}
+
+.triggeredFootnoteText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.50);
+    font-family: Mulish;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.triggeredStatusTag {
+  position: absolute;
+  right: 14px;
+  top: 0;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-family: Mulish;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.triggeredStatusTagSuccess {
+  color: #00C310;
+  border-color: rgba(0, 195, 16, 0.40);
+  background: rgba(0, 195, 16, 0.12);
+}
+
+.triggeredStatusTagPartial {
+  color: #FF9500;
+  border-color: rgba(255, 149, 0, 0.40);
+  background: rgba(255, 149, 0, 0.12);
+}
+
+.triggeredStatusTagFail {
+  color: #FF3B30;
+  border-color: rgba(255, 59, 48, 0.40);
+  background: rgba(255, 59, 48, 0.12);
+}
+
+.markerTriggered {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 14px;
+}
+
+.markerTriggeredOpen {
+  max-height: 330px;
+  opacity: 1;
+  transform: translateY(0);
+  padding: 12px 14px;
+  background: #F6F6F5;
+  overflow-y: auto;
+  transition: max-height 260ms ease, opacity 200ms ease, transform 200ms ease, padding 200ms ease;
+}
+
+.markerTriggeredClosed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  padding: 0 14px;
+  overflow: hidden;
+  transition: max-height 260ms ease, opacity 180ms ease, transform 180ms ease, padding 180ms ease;
+  pointer-events: none;
+}
+
+.markerTriggeredGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.markerTriggeredLine {
+  margin: 0;
+  color: #000;
+  font-family: Mulish;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  b {
+    font-weight: 800;
+  }
+}
 .CallTranscribationWidgets {
   display: flex;
   align-items: flex-start;
