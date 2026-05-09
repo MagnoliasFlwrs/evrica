@@ -1,0 +1,23 @@
+.wrap {
+  width: 100%;
+  padding: 16px 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.55);
+  line-height: 1.2;
+}
+
+.range {
+  min-width: 260px;
+}
+
+.select {
+  min-width: 220px;
+}
+
+.field {
+  min-width: 0;
+}

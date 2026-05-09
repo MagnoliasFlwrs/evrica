@@ -18,7 +18,13 @@ const AnalyticReportCards = () => {
                 '  следующего контакта',
             link:'/make-an-appointment'
 
-        }
+        },
+        {
+            title:'Портрет клиента',
+            description:'текст',
+            essense:'еще какой-то текст',
+            link:'/client-portrait'
+        },
     ]
     return (
         <PageContainer style={{marginRight:'20px'}}>
