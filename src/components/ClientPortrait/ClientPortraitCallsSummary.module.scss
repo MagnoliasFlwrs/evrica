@@ -72,3 +72,12 @@
   max-width: 280px;
   margin: 0 auto;
 }
+
+.emptyChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.45);
+}

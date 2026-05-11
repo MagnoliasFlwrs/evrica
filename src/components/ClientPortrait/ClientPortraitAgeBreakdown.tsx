@@ -9,8 +9,19 @@ import {
 } from 'chart.js';
 import type { ChartData, ChartOptions, Plugin, TooltipItem } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import type { SummaryBreakdownItem } from './ClientPortraitCallsSummary';
-import { CLIENT_PORTRAIT_CALLS_SUMMARY_MOCK } from './ClientPortraitCallsSummary';
+import type { SummaryBreakdownItem } from './clientPortraitReportChartUtils';
+import {
+  emptyGenderDetailAgeShares,
+  emptyGenderDetailMaritalByAge,
+  emptyGenderDetailRiskByAge,
+  getMenWomenFromGeneralStats,
+  mapGenderDetailAgeShares,
+  mapGenderDetailMaritalByAge,
+  mapGenderDetailRiskByAge,
+  quantityFromPercent,
+  segmentCalls,
+} from './clientPortraitReportChartUtils';
+import { useDashboardStore } from '../../stores/dashboardStore';
 import styles from './ClientPortraitAgeBreakdown.module.scss';
 
 /** Доп. поле датасета: цвет заливки сегмента (рисуется плагином) */
@@ -58,155 +69,8 @@ const roundedStackSegmentsPlugin: Plugin<'bar'> = {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, roundedStackSegmentsPlugin);
 
-/** Доли возрастов внутри пола (для штук в подсказке) */
-const MEN_AGE_WITHIN_GENDER: SummaryBreakdownItem[] = [
-  { label: 'до 25 лет', percent: 24, color: '#6366f1' },
-  { label: 'от 25 до 40 лет', percent: 34, color: '#8b5cf6' },
-  { label: 'от 40 до 55 лет', percent: 26, color: '#a855f7' },
-  { label: 'старше 55 лет', percent: 12, color: '#c084fc' },
-  { label: 'не определено', percent: 4, color: '#94a3b8' },
-];
-
-const WOMEN_AGE_WITHIN_GENDER: SummaryBreakdownItem[] = [
-  { label: 'до 25 лет', percent: 18, color: '#6366f1' },
-  { label: 'от 25 до 40 лет', percent: 36, color: '#8b5cf6' },
-  { label: 'от 40 до 55 лет', percent: 30, color: '#a855f7' },
-  { label: 'старше 55 лет', percent: 12, color: '#c084fc' },
-  { label: 'не определено', percent: 4, color: '#94a3b8' },
-];
-
-const MARITAL_MEN: SummaryBreakdownItem[][] = [
-  [
-    { label: 'Женат / замужем', percent: 40, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 24, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 8, color: '#f97316' },
-    { label: 'Не определено', percent: 28, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 55, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 26, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 7, color: '#f97316' },
-    { label: 'Не определено', percent: 12, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 58, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 22, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 11, color: '#f97316' },
-    { label: 'Не определено', percent: 9, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 42, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 20, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 26, color: '#f97316' },
-    { label: 'Не определено', percent: 12, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 25, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 18, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 12, color: '#f97316' },
-    { label: 'Не определено', percent: 45, color: '#94a3b8' },
-  ],
-];
-
-const RISK_MEN: SummaryBreakdownItem[][] = [
-  [
-    { label: 'Да', percent: 24, color: '#ef4444' },
-    { label: 'Нет', percent: 66, color: '#22c55e' },
-    { label: 'Не определено', percent: 10, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 32, color: '#ef4444' },
-    { label: 'Нет', percent: 57, color: '#22c55e' },
-    { label: 'Не определено', percent: 11, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 36, color: '#ef4444' },
-    { label: 'Нет', percent: 52, color: '#22c55e' },
-    { label: 'Не определено', percent: 12, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 40, color: '#ef4444' },
-    { label: 'Нет', percent: 49, color: '#22c55e' },
-    { label: 'Не определено', percent: 11, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 28, color: '#ef4444' },
-    { label: 'Нет', percent: 55, color: '#22c55e' },
-    { label: 'Не определено', percent: 17, color: '#94a3b8' },
-  ],
-];
-
-const MARITAL_WOMEN: SummaryBreakdownItem[][] = [
-  [
-    { label: 'Женат / замужем', percent: 44, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 26, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 6, color: '#f97316' },
-    { label: 'Не определено', percent: 24, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 52, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 30, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 8, color: '#f97316' },
-    { label: 'Не определено', percent: 10, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 54, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 24, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 10, color: '#f97316' },
-    { label: 'Не определено', percent: 12, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 46, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 22, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 18, color: '#f97316' },
-    { label: 'Не определено', percent: 14, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Женат / замужем', percent: 30, color: '#22c55e' },
-    { label: 'Разведён / разведена', percent: 20, color: '#3b82f6' },
-    { label: 'Вдовец / вдова', percent: 15, color: '#f97316' },
-    { label: 'Не определено', percent: 35, color: '#94a3b8' },
-  ],
-];
-
-const RISK_WOMEN: SummaryBreakdownItem[][] = [
-  [
-    { label: 'Да', percent: 20, color: '#ef4444' },
-    { label: 'Нет', percent: 70, color: '#22c55e' },
-    { label: 'Не определено', percent: 10, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 30, color: '#ef4444' },
-    { label: 'Нет', percent: 60, color: '#22c55e' },
-    { label: 'Не определено', percent: 10, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 34, color: '#ef4444' },
-    { label: 'Нет', percent: 55, color: '#22c55e' },
-    { label: 'Не определено', percent: 11, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 38, color: '#ef4444' },
-    { label: 'Нет', percent: 52, color: '#22c55e' },
-    { label: 'Не определено', percent: 10, color: '#94a3b8' },
-  ],
-  [
-    { label: 'Да', percent: 22, color: '#ef4444' },
-    { label: 'Нет', percent: 58, color: '#22c55e' },
-    { label: 'Не определено', percent: 20, color: '#94a3b8' },
-  ],
-];
-
 /** Короткие подписи оси X */
 const AGE_AXIS_LABELS = ['до 25', '25–40', '40–55', '55+', 'не опр.'];
-
-function quantityFromPercent(total: number, percent: number): number {
-  return Math.round((total * percent) / 100);
-}
-
-function segmentCalls(cohortSize: number, segmentPercent: number): number {
-  return Math.round((cohortSize * segmentPercent) / 100);
-}
 
 const RISK_STACK = 'risk';
 const MARITAL_STACK = 'marital';
@@ -263,7 +127,10 @@ function makeBarOptions(
   genderCalls: number,
   ageShares: SummaryBreakdownItem[],
   fullAgeLabels: string[],
+  riskByAge: SummaryBreakdownItem[][],
+  maritalByAge: SummaryBreakdownItem[][],
 ): ChartOptions<'bar'> {
+  const riskCount = riskByAge[0]?.length ?? 0;
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -312,7 +179,15 @@ function makeBarOptions(
             const ageIdx = ctx.dataIndex;
             const agePct = ageShares[ageIdx]?.percent ?? 0;
             const callsInAge = segmentCalls(genderCalls, agePct);
-            const nSeg = segmentCalls(callsInAge, pct);
+            const dsIdx = ctx.datasetIndex;
+            let item: SummaryBreakdownItem | undefined;
+            if (dsIdx < riskCount) {
+              item = riskByAge[ageIdx]?.[dsIdx];
+            } else {
+              item = maritalByAge[ageIdx]?.[dsIdx - riskCount];
+            }
+            const nSeg =
+              item?.count !== undefined ? item.count : segmentCalls(callsInAge, pct);
             const pctStr = Number.isInteger(pct) ? `${pct}%` : `${pct.toFixed(1)}%`;
             const raw = String(ctx.dataset.label ?? '');
             const short = raw.replace(/^Риск:\s*|^Семья:\s*/, '').trim();
@@ -370,8 +245,8 @@ const GenderBarPanel = ({
   );
   const fullAgeLabels = useMemo(() => ageShares.map((a) => a.label), [ageShares]);
   const options = useMemo(
-    () => makeBarOptions(genderCalls, ageShares, fullAgeLabels),
-    [genderCalls, ageShares, fullAgeLabels],
+    () => makeBarOptions(genderCalls, ageShares, fullAgeLabels, riskByAge, maritalByAge),
+    [genderCalls, ageShares, fullAgeLabels, riskByAge, maritalByAge],
   );
 
   return (
@@ -389,10 +264,47 @@ const GenderBarPanel = ({
 };
 
 const ClientPortraitAgeBreakdown = () => {
-  const totalCalls = CLIENT_PORTRAIT_CALLS_SUMMARY_MOCK.totalCalls;
-  const [menG, womenG] = CLIENT_PORTRAIT_CALLS_SUMMARY_MOCK.gender;
-  const callsMen = quantityFromPercent(totalCalls, menG.percent);
-  const callsWomen = quantityFromPercent(totalCalls, womenG.percent);
+  const generalStats = useDashboardStore((state) => state.clientPortrait?.general_stats);
+  const genderDetailStat = useDashboardStore((state) => state.clientPortrait?.gender_detail_stat);
+
+  const { totalCalls, men: menG, women: womenG } = useMemo(
+    () => getMenWomenFromGeneralStats(generalStats),
+    [generalStats],
+  );
+  const callsMen = menG.count ?? quantityFromPercent(totalCalls, menG.percent);
+  const callsWomen = womenG.count ?? quantityFromPercent(totalCalls, womenG.percent);
+
+  const menDetail = useMemo(() => {
+    if (!genderDetailStat?.man) {
+      return {
+        ageShares: emptyGenderDetailAgeShares(),
+        riskByAge: emptyGenderDetailRiskByAge(),
+        maritalByAge: emptyGenderDetailMaritalByAge(),
+      };
+    }
+    const side = genderDetailStat.man;
+    return {
+      ageShares: mapGenderDetailAgeShares(side),
+      riskByAge: mapGenderDetailRiskByAge(side),
+      maritalByAge: mapGenderDetailMaritalByAge(side),
+    };
+  }, [genderDetailStat]);
+
+  const womenDetail = useMemo(() => {
+    if (!genderDetailStat?.woman) {
+      return {
+        ageShares: emptyGenderDetailAgeShares(),
+        riskByAge: emptyGenderDetailRiskByAge(),
+        maritalByAge: emptyGenderDetailMaritalByAge(),
+      };
+    }
+    const side = genderDetailStat.woman;
+    return {
+      ageShares: mapGenderDetailAgeShares(side),
+      riskByAge: mapGenderDetailRiskByAge(side),
+      maritalByAge: mapGenderDetailMaritalByAge(side),
+    };
+  }, [genderDetailStat]);
 
   return (
     <section className={styles.wrap} aria-label="Расшифровка по полу и возрасту">
@@ -407,18 +319,18 @@ const ClientPortraitAgeBreakdown = () => {
           title="Мужчины"
           sharePercent={menG.percent}
           genderCalls={callsMen}
-          ageShares={MEN_AGE_WITHIN_GENDER}
-          riskByAge={RISK_MEN}
-          maritalByAge={MARITAL_MEN}
+          ageShares={menDetail.ageShares}
+          riskByAge={menDetail.riskByAge}
+          maritalByAge={menDetail.maritalByAge}
         />
         <GenderBarPanel
           sectionClass={styles.genderWomen}
           title="Женщины"
           sharePercent={womenG.percent}
           genderCalls={callsWomen}
-          ageShares={WOMEN_AGE_WITHIN_GENDER}
-          riskByAge={RISK_WOMEN}
-          maritalByAge={MARITAL_WOMEN}
+          ageShares={womenDetail.ageShares}
+          riskByAge={womenDetail.riskByAge}
+          maritalByAge={womenDetail.maritalByAge}
         />
       </div>
     </section>
