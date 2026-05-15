@@ -1,219 +1,223 @@
-import React, {useEffect, useState} from 'react';
-import {
-    Flex,
-    ConfigProvider,
-    notification,
-    Spin, Empty, Pagination, Breadcrumb
-} from "antd";
+import React, { useEffect, useState } from 'react';
+import { Flex, ConfigProvider, notification, Spin, Empty, Pagination, Breadcrumb } from 'antd';
 
-import PageContainer from "../components/ui/PageContainer/PageContainer";
-import PageTitle from "../components/ui/PageTitle/PageTitle";
-import styles from "../components/MakeAnAppointmentLayout/AnalyticsLayout2.module.scss";
-import ruRU from "antd/locale/ru_RU";
-import {useCallsStore} from "../stores/callsStore";
-import CircledChart from "../components/MakeAnAppointmentLayout/CircledChart";
-import {useAnalyticsStore2} from "../stores/analyticsStore2";
-import ManagerCard from "../components/MakeAnAppointmentLayout/ManagerCard";
-import GetReportFilter from "../components/MakeAnAppointmentLayout/GetReportFilter";
+import PageContainer from '../components/ui/PageContainer/PageContainer';
+import PageTitle from '../components/ui/PageTitle/PageTitle';
+import styles from '../components/MakeAnAppointmentLayout/AnalyticsLayout2.module.scss';
+import ruRU from 'antd/locale/ru_RU';
+import { useCallsStore } from '../stores/callsStore';
+import CircledChart from '../components/MakeAnAppointmentLayout/CircledChart';
+import { useAnalyticsStore2 } from '../stores/analyticsStore2';
+import ManagerCard from '../components/MakeAnAppointmentLayout/ManagerCard';
+import GetReportFilter from '../components/MakeAnAppointmentLayout/GetReportFilter';
 import {
-    AppointmentsData,
-    DirectionsData,
-    EmployeeReportItem,
-    ManagersReportData,
-    ReportData
-} from "../components/MakeAnAppointmentLayout/types";
-import EmployeeReportHead from "../components/MakeAnAppointmentLayout/EmployeeReportHead";
-import FilterModal from "../components/MakeAnAppointmentLayout/FilterModal";
-import ProgressChart from "../components/MakeAnAppointmentLayout/ProgressChart";
-import DistributionByDirectionChart from "../components/MakeAnAppointmentLayout/DistributionByDirectionChart";
-import Legend from "../components/MakeAnAppointmentLayout/Legend";
-
+  AppointmentsData,
+  DirectionsData,
+  EmployeeReportItem,
+  ManagersReportData,
+  ReportData,
+} from '../components/MakeAnAppointmentLayout/types';
+import EmployeeReportHead from '../components/MakeAnAppointmentLayout/EmployeeReportHead';
+import FilterModal from '../components/MakeAnAppointmentLayout/FilterModal';
+import ProgressChart from '../components/MakeAnAppointmentLayout/ProgressChart';
+import DistributionByDirectionChart from '../components/MakeAnAppointmentLayout/DistributionByDirectionChart';
+import Legend from '../components/MakeAnAppointmentLayout/Legend';
 
 const MakeAnAppointmentLayout = () => {
-    const getCallsCategories = useCallsStore((state)=>state.getCallsCategories);
-    const loading = useCallsStore((state)=>state.loading);
+  const getCallsCategories = useCallsStore((state) => state.getCallsCategories);
+  const loading = useCallsStore((state) => state.loading);
 
-    const [api, contextHolder] = notification.useNotification();
+  const [api, contextHolder] = notification.useNotification();
 
-    const clearReportTotalData = useAnalyticsStore2((state)=> state.clearReportTotalData);
-    const clearManagerReportsObj = useAnalyticsStore2((state)=> state.clearManagerReportsObj);
+  const clearReportTotalData = useAnalyticsStore2((state) => state.clearReportTotalData);
+  const clearManagerReportsObj = useAnalyticsStore2((state) => state.clearManagerReportsObj);
 
-    const getManagersReport = useAnalyticsStore2((state)=> state.getManagersReport);
+  const getManagersReport = useAnalyticsStore2((state) => state.getManagersReport);
 
-    const reportTotalData = useAnalyticsStore2((state)=> state.reportTotalData) as ReportData | null;
-    const managersReportData = useAnalyticsStore2((state)=> state.managersReportData) as ManagersReportData | null;
+  const reportTotalData = useAnalyticsStore2((state) => state.reportTotalData) as ReportData | null;
+  const managersReportData = useAnalyticsStore2(
+    (state) => state.managersReportData,
+  ) as ManagersReportData | null;
 
-    // Состояния с правильной типизацией
-    const [appointmentsData, setAppointmentData] = useState<AppointmentsData | null>(null);
-    const [directionsData, setDirectionsData] = useState<DirectionsData | null>(null);
-    const [employeeReportData, setEmployeeReportData] = useState<EmployeeReportItem[]>([]);
+  // Состояния с правильной типизацией
+  const [appointmentsData, setAppointmentData] = useState<AppointmentsData | null>(null);
+  const [directionsData, setDirectionsData] = useState<DirectionsData | null>(null);
+  const [employeeReportData, setEmployeeReportData] = useState<EmployeeReportItem[]>([]);
 
-    const managerReportsObj = useAnalyticsStore2((state) => state.managerReportsObj);
-    const setPageLimit = useAnalyticsStore2((state) => state.setPageLimit);
-    const setPage = useAnalyticsStore2((state) => state.setPage);
+  const managerReportsObj = useAnalyticsStore2((state) => state.managerReportsObj);
+  const setPageLimit = useAnalyticsStore2((state) => state.setPageLimit);
+  const setPage = useAnalyticsStore2((state) => state.setPage);
 
-    const [totalItemsCount, setTotalItemsCount] = useState<number | null>(null);
-    const [currentPage, setCurrentPage] = useState<number | null>(1);
-    const [currentLimit, setCurrentLimit] = useState<number | null>(10);
+  const [totalItemsCount, setTotalItemsCount] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number | null>(1);
+  const [currentLimit, setCurrentLimit] = useState<number | null>(10);
 
-    const [isOpenFilterModal, setIsOpenFilterModal] = useState<boolean>(false);
-    const [isActiveFilter, setIsActiveFilter] = useState<boolean>(false);
+  const [isOpenFilterModal, setIsOpenFilterModal] = useState<boolean>(false);
+  const [isActiveFilter, setIsActiveFilter] = useState<boolean>(false);
 
-    // Состояние для задержки отрисовки карточек
-    const [isDelayedLoading, setIsDelayedLoading] = useState<boolean>(false);
-    const [delayedEmployeeData, setDelayedEmployeeData] = useState<EmployeeReportItem[]>([]);
+  // Состояние для задержки отрисовки карточек
+  const [isDelayedLoading, setIsDelayedLoading] = useState<boolean>(false);
+  const [delayedEmployeeData, setDelayedEmployeeData] = useState<EmployeeReportItem[]>([]);
 
-    useEffect(() => {
-        clearReportTotalData();
-        clearManagerReportsObj()
-    }, []);
+  useEffect(() => {
+    clearReportTotalData();
+    clearManagerReportsObj();
+  }, []);
 
-    useEffect(() => {
-        if (currentLimit) {
-            setPageLimit(currentLimit);
-            setCurrentPage(1);
-            setPage(1);
-        }
-    }, [currentLimit]);
+  useEffect(() => {
+    if (currentLimit) {
+      setPageLimit(currentLimit);
+      setCurrentPage(1);
+      setPage(1);
+    }
+  }, [currentLimit]);
 
-    useEffect(() => {
-        if (managerReportsObj.date_from &&
-            managerReportsObj.date_to &&
-            managerReportsObj.category_id &&
-            managerReportsObj.org_id) {
+  useEffect(() => {
+    if (
+      managerReportsObj.date_from &&
+      managerReportsObj.date_to &&
+      managerReportsObj.category_id &&
+      managerReportsObj.org_id
+    ) {
+      if (currentPage) {
+        setPage(currentPage);
+      }
+      if (currentLimit) {
+        setPageLimit(currentLimit);
+      }
 
-            if (currentPage) {
-                setPage(currentPage);
-            }
-            if (currentLimit) {
-                setPageLimit(currentLimit);
-            }
+      getManagersReport();
+    }
+  }, [
+    currentPage,
+    currentLimit,
+    managerReportsObj.date_from,
+    managerReportsObj.date_to,
+    managerReportsObj.category_id,
+    managerReportsObj.org_id,
+    managerReportsObj.sort,
+    managerReportsObj.managers,
+  ]);
 
-            getManagersReport();
-        }
-    }, [currentPage, currentLimit, managerReportsObj.date_from,
-        managerReportsObj.date_to, managerReportsObj.category_id,
-        managerReportsObj.org_id, managerReportsObj.sort, managerReportsObj.managers]);
+  useEffect(() => {
+    getCallsCategories();
+  }, [getCallsCategories]);
 
+  useEffect(() => {
+    if (reportTotalData) {
+      setAppointmentData(reportTotalData.number_of_appointments_and_calls);
+      setDirectionsData(reportTotalData.distribution_by_directions);
+      // setEmployeeReportData(reportData.employee_report);
+    }
+  }, [reportTotalData]);
+  useEffect(() => {
+    if (managersReportData) {
+      setTotalItemsCount(managersReportData.total);
 
+      setIsDelayedLoading(true);
 
-    useEffect(() => {
-        getCallsCategories();
-    }, [getCallsCategories]);
+      const timer = setTimeout(() => {
+        setDelayedEmployeeData(managersReportData.items);
+        setIsDelayedLoading(false);
+      }, 1000);
 
-    useEffect(() => {
-        if (reportTotalData) {
-            setAppointmentData(reportTotalData.number_of_appointments_and_calls);
-            setDirectionsData(reportTotalData.distribution_by_directions);
-            // setEmployeeReportData(reportData.employee_report);
-        }
-    }, [reportTotalData]);
-    useEffect(() => {
-        if (managersReportData) {
-            setTotalItemsCount(managersReportData.total);
+      return () => clearTimeout(timer);
+    }
+  }, [managersReportData]);
 
-            setIsDelayedLoading(true);
+  const showLoader = loading || isDelayedLoading;
 
-            const timer = setTimeout(() => {
-                setDelayedEmployeeData(managersReportData.items);
-                setIsDelayedLoading(false);
-            }, 1000);
+  return (
+    <ConfigProvider getPopupContainer={() => document.body} locale={ruRU}>
+      {contextHolder}
+      <PageContainer style={{ marginRight: '20px' }}>
+        <Breadcrumb
+          style={{ marginBottom: '20px' }}
+          items={[
+            {
+              title: <a href="/reports">Отчеты</a>,
+            },
+            {
+              title: 'Назначение встречи',
+            },
+          ]}
+        />
+        <Flex vertical gap={20}>
+          <PageTitle text="Назначение встречи" />
+        </Flex>
+        <Flex className={styles.AnalyticsControls}>
+          <GetReportFilter />
+        </Flex>
 
-            return () => clearTimeout(timer);
-        }
-    }, [managersReportData]);
+        {reportTotalData ? (
+          <Flex vertical gap={20}>
+            <Flex gap={20} style={{ marginTop: '30px' }}>
+              <ProgressChart data={appointmentsData} />
+              <DistributionByDirectionChart data={directionsData} />
+              <Legend />
+            </Flex>
 
+            <Flex vertical gap={20}>
+              <EmployeeReportHead
+                setIsOpenFilterModal={setIsOpenFilterModal}
+                isActiveFilter={isActiveFilter}
+              />
 
-    const showLoader = loading || isDelayedLoading;
-
-    return (
-        <ConfigProvider
-            getPopupContainer={() => document.body}
-            locale={ruRU}
-        >
-            {contextHolder}
-            <PageContainer style={{marginRight:'20px'}}>
-                <Breadcrumb
-                    style={{marginBottom:'20px'}}
-                    items={[
-                        {
-                            title: <a href="/reports">Отчеты</a>,
-                        },
-                        {
-                            title: 'Назначение встречи',
-                        },
-                    ]}
-                />
-                <Flex vertical gap={20}>
-                    <PageTitle text='Назначение встречи'/>
-                </Flex>
-                <Flex className={styles.AnalyticsControls}>
-                    <GetReportFilter/>
-                </Flex>
-
-                {reportTotalData ? (
-                        <Flex vertical gap={20}>
-                            <Flex gap={20} style={{marginTop:'30px'}}>
-                                <ProgressChart data={appointmentsData}/>
-                                <DistributionByDirectionChart data={directionsData}/>
-                                <Legend/>
-                            </Flex>
-
-                            <Flex vertical gap={20}>
-                                <EmployeeReportHead
-                                    setIsOpenFilterModal={setIsOpenFilterModal}
-                                    isActiveFilter={isActiveFilter}
-                                />
-
-                                <Flex vertical gap={20}>
-                                    {showLoader ? (
-                                        <Flex justify="center" align="center" style={{minHeight: '300px'}}>
-                                            <Spin size="large"/>
-                                        </Flex>
-                                    ) : (
-                                        delayedEmployeeData.length > 0 ? (
-                                            <Flex vertical gap={20}>
-                                                <Flex style={{marginTop:'30px', flexWrap:'wrap', rowGap:'40px', columnGap:'20px'}}>
-                                                    {delayedEmployeeData.map((item, index) => (
-                                                        <ManagerCard key={index} userData={item} />
-                                                    ))}
-                                                </Flex>
-                                                <Flex justify="flex-end">
-                                                    <Pagination
-                                                        showSizeChanger
-                                                        onShowSizeChange={(current, size) => {
-                                                            setCurrentLimit(size);
-                                                        }}
-                                                        onChange={(page, pageSize) => {
-                                                            setCurrentPage(page);
-                                                            setCurrentLimit(pageSize);
-                                                        }}
-                                                        current={currentPage || 1}
-                                                        total={totalItemsCount || 0}
-                                                        pageSize={currentLimit || 10}
-                                                        pageSizeOptions={['10', '20', '50']}
-                                                        showTotal={(total) => `Всего: ${total}`}
-                                                    />
-                                                </Flex>
-                                            </Flex>
-                                        ) : (
-                                            <Flex flex={1} justify={'center'} align={'center'} style={{minHeight: '300px'}}>
-                                                <Empty/>
-                                            </Flex>
-                                        )
-                                    )}
-                                </Flex>
-                            </Flex>
-                        </Flex>
-                    ) : null
-                }
-                {
-                    isOpenFilterModal && <FilterModal setIsOpenFilterModal={setIsOpenFilterModal} setIsActiveFilter={setIsActiveFilter}/>
-                }
-
-            </PageContainer>
-        </ConfigProvider>
-    );
+              <Flex vertical gap={20}>
+                {showLoader ? (
+                  <Flex justify="center" align="center" style={{ minHeight: '300px' }}>
+                    <Spin size="large" />
+                  </Flex>
+                ) : delayedEmployeeData.length > 0 ? (
+                  <Flex vertical gap={20}>
+                    <Flex
+                      style={{
+                        marginTop: '30px',
+                        flexWrap: 'wrap',
+                        rowGap: '40px',
+                        columnGap: '20px',
+                      }}
+                    >
+                      {delayedEmployeeData.map((item, index) => (
+                        <ManagerCard key={index} userData={item} />
+                      ))}
+                    </Flex>
+                    <Flex justify="flex-end">
+                      <Pagination
+                        showSizeChanger
+                        onShowSizeChange={(current, size) => {
+                          setCurrentLimit(size);
+                        }}
+                        onChange={(page, pageSize) => {
+                          setCurrentPage(page);
+                          setCurrentLimit(pageSize);
+                        }}
+                        current={currentPage || 1}
+                        total={totalItemsCount || 0}
+                        pageSize={currentLimit || 10}
+                        pageSizeOptions={['10', '20', '50']}
+                        showTotal={(total) => `Всего: ${total}`}
+                      />
+                    </Flex>
+                  </Flex>
+                ) : (
+                  <Flex flex={1} justify={'center'} align={'center'} style={{ minHeight: '300px' }}>
+                    <Empty />
+                  </Flex>
+                )}
+              </Flex>
+            </Flex>
+          </Flex>
+        ) : null}
+        {isOpenFilterModal && (
+          <FilterModal
+            setIsOpenFilterModal={setIsOpenFilterModal}
+            setIsActiveFilter={setIsActiveFilter}
+          />
+        )}
+      </PageContainer>
+    </ConfigProvider>
+  );
 };
 
 export default MakeAnAppointmentLayout;

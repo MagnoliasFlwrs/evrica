@@ -16,8 +16,23 @@
   padding: 10px 14px;
   cursor: pointer;
   border-radius: 40px;
-  background: #EFEFED;
+  background: #efefed;
 
+  &.light {
+    border-radius: 10px;
+    background-color: transparent;
+    height: 40px;
+    border: 1px solid #0000001a;
+    width: 100%;
+  }
+}
+
+.embedded {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 6px 0 0;
+  min-width: 0 !important;
 }
 
 .selectedValueContainer {
@@ -50,14 +65,14 @@
   flex-wrap: nowrap;
   flex: 1;
 }
-.selectedOptions{
+.selectedOptions {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-left: auto;
   .selectedTag {
     border-radius: 2px;
-    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007aff);
     background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
     display: flex;
     height: 20px;
@@ -65,7 +80,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007aff);
     text-align: center;
     font-family: Mulish;
     font-size: 10px;
@@ -75,7 +90,7 @@
   }
   .selectedCount {
     border-radius: 2px;
-    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    border: 1px solid var(--Miscellaneous-Floating-Tab---Text-Selected, #007aff);
     background: var(--Miscellaneous-Button---Tinted-Fill, rgba(0, 122, 255, 0.15));
     display: flex;
     width: 20px;
@@ -83,7 +98,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+    color: var(--Miscellaneous-Floating-Tab---Text-Selected, #007aff);
     text-align: center;
     font-family: Mulish;
     font-size: 10px;
@@ -99,14 +114,11 @@
     outline: none;
     &:hover {
       svg path {
-        fill: #007AFF;
+        fill: #007aff;
       }
     }
   }
-
 }
-
-
 
 .arrow {
   flex-shrink: 0;
@@ -120,7 +132,7 @@
   left: 0;
   right: 0;
   border-radius: 20px;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
   display: flex;
   min-width: 247px;
@@ -131,6 +143,25 @@
   z-index: 10;
 }
 
+.optionsScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 252px;
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.optionsScroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.optionsScroll::-webkit-scrollbar-thumb {
+  background: rgba(125, 125, 125, 0.35);
+  border-radius: 999px;
+}
+
 .option {
   display: flex;
   justify-content: space-between;
@@ -138,6 +169,8 @@
   gap: 10px;
   align-self: stretch;
   width: 100%;
+  min-height: 34px;
+  padding: 7px 0;
   cursor: pointer;
   transition: 0.3s ease;
   color: #000;
@@ -145,13 +178,13 @@
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
-  line-height: normal;
+  line-height: 1.35;
   &:hover {
-    color: #007AFF;
+    color: #007aff;
   }
 }
 .optionAll {
-  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.1));
   display: flex;
   padding: 10px 0;
   justify-content: space-between;
@@ -169,7 +202,7 @@
   line-height: normal;
 
   &:hover {
-    color: #007AFF;
+    color: #007aff;
   }
 }
 
@@ -212,36 +245,40 @@
   gap: 10px;
   align-self: stretch;
   border: none;
-  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10));
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.1));
   outline: none;
   border-radius: 0;
   &::before {
     content: none !important;
   }
   &::placeholder {
-    color: rgba(0, 0, 0, 0.50);
+    color: rgba(0, 0, 0, 0.5);
     font-family: Mulish;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
   }
-  &:hover, &:focus, &:active, &:focus-visible , &:focus-within {
+  &:hover,
+  &:focus,
+  &:active,
+  &:focus-visible,
+  &:focus-within {
     outline: none;
-    border: none!important;
+    border: none !important;
     box-shadow: none;
-    border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.10))!important;
+    border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.1)) !important;
   }
 }
 :where(.css-dev-only-do-not-override-xepvsj).ant-input-affix-wrapper::before {
-  content: none!important;
+  content: none !important;
 }
 
 .promise {
   border-radius: 4px;
-  background: #EDFBCC;
+  background: #edfbcc;
   overflow: hidden;
-  color: #486A12;
+  color: #486a12;
   text-overflow: ellipsis;
   font-family: Mulish;
   font-size: 10px;
@@ -261,9 +298,9 @@
   align-items: center;
   gap: 4px;
   border-radius: 4px;
-  background: #CCFBF0;
+  background: #ccfbf0;
   overflow: hidden;
-  color: #126D69;
+  color: #126d69;
   text-overflow: ellipsis;
   font-family: Mulish;
   font-size: 10px;
@@ -271,7 +308,6 @@
   font-weight: 700;
   line-height: normal;
   text-transform: uppercase;
-
 }
 
 .expencive {
@@ -280,7 +316,7 @@
   align-items: center;
   gap: 4px;
   overflow: hidden;
-  color: #00598F;
+  color: #00598f;
   text-overflow: ellipsis;
   font-family: Mulish;
   font-size: 10px;
@@ -289,7 +325,7 @@
   line-height: normal;
   text-transform: uppercase;
   border-radius: 4px;
-  background: #ECF8FE;
+  background: #ecf8fe;
 }
 
 .donthelp {
@@ -298,9 +334,9 @@
   align-items: center;
   gap: 4px;
   border-radius: 4px;
-  background: #F9E7FE;
+  background: #f9e7fe;
   overflow: hidden;
-  color: #8D1697;
+  color: #8d1697;
   text-overflow: ellipsis;
   font-family: Mulish;
   font-size: 10px;

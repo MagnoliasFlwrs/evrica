@@ -42,6 +42,7 @@
   --brand-blue-dark: #153093;
   --light-blue: rgba(0, 122, 255, 0.15);
   --light-grey: #f3f3f3;
+  --border: rgba(0, 0, 0, 0.1);
 }
 * {
   margin: 0;
@@ -130,6 +131,25 @@ body {
   line-height: normal;
 }
 
+.ant-input {
+  font-family: 'Mulish';
+}
+
 .swiper {
   width: 100%;
+}
+
+.ant-picker-dropdown,
+.ant-picker-dropdown * {
+  font-family: 'Mulish';
+}
+
+.ant-picker-panel-container {
+  border-radius: 20px !important;
+}
+
+.ant-picker-cell-today {
+  background-color: var(--brand-blue);
+  color: #ffffff !important;
+  border-radius: 6px;
 }

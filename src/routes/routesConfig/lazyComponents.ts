@@ -1,4 +1,4 @@
-import {lazy} from "react";
+import { lazy } from 'react';
 
 export const ErrorPage = lazy(() => import('../ErrorPage'));
 export const MainLayout = lazy(() => import('../MainLayout'));

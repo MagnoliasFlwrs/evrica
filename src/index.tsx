@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import './index.css';
 import { createRoot } from 'react-dom/client';
-import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   ErrorPage,
   MainLayout,
@@ -90,7 +90,7 @@ const App = () => {
         },
         {
           path: '/settings',
-          element: <Navigate to="/settings/checklists" replace />,
+          element: <SettingsLayout />,
         },
         {
           path: '/settings/markers/:markerId/edit',

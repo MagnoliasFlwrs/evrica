@@ -1,5 +1,5 @@
 .blueButton {
-  color: #FFF;
+  color: #fff;
   font-family: Mulish;
   font-size: 14px;
   font-style: normal;
@@ -12,7 +12,7 @@
   align-items: center;
   gap: 10px;
   border-radius: 30px;
-  background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007AFF);
+  background: var(--Miscellaneous-Floating-Tab---Text-Selected, #007aff);
   border: none;
   outline: none;
   cursor: pointer;
@@ -27,5 +27,8 @@
   .iconEnd {
     display: flex;
     align-items: center;
+  }
+  .buttonText {
+    color: #fff;
   }
 }
