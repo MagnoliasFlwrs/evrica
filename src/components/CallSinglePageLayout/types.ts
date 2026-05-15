@@ -8,8 +8,10 @@ export interface CheckListItem {
 
 
 export interface MarkerItem {
-    type: string;
-    count :number;
+    id: number;
+    name: string;
+    /** Массив “абзацев”, каждый абзац — массив строк с HTML-тегами `<b>` */
+    search_text_highlight_full: string[][];
 }
 
 export interface MarkerModalProps {

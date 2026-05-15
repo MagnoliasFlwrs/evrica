@@ -14,6 +14,11 @@ export const useDashboardStore = create(
             employeeDidntHandleObjection:null,
             dealProbabilityLastDays:null,
             problemCallsPriorityLastDays:null,
+            clientPortrait:null,
+            resetClientPortrait: () =>
+                set({
+                    clientPortrait: null,
+                }),
             getRiskOfLosingAClient:async (orgId:string | number , days :number) => {
                 set({ loading: true, error: false });
                 try {
@@ -193,7 +198,48 @@ export const useDashboardStore = create(
                         loading: false,
                     });
                 }
-            }
+            },
+            getClientPortrait:async (orgId:string | number ,
+                                     dateFrom:string,
+                                     dateTo:string,
+                                     categoryId:string|number,
+                                     target:boolean) => {
+                set({ loading: true, error: false });
+                try {
+                    const res = await axiosInstanceAll.post(
+                        `${baseAuthUrl}/proxy-dashboard/get-client-portrait`,
+                        {
+                            date_from:dateFrom,
+                            date_to: dateTo,
+                            category_id: categoryId,
+                            org_id: orgId,
+                            target: target
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                accept: '*/*',
+                                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                            },
+                        },
+                    );
+
+                    if (res.status === 200) {
+                        set({
+                            loading: false,
+                            error: false,
+                            clientPortrait:res.data.data
+                        });
+
+                        return res.data;
+                    }
+                } catch (error) {
+                    set({
+                        error: true,
+                        loading: false,
+                    });
+                }
+            },
 
         }),
             {

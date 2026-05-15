@@ -16,7 +16,8 @@ const CallMarkerItem = ({ item, key , setShowMarkerModal }: CallsOptionsMarkerIt
     const [isTriggered, setIsTriggered] = useState(false);
 
     const getColorByMarkerType = () => {
-        switch(item?.type.toLowerCase()) {
+        // Пока нет маппинга по реальным словарям — используем дефолтный цвет
+        switch(item?.name.toLowerCase()) {
             case 'возражение "дорого"':
                 return callsOptionsMarkersColors.blue;
             case 'не хочу':
@@ -54,14 +55,36 @@ const CallMarkerItem = ({ item, key , setShowMarkerModal }: CallsOptionsMarkerIt
                         color: colorConfig.color
                     }}
                 >
-                    {item?.type}
+                    {item?.name}
                 </Flex>
-                <Flex className={styles.CallsOptionsMarkCount}
+                {/* <Flex className={styles.CallsOptionsMarkCount}
                       onClick={handleClick}
                 >
                     {item?.count}
-                </Flex>
+                </Flex> */}
             </Flex>
+
+            {item?.search_text_highlight_full?.length > 0 && (
+                <div
+                    className={[
+                        styles.markerTriggered,
+                        isTriggered ? styles.markerTriggeredOpen : styles.markerTriggeredClosed
+                    ].join(' ')}
+                    aria-hidden={!isTriggered}
+                >
+                    {item.search_text_highlight_full.map((group, groupIndex) => (
+                        <div className={styles.markerTriggeredGroup} key={`${item.id}-${groupIndex}`}>
+                            {group.map((line, lineIndex) => (
+                                <p
+                                    key={`${item.id}-${groupIndex}-${lineIndex}`}
+                                    className={styles.markerTriggeredLine}
+                                    dangerouslySetInnerHTML={{ __html: line }}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {
                 isTriggered ?

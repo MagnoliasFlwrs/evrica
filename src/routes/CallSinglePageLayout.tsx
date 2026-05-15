@@ -21,10 +21,14 @@ const CallSinglePageLayout = () => {
   const getPromptList = useCallsStore((state) => state.getPromptList);
   const getAiJsonList = useCallsStore((state) => state.getAiJsonList);
   const currentCallInfo = useCallsStore((state) => state.currentCallInfo);
+  const getCallComments = useCallsStore((state) => state.getCallComments);
+
+
 
   useEffect(() => {
     getCurrentCallInfo(currentCallId || '');
-  }, [currentCallId, getCurrentCallInfo]);
+      getCallComments(currentCallId || '');
+  }, [currentCallId, getCurrentCallInfo, getCallComments]);
 
   useEffect(() => {
     getPromptList(user?.organization_id);

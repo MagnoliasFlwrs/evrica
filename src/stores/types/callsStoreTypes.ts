@@ -450,6 +450,9 @@ export interface CallsState {
   fetchCategoryDictionaryFullData: (params: CategoryDictionaryFullDataObj) => Promise<any | null>;
   callsByCategories: any;
   categoriesIds: number[] | null;
+  comments: any[];
+  getCallComments: (id: string | number) => Promise<any>;
+  saveComment: (id: string | number, categoryId: string | number, comment: string) => Promise<any>;
   getCallsByCategories?: () => Promise<any[]>;
   setCategoriesIds: (arr: number[]) => void;
 }

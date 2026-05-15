@@ -19,6 +19,7 @@ import { Spin } from 'antd';
 import CallsFilteredLayout from './routes/CallsFilteredLayout';
 import CallSinglePageLayout from './routes/CallSinglePageLayout';
 import { useAuth } from './store';
+import ClientPortraitLayout from "./routes/ClientPortraitLayout";
 
 const App = () => {
   const isAuth = useAuth((state) => state.isAuth);
@@ -77,13 +78,18 @@ const App = () => {
           element: <AnalyticsLayout />,
         },
         {
-          path: '/make-an-appointment',
-          element: <MakeAnAppointmentLayout />,
-        },
-        {
           path: '/reports',
           element: <AnalyticReportCards />,
+
         },
+          {
+              path: 'make-an-appointment',
+              element: <MakeAnAppointmentLayout />,
+          },
+          {
+              path: 'client-portrait',
+              element: <ClientPortraitLayout />,
+          },
         {
           path: '/analytics-report',
           element: <AnalyticsReportLayout />,
