@@ -18,6 +18,7 @@ import PageContainer from '../components/ui/PageContainer/PageContainer';
 import PageTitle from '../components/ui/PageTitle/PageTitle';
 import StaticRangePicker from '../components/ui/StaticRangePicker/StaticRangePicker';
 import {
+  SettingsMarkerGroupApi,
   useSettingsStore,
   type SettingsChecklistApi,
   type SettingsDictionaryApi,
@@ -442,7 +443,11 @@ const iconSrc = {
 const SettingsLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { markerId, checklistId } = useParams<{ markerId?: string; checklistId?: string }>();
+  const { markerId, checklistId, groupId } = useParams<{
+    markerId?: string;
+    checklistId?: string;
+    groupId?: string;
+  }>();
   const markerTypeFromQuery = useMemo(() => {
     const type = new URLSearchParams(location.search).get('type');
     return type === 'client' || type === 'system' || type === 'for_group' ? type : null;
@@ -461,6 +466,11 @@ const SettingsLayout = () => {
   const checklistSaving = useSettingsStore((state) => state.checklistSaving);
   const checklistDeleting = useSettingsStore((state) => state.checklistDeleting);
   const checklistsError = useSettingsStore((state) => state.checklistsError);
+  const markerGroups = useSettingsStore((state) => state.markerGroups);
+  const markerGroupsLoading = useSettingsStore((state) => state.markerGroupsLoading);
+  const fetchMarkerGroups = useSettingsStore((state) => state.fetchMarkerGroups);
+  const saveMarkerGroup = useSettingsStore((state) => state.saveMarkerGroup);
+  const deleteMarkerGroup = useSettingsStore((state) => state.deleteMarkerGroup);
   const fetchMarkers = useSettingsStore((state) => state.fetchMarkers);
   const fetchMarkerById = useSettingsStore((state) => state.fetchMarkerById);
   const saveMarker = useSettingsStore((state) => state.saveMarker);
@@ -670,10 +680,39 @@ const SettingsLayout = () => {
     return initial;
   });
 
+  // Стейты для редактирования/создания группы
+  const [isGroupModalOpen, setGroupModalOpen] = useState(false);
+  const [groupForm, setGroupForm] = useState<{
+    id?: number;
+    name: string;
+    color: string;
+    type: 'client' | 'system';
+    dictionaries_ids: number[];
+  }>({
+    name: '',
+    color: '#007aff',
+    type: 'client',
+    dictionaries_ids: [],
+  });
+
+  // Стейты для удаления группы
+  const [isDeleteGroupModalOpen, setDeleteGroupModalOpen] = useState(false);
+  const [groupToDelete, setGroupToDelete] = useState<{ id: number; type: string } | null>(null);
+
+  // Стейты для добавления маркеров в группу
+  const [isGroupMarkersModalOpen, setGroupMarkersModalOpen] = useState(false);
+  const [selectedGroupMarkers, setSelectedGroupMarkers] = useState<number[]>([]);
+
   useEffect(() => {
     void fetchMarkers();
     void fetchChecklists();
   }, [fetchChecklists, fetchMarkers]);
+
+  useEffect(() => {
+    void fetchMarkers();
+    void fetchChecklists();
+    void fetchMarkerGroups();
+  }, [fetchChecklists, fetchMarkers, fetchMarkerGroups]);
 
   useEffect(() => {
     if (!isNewMarker && markerFromList.apiId != null) {
@@ -748,9 +787,19 @@ const SettingsLayout = () => {
     [checklistItems],
   );
 
+  const activeGroup = useMemo(() => {
+    if (!groupId) return null;
+    return markerGroups.find((g) => String(g.id) === groupId) || null;
+  }, [groupId, markerGroups]);
+
   const filteredMarkers = useMemo(() => {
-    return markerItems.filter((item) => {
-      if (item.markerType === 'for_group') return false;
+    let baseItems = markerItems;
+    if (activeGroup) {
+      const allowedMarkerIds = activeGroup.dictionaries.map((d) => String(d.dictionary_id));
+      baseItems = baseItems.filter((item) => allowedMarkerIds.includes(String(item.apiId)));
+    }
+
+    return baseItems.filter((item) => {
       if (selectedNames.length && !selectedNames.includes(item.id)) return false;
       if (selectedMarkerTypes.length && !selectedMarkerTypes.includes(item.markerType))
         return false;
@@ -769,6 +818,7 @@ const SettingsLayout = () => {
     });
   }, [
     markerItems,
+    activeGroup,
     searchValue,
     selectedCallType,
     selectedChannel,
@@ -979,6 +1029,71 @@ const SettingsLayout = () => {
       navigate(`/settings/checklists/${savedId}/edit/markers`);
     } else {
       navigate('/settings/checklists');
+    }
+  };
+
+  const handleOpenCreateGroup = () => {
+    setGroupForm({ name: '', color: '#007aff', type: 'client', dictionaries_ids: [] });
+    setGroupModalOpen(true);
+  };
+
+  const handleOpenEditGroup = (group: SettingsMarkerGroupApi) => {
+    setGroupForm({
+      id: group.id,
+      name: group.name,
+      color: group.color,
+      type: group.type,
+      dictionaries_ids: group.dictionaries.map((d) => d.dictionary_id),
+    });
+    setGroupModalOpen(true);
+  };
+
+  const handleSaveGroup = async () => {
+    if (!groupForm.name.trim()) return;
+    const success = await saveMarkerGroup(groupForm);
+    if (success) {
+      setGroupModalOpen(false);
+      setFeedback({ type: 'success', text: 'Группа успешно сохранена' });
+    } else {
+      setFeedback({ type: 'error', text: 'Не удалось сохранить группу' });
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!groupToDelete) return;
+    const success = await deleteMarkerGroup(groupToDelete.id, groupToDelete.type);
+    if (success) {
+      setDeleteGroupModalOpen(false);
+      setFeedback({ type: 'success', text: 'Группа удалена' });
+      // Если мы находились внутри этой группы, выкидываем обратно в общий список
+      if (activeGroup?.id === groupToDelete.id) {
+        navigate('/settings');
+      }
+    } else {
+      setFeedback({ type: 'error', text: 'Не удалось удалить группу' });
+    }
+  };
+
+  const handleOpenGroupMarkers = () => {
+    if (!activeGroup) return;
+    setSelectedGroupMarkers(activeGroup.dictionaries.map((d) => d.dictionary_id));
+    setGroupMarkersModalOpen(true);
+  };
+
+  const handleSaveGroupMarkers = async () => {
+    if (!activeGroup) return;
+    const success = await saveMarkerGroup({
+      id: activeGroup.id,
+      name: activeGroup.name,
+      color: activeGroup.color,
+      type: activeGroup.type,
+      dictionaries_ids: selectedGroupMarkers,
+    });
+    if (success) {
+      setGroupMarkersModalOpen(false);
+      setFeedback({ type: 'success', text: 'Маркеры группы обновлены' });
+    } else {
+      setFeedback({ type: 'error', text: 'Не удалось обновить маркеры' });
     }
   };
 
@@ -1461,19 +1576,109 @@ const SettingsLayout = () => {
   const renderMarkersList = () => (
     <PageContainer className={styles.page}>
       <Flex className={styles.headerRow} align="center" justify="space-between">
-        <PageTitle text="Настройки" />
+        <div>
+          {/* Если мы внутри группы, показываем хлебные крошки */}
+          {activeGroup ? (
+            <div className={styles.breadcrumbs}>
+              <Link to="/settings">Настройки</Link>
+              <span>›</span>
+              <Link to="/settings">Маркеры</Link>
+              <span>›</span>
+              <span className={styles.currentCrumb}>{activeGroup.name}</span>
+            </div>
+          ) : (
+            <PageTitle text="Настройки" />
+          )}
+        </div>
         {renderTopTabs()}
       </Flex>
 
       <Flex className={styles.sectionHeaderRow} align="center" justify="space-between">
-        <h2 className={styles.sectionTitleCompact}>Настройка маркеров</h2>
-        <BlueButton
-          text="Создать новый маркер"
-          icon={<PlusOutlined />}
-          onClick={() => navigate('/settings/markers/new/edit')}
-        />
+        <h2 className={styles.sectionTitleCompact}>
+          {activeGroup ? `Группа: ${activeGroup.name}` : 'Настройка маркеров'}
+        </h2>
+        <Flex gap={12}>
+          {activeGroup ? (
+            <BlueButton
+              text="Добавить маркеры"
+              icon={<PlusOutlined />}
+              onClick={handleOpenGroupMarkers}
+            />
+          ) : (
+            <>
+              <button className={styles.secondaryButton} onClick={handleOpenCreateGroup}>
+                <PlusOutlined /> Создать группу
+              </button>
+              <BlueButton
+                text="Создать новый маркер"
+                icon={<PlusOutlined />}
+                onClick={() => navigate('/settings/markers/new/edit')}
+              />
+            </>
+          )}
+        </Flex>
       </Flex>
 
+      {/* БЛОК С ГРУППАМИ  */}
+      {!activeGroup && (
+        <div className={styles.groupsWrapper}>
+          <h3 className={styles.listTitle}>Группы маркеров</h3>
+          {markerGroupsLoading ? (
+            <Spin size="small" />
+          ) : markerGroups.length > 0 ? (
+            <div className={styles.groupsGrid}>
+              {markerGroups.map((group) => (
+                <div
+                  key={group.id}
+                  className={styles.groupCard}
+                  onClick={() => navigate(`/settings/markers/group/${group.id}`)}
+                >
+                  <div className={styles.groupCardHeader}>
+                    <Flex align="center" gap={8}>
+                      <div
+                        className={styles.groupColorDot}
+                        style={{ backgroundColor: group.color }}
+                      ></div>
+                      <span className={styles.groupTypeBadge}>
+                        {group.type === 'client' ? 'Клиентская' : 'Системная'}
+                      </span>
+                    </Flex>
+                    <Flex gap={4}>
+                      <button
+                        className={styles.editButton}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenEditGroup(group);
+                        }}
+                      >
+                        <img alt="редактировать" src="/icons/edit.svg" />
+                      </button>
+                      <button
+                        className={styles.editButton}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setGroupToDelete({ id: group.id, type: group.type });
+                          setDeleteGroupModalOpen(true);
+                        }}
+                      >
+                        <img alt="редактировать" src="/icons/delete.svg" />
+                      </button>
+                    </Flex>
+                  </div>
+                  <h4 className={styles.groupCardTitle}>{group.name}</h4>
+                  <p className={styles.groupCardCount}>
+                    Маркеров: {group.dictionaries?.length || 0}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <span className={styles.emptyHint}>Группы не найдены</span>
+          )}
+        </div>
+      )}
+
+      {/* ФИЛЬТРЫ И СПИСОК МАРКЕРОВ */}
       <Flex className={styles.actionsRow} align="center" justify="space-between">
         <div className={styles.filtersRow}>
           {renderFilterShell(
@@ -1483,7 +1688,6 @@ const SettingsLayout = () => {
               options={[
                 { value: 'client', label: 'Клиентские' },
                 { value: 'system', label: 'Системные' },
-                // { value: 'for_group', label: 'Групповые' },
               ]}
               multiple
               value={selectedMarkerTypes}
@@ -1589,55 +1793,186 @@ const SettingsLayout = () => {
         </div>
       ) : (
         <div className={styles.cardsGrid}>
-          {filteredMarkers.map((item) => (
-            <div key={`${item.markerType}-${item.id}`} className={styles.markerCard}>
-              <div className={styles.cardTop}>
-                <span className={styles.colorTag} style={getMarkerTagStyle(item.colorToken)}>
-                  {item.title}
-                </span>
-                <Tooltip title="Редактировать маркер">
-                  <button
-                    type="button"
-                    className={styles.editButton}
-                    onClick={() =>
-                      navigate(`/settings/markers/${item.id}/edit?type=${item.markerType}`)
-                    }
-                  >
-                    <img alt="редактировать" src="/icons/edit.svg" />
-                  </button>
-                </Tooltip>
+          {filteredMarkers.length > 0 ? (
+            filteredMarkers.map((item) => (
+              <div key={`${item.markerType}-${item.id}`} className={styles.markerCard}>
+                <div className={styles.cardTop}>
+                  <span className={styles.colorTag} style={getMarkerTagStyle(item.colorToken)}>
+                    {item.title}
+                  </span>
+                  <Tooltip title="Редактировать маркер">
+                    <button
+                      type="button"
+                      className={styles.editButton}
+                      onClick={() =>
+                        navigate(`/settings/markers/${item.id}/edit?type=${item.markerType}`)
+                      }
+                    >
+                      <img alt="редактировать" src="/icons/edit.svg" />
+                    </button>
+                  </Tooltip>
+                </div>
+                <p className={styles.cardDescription}>{item.description || 'Без описания'}</p>
+                <div className={styles.cardMeta}>
+                  <div>
+                    <span>Тип</span>
+                    <b>{toMarkerLabel(item.markerType)}</b>
+                  </div>
+                  <div>
+                    <span>Вес</span>
+                    <b>
+                      {toWeightLabel(item.weight)} ({item.points})
+                    </b>
+                  </div>
+                  <div>
+                    <span>Реверс</span>
+                    <b>{toReverseLabel(item.reverse)}</b>
+                  </div>
+                  <div>
+                    <span>Тип звонков</span>
+                    <b>{toCallTypeLabel(item.callType)}</b>
+                  </div>
+                  <div>
+                    <span>Канал</span>
+                    <b>{toChannelLabel(item.channel)}</b>
+                  </div>
+                </div>
               </div>
-
-              <p className={styles.cardDescription}>{item.description || 'Без описания'}</p>
-
-              <div className={styles.cardMeta}>
-                <div>
-                  <span>Тип</span>
-                  <b>{toMarkerLabel(item.markerType)}</b>
-                </div>
-                <div>
-                  <span>Вес</span>
-                  <b>
-                    {toWeightLabel(item.weight)} ({item.points})
-                  </b>
-                </div>
-                <div>
-                  <span>Реверс</span>
-                  <b>{toReverseLabel(item.reverse)}</b>
-                </div>
-                <div>
-                  <span>Тип звонков</span>
-                  <b>{toCallTypeLabel(item.callType)}</b>
-                </div>
-                <div>
-                  <span>Канал</span>
-                  <b>{toChannelLabel(item.channel)}</b>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <span className={styles.emptyHint}>Маркеры не найдены</span>
+          )}
         </div>
       )}
+
+      {/*  МОДАЛКА СОЗДАНИЯ/РЕДАКТИРОВАНИЯ ГРУППЫ  */}
+      <Modal
+        open={isGroupModalOpen}
+        onCancel={() => setGroupModalOpen(false)}
+        footer={null}
+        centered
+        destroyOnClose
+        className={styles.groupModal}
+      >
+        <Flex vertical gap={16} className={styles.modalContentPadding}>
+          <h3>{groupForm.id ? 'Редактирование группы' : 'Создание группы'}</h3>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Название группы</label>
+            <Input
+              value={groupForm.name}
+              onChange={(e) => setGroupForm({ ...groupForm, name: e.target.value })}
+              className={styles.input}
+              placeholder="Введите название"
+            />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Тип группы</label>
+            <BaseSelect
+              variant="light"
+              value={groupForm.type}
+              onChange={(value) =>
+                setGroupForm({ ...groupForm, type: value as 'client' | 'system' })
+              }
+              options={[
+                { value: 'client', label: 'Клиентская' },
+                { value: 'system', label: 'Системная' },
+              ]}
+            />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Цвет</label>
+            <input
+              type="color"
+              value={groupForm.color}
+              onChange={(e) => setGroupForm({ ...groupForm, color: e.target.value })}
+              className={styles.nativeColorInput}
+            />
+          </div>
+
+          <BlueButton
+            text="Сохранить группу"
+            onClick={handleSaveGroup}
+            disabled={!groupForm.name.trim()}
+          />
+        </Flex>
+      </Modal>
+
+      {/*  МОДАЛКА УДАЛЕНИЯ ГРУППЫ  */}
+      <Modal
+        open={isDeleteGroupModalOpen}
+        onCancel={() => setDeleteGroupModalOpen(false)}
+        footer={null}
+        centered
+        destroyOnClose
+        className={styles.deleteModal}
+      >
+        <Flex vertical align="center" className={styles.deleteModalContent}>
+          <h3>Удаление группы</h3>
+          <p>Это действие необратимо. Группа будет удалена.</p>
+          <Button danger type="primary" className={styles.deleteButton} onClick={handleDeleteGroup}>
+            Удалить группу
+          </Button>
+          <button
+            type="button"
+            onClick={() => setDeleteGroupModalOpen(false)}
+            className={styles.cancelDelete}
+          >
+            Отменить удаление
+          </button>
+        </Flex>
+      </Modal>
+
+      {/*  МОДАЛКА ДОБАВЛЕНИЯ МАРКЕРОВ  */}
+      <Modal
+        open={isGroupMarkersModalOpen}
+        onCancel={() => setGroupMarkersModalOpen(false)}
+        footer={null}
+        centered
+        destroyOnClose
+        className={styles.groupModal}
+      >
+        <Flex vertical className={styles.modalContentPadding}>
+          <h3 style={{ marginBottom: 12 }}>Выберите маркеры для группы</h3>
+          <div className={styles.groupMarkersList}>
+            {/* Показываем маркеры того же типа, что и сама группа */}
+            {markerItems
+              .filter((m) => m.markerType === activeGroup?.type)
+              .map((marker) => (
+                <Checkbox
+                  key={marker.apiId}
+                  checked={selectedGroupMarkers.includes(Number(marker.apiId))}
+                  onChange={(e) => {
+                    const id = Number(marker.apiId);
+                    if (e.target.checked) {
+                      setSelectedGroupMarkers((prev) => [...prev, id]);
+                    } else {
+                      setSelectedGroupMarkers((prev) => prev.filter((i) => i !== id));
+                    }
+                  }}
+                  className={styles.groupMarkerCheckbox}
+                >
+                  <span className={styles.colorTag} style={getMarkerTagStyle(marker.colorToken)}>
+                    {marker.title}
+                  </span>
+                </Checkbox>
+              ))}
+          </div>
+
+          <Flex align="center" gap={12} style={{ marginTop: 16 }}>
+            <BlueButton text="Сохранить изменения" onClick={handleSaveGroupMarkers} />
+            <button
+              type="button"
+              className={styles.cancelDelete}
+              onClick={() => setGroupMarkersModalOpen(false)}
+            >
+              Отмена
+            </button>
+          </Flex>
+        </Flex>
+      </Modal>
     </PageContainer>
   );
 

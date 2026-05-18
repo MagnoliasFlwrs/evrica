@@ -24,6 +24,19 @@ export interface SettingsDictionaryApi {
   [key: string]: unknown;
 }
 
+// ДОБАВЛЕНО: Тип для группы маркеров
+export interface SettingsMarkerGroupApi {
+  id: number;
+  name: string;
+  color: string;
+  type: 'client' | 'system';
+  dictionaries: Array<{
+    id: number;
+    dictionary_id: number;
+    dictionary: SettingsDictionaryApi;
+  }>;
+}
+
 export interface SettingsChecklistApi {
   id: number | string;
   name?: string | null;
@@ -47,11 +60,19 @@ interface SettingsState {
   markerSaving: boolean;
   markerDeleting: boolean;
   markersError: string | null;
+
+  markerGroups: SettingsMarkerGroupApi[];
+  markerGroupsLoading: boolean;
+  fetchMarkerGroups: () => Promise<void>;
+  saveMarkerGroup: (payload: Record<string, unknown>) => Promise<boolean>;
+  deleteMarkerGroup: (id: number, type: string) => Promise<boolean>;
+
   checklists: SettingsChecklistApi[];
   checklistsLoading: boolean;
   checklistSaving: boolean;
   checklistDeleting: boolean;
   checklistsError: string | null;
+
   fetchMarkers: () => Promise<SettingsDictionaryApi[]>;
   fetchMarkerById: (
     id: number | string,
@@ -149,11 +170,80 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   markerSaving: false,
   markerDeleting: false,
   markersError: null,
+
+  // Инициализация стейта для групп
+  markerGroups: [],
+  markerGroupsLoading: false,
+
   checklists: [],
   checklistsLoading: false,
   checklistSaving: false,
   checklistDeleting: false,
   checklistsError: null,
+
+  fetchMarkerGroups: async () => {
+    set({ markerGroupsLoading: true });
+    try {
+      const res = await axiosInstanceAll.get(`${baseAuthUrl}/dictionary/get-dictionaries-groups`, {
+        headers: {
+          'Content-Type': 'application/json',
+          accept: '*/*',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      const data = extractData(res);
+      if (data && (data.client_groups || data.system_groups)) {
+        // Склеиваем клиентские и системные группы
+        const allGroups = [...(data.client_groups || []), ...(data.system_groups || [])];
+        set({ markerGroups: allGroups, markerGroupsLoading: false });
+      } else {
+        set({ markerGroups: [], markerGroupsLoading: false });
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки групп маркеров:', error);
+      set({ markerGroups: [], markerGroupsLoading: false });
+    }
+  },
+  saveMarkerGroup: async (payload) => {
+    try {
+      await axiosInstanceAll.post(`${baseAuthUrl}/dictionary/save-dictionaries-group`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          accept: '*/*',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      // Обновляем список групп после сохранения
+      await get().fetchMarkerGroups();
+      return true;
+    } catch (error) {
+      console.error('Ошибка при сохранении группы', error);
+      return false;
+    }
+  },
+
+  deleteMarkerGroup: async (id, type) => {
+    try {
+      await axiosInstanceAll.post(
+        `${baseAuthUrl}/dictionary/delete-dictionaries-group`,
+        { id, type },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            accept: '*/*',
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        },
+      );
+      // Обновляем список групп после удаления
+      await get().fetchMarkerGroups();
+      return true;
+    } catch (error) {
+      console.error('Ошибка при удалении группы', error);
+      return false;
+    }
+  },
 
   fetchMarkers: async () => {
     set({ markersLoading: true, markersError: null });

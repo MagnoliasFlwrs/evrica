@@ -408,6 +408,7 @@ export interface CategoriesDictionariesList {
   system: CategoryDictionary[];
   client: CategoryDictionary[];
 }
+
 export interface CallsState {
   error: boolean;
   loading: boolean;

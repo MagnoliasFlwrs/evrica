@@ -167,10 +167,10 @@
 }
 
 .markerCard {
-  padding: 14px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   border-radius: 20px;
   background: #fff;
   transition: 0.2s;
@@ -186,6 +186,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 10px;
 }
 
 .editButton {
@@ -215,7 +216,6 @@
 }
 
 .cardMeta {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1090,6 +1090,191 @@
 
 .unsavedModal :global(.ant-modal-content) {
   border-radius: 20px;
+}
+
+/* Стили для групп маркеров */
+.groupsWrapper {
+  margin-top: 24px;
+  margin-bottom: 30px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.groupsGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.groupCard {
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &:hover {
+    border-color: rgba(0, 122, 255, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 122, 255, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+.groupCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupColorDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.groupTypeBadge {
+  font-family: Mulish;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: #f3f3f3;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.groupCardTitle {
+  color: var(--text-tertiary);
+  font-family: Mulish;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.groupCardCount {
+  color: var(--text-secondary);
+  font-family: Mulish;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.secondaryButton {
+  height: 42px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: Mulish;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f3f3f3;
+  }
+}
+
+/* Иконки на карточке группы */
+.groupIconButton {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--brand-blue);
+    background: rgba(0, 122, 255, 0.1);
+  }
+
+  /* Красный цвет при наведении на корзину */
+  &:nth-child(2):hover {
+    color: #c3002a;
+    background: rgba(195, 0, 42, 0.1);
+  }
+}
+
+/* Стили для модалок групп */
+.groupModal :global(.ant-modal-content) {
+  border-radius: 20px;
+}
+
+.modalContentPadding {
+  padding: 10px 0;
+
+  h3 {
+    color: var(--text-tertiary);
+    font-family: Mulish;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
+
+/* Нативный инпут выбора цвета */
+.nativeColorInput {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 2px;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+}
+
+/* Список чекбоксов в модалке */
+.groupMarkersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 8px;
+
+  /* Кастомизация скроллбара */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 999px;
+  }
+}
+
+.groupMarkerCheckbox {
+  align-items: center;
+
+  :global(.ant-checkbox) {
+    top: 0; /* Центровка чекбокса */
+  }
 }
 
 @media (max-width: 1600px) {

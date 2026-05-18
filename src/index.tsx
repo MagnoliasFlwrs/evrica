@@ -1,25 +1,25 @@
-import React, { Suspense } from 'react';
-import './index.css';
+import { Spin } from 'antd';
+import { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import {
-  ErrorPage,
-  MainLayout,
-  CallsLayout,
-  AnalyticsLayout,
-  LoginLayout,
-  AnalyticsReportLayout,
-  DashboardLayout,
-  MakeAnAppointmentLayout,
-  AnalyticReportCards,
-  ClientsLayout,
-  SettingsLayout,
-} from './routes/routesConfig/lazyComponents';
-import { Spin } from 'antd';
+import './index.css';
 import CallsFilteredLayout from './routes/CallsFilteredLayout';
 import CallSinglePageLayout from './routes/CallSinglePageLayout';
+import ClientPortraitLayout from './routes/ClientPortraitLayout';
+import {
+  AnalyticReportCards,
+  AnalyticsLayout,
+  AnalyticsReportLayout,
+  CallsLayout,
+  ClientsLayout,
+  DashboardLayout,
+  ErrorPage,
+  LoginLayout,
+  MainLayout,
+  MakeAnAppointmentLayout,
+  SettingsLayout,
+} from './routes/routesConfig/lazyComponents';
 import { useAuth } from './store';
-import ClientPortraitLayout from "./routes/ClientPortraitLayout";
 
 const App = () => {
   const isAuth = useAuth((state) => state.isAuth);
@@ -80,16 +80,15 @@ const App = () => {
         {
           path: '/reports',
           element: <AnalyticReportCards />,
-
         },
-          {
-              path: 'make-an-appointment',
-              element: <MakeAnAppointmentLayout />,
-          },
-          {
-              path: 'client-portrait',
-              element: <ClientPortraitLayout />,
-          },
+        {
+          path: 'make-an-appointment',
+          element: <MakeAnAppointmentLayout />,
+        },
+        {
+          path: 'client-portrait',
+          element: <ClientPortraitLayout />,
+        },
         {
           path: '/analytics-report',
           element: <AnalyticsReportLayout />,
@@ -100,6 +99,10 @@ const App = () => {
         },
         {
           path: '/settings/markers/:markerId/edit',
+          element: <SettingsLayout />,
+        },
+        {
+          path: '/settings/markers/group/:groupId',
           element: <SettingsLayout />,
         },
         {
